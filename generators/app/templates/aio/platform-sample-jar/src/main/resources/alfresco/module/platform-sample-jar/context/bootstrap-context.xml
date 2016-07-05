@@ -4,11 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
+    <!-- The bootstrap-context.xml file is used for patch definitions, importers,
 		 workflow, and loading custom content models.  -->
 
     <!-- Registration of new models -->
-    <bean id="${project.artifactId}.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${project.artifactId}/model/mycontent-model.xml</value>
@@ -16,7 +16,7 @@
         </property>
     </bean>
 
-    <bean id="${project.artifactId}.myprocess.workflowBootstrap" parent="workflowDeployer">
+    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.myprocess.workflowBootstrap" parent="workflowDeployer">
         <property name="workflowDefinitions">
             <list>
                 <props>

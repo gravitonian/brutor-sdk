@@ -2,8 +2,8 @@
 <model name="myc:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
     <!-- Optional meta-data about the model -->
-    <description>Document Model for Repo Extension</description>
-    <author>SDK Sample Model</author>
+    <description>Sample content model for platform extension</description>
+    <author>SDK Generator</author>
     <version>1.0</version>
 
     <imports>

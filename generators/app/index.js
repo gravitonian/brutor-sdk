@@ -27,7 +27,8 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  /* Methods that are part of Yeoman environment run loop */
+  /*********************************************************************************************************************
+   * Methods that are part of Yeoman environment run loop */
 
   initializing: function () {
     this.props = {};
@@ -136,13 +137,10 @@ module.exports = yeoman.Base.extend({
         constants.PROP_ALFRESCO_SHARE_VERSION,
         constants.PROP_GENERATE_SAMPLE_SRC
       ], props);
-
-
-      this.log('Prompting finished!');
     }.bind(this));
   },
 
-  /*
+  /* TODO: remove, no need to do this if you do individual saves
   configuring: {
     saveConfig: function () {
 
@@ -160,14 +158,12 @@ module.exports = yeoman.Base.extend({
       var projectArtifactId = this.config.get(constants.PROP_PROJECT_ARTIFACT_ID);
       if (path.basename(this.destinationPath()) !== projectArtifactId) {
         this.log(
-          "Your generator must be inside a directory named " + projectArtifactId + "\n" +
+          "Your SDK project must be inside a directory named " + projectArtifactId + "\n" +
           "This directory will be automatically created."
         );
         mkdirp(projectArtifactId);
         this.destinationRoot(this.destinationPath(projectArtifactId));
       }
-
-      this.log('Finished checking root dir!');
     }
   },
 
@@ -175,37 +171,74 @@ module.exports = yeoman.Base.extend({
     writeProjectFiles: function () {
       this.log('Writing project files...');
 
+      // Set up new artifact ids
+      var platformJarBaseArtifactId = "-platform-sample-jar";
+      var platformJarArtifactId = this.props.projectArtifactId + platformJarBaseArtifactId;
+
       // Template Context
       var tplContext = {
         groupId: this.props.projectGroupId,
         artifactId: this.props.projectArtifactId,
         version: this.props.projectVersion,
+        package: this.props.projectPackage,
         name: this.props.projectName,
         description: this.props.projectDescription,
         platformVersion: this.props.alfrescoPlatformVersion,
-        shareVersion: this.props.alfrescoShareVersion
+        shareVersion: this.props.alfrescoShareVersion,
+        platformJarArtifactId: platformJarArtifactId
       };
 
-      // AIO Parent POM
-      this.fs.copyTpl(
-        this.templatePath("aio/pom.xml"),
-        this.destinationPath("pom.xml"),
-        tplContext
-      );
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy AIO Parent files
+      this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
+      this._copyAsTemplate("aio/", "", "README.md", tplContext);
+      this._copyAsTemplate("aio/", "", "run.sh", tplContext);
 
-      // Platform JAR Module
-      var ampAssemblyFileName = "amp.xml";
-      var platformJarBaseArtifactId = "-platform-sample-jar";
-      var platformJarArtifactId = this.props.projectArtifactId + platformJarBaseArtifactId;
-      var ampAssemblyFileDst = platformJarArtifactId + '/src/main/assembly/' + ampAssemblyFileName;
-      var ampAssemblyFileSrc = 'aio/platform-sample-jar/src/main/assembly/' + ampAssemblyFileName;
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy Platform JAR Module files
+      var platformJarTemplateSrcMainDir = 'aio/platform-sample-jar/src/main/';
+      var alfrescoModulePath = '/src/main/resources/alfresco/module/';
+      var platformJarTemplateModuleDir = 'aio/platform-sample-jar/' + alfrescoModulePath + 'platform-sample-jar/';
 
-      this.fs.copy(
-        this.templatePath(ampAssemblyFileSrc),
-        this.destinationPath(ampAssemblyFileDst)
-      );
+      this._copyAsTemplate("aio/platform-sample-jar/", platformJarArtifactId + "/", "pom.xml", tplContext);
 
-      this.log('Finished writing project files...');
+      var fileSrc = platformJarTemplateSrcMainDir + 'assembly/';
+      var fileDst = platformJarArtifactId + '/src/main/assembly/';
+      this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+
+      fileSrc = platformJarTemplateSrcMainDir + 'java/org/alfresco/tutorial/platformsample/';
+      fileDst = platformJarArtifactId + '/src/main/java/' + this.props.projectPackage.replace(/\./gi, '/') +
+        '/platformsample/';
+      this._copyAsTemplate(fileSrc, fileDst, "Demo.java", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "DemoComponent.java", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "HelloWorldWebScript.java", tplContext);
+
+      var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
+      fileSrc = platformJarTemplateSrcMainDir + 'resources/' + webScriptDirPath;
+      fileDst = platformJarArtifactId + '/src/main/resources/' + webScriptDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
+
+      var platformModulePathDst = platformJarArtifactId + alfrescoModulePath + platformJarArtifactId + '/';
+      var springContextDirPath = 'context/';
+      fileSrc = platformJarTemplateModuleDir + springContextDirPath;
+      fileDst = platformModulePathDst + springContextDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "bootstrap-context.xml", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "service-context.xml", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "webscript-context.xml", tplContext);
+
+      var contentModelDirPath = 'model/';
+      fileSrc = platformJarTemplateModuleDir + contentModelDirPath;
+      fileDst = platformModulePathDst + contentModelDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "content-model.xml", tplContext);
+
+      var workflowDirPath = 'workflow/';
+      fileSrc = platformJarTemplateModuleDir + workflowDirPath;
+      fileDst = platformModulePathDst + workflowDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "sample-process.bpmn20.xml", tplContext);
+
+
     }
   },
 
@@ -215,7 +248,8 @@ module.exports = yeoman.Base.extend({
     this.installDependencies();
   },
 
-  /* Private methods not part of Yemoan run loop */
+  /*********************************************************************************************************************
+   *  Private methods not part of Yemoan run loop */
 
   _getConfigValue: function (key) {
     if (!_.isNil(key)) {
@@ -231,7 +265,6 @@ module.exports = yeoman.Base.extend({
   _saveProp: function (propName, propObject) {
     var value = propObject[propName];
     this[propName] = value;
-    this.log("Saving config [name="+ propName + "][value=" + value + "]");
     this.config.set(propName, value);
   },
 
@@ -239,6 +272,14 @@ module.exports = yeoman.Base.extend({
     propNames.forEach(function (propName) {
       this._saveProp(propName, propObject);
     }.bind(this));
+  },
+
+  _copyAsTemplate: function (fileSrcDir , fileDstDir, fileName, tplContext) {
+    this.fs.copyTpl(
+      this.templatePath(fileSrcDir + fileName),
+      this.destinationPath(fileDstDir + fileName),
+      tplContext
+    );
   }
 
 });
