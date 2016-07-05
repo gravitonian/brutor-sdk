@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-   
+
    <!--
     Define beans related to this Share extension here, such as
      evaluators and resource bootstrapping.
@@ -14,11 +14,11 @@
    -->
 
    <!-- Add module specific messages and labels -->
-   <bean id="aio-share-sample-jar.resources"
+   <bean id="<%- groupId %>.<%- shareJarArtifactId %>.resources"
          class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
       <property name="resourceBundles">
          <list>
-            <value>alfresco.web-extension.messages.aio-share-sample-jar</value>
+            <value>alfresco.web-extension.messages.custom</value>
          </list>
       </property>
    </bean>

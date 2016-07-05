@@ -16,7 +16,7 @@ module.exports = yeoman.Base.extend({
     // This makes `projectType` a command line argument.
     this.argument('projectType', {
       type: String,
-      desc: 'SDK Project Type [AIO | PlatformJAR | ShareJAR ]',
+      desc: 'SDK Project Type [AIO | PlatformJAR | ShareJAR | RepoAction]',
       optional: false,
       defaults: 'AIO'
     });
@@ -193,6 +193,14 @@ module.exports = yeoman.Base.extend({
       this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
       this._copyAsTemplate("aio/", "", "README.md", tplContext);
       this._copyAsTemplate("aio/", "", "run.sh", tplContext);
+      var localPropsPath = 'src/test/properties/local/';
+      this._copyAsTemplate("aio/" + localPropsPath, localPropsPath, "alfresco-global.properties", tplContext);
+      var resourcesPath = 'src/test/resources/';
+      var alfExtensionPath = resourcesPath + 'alfresco/extension/';
+      this._copyAsTemplate("aio/" + alfExtensionPath, alfExtensionPath, "disable-webscript-caching-context.xml", tplContext);
+      var tomcatPath = resourcesPath + 'tomcat/';
+      this._copyAsTemplate("aio/" + tomcatPath, tomcatPath, "context-solr.xml", tplContext);
+      this._copyAsTemplate("aio/" + resourcesPath, resourcesPath, "log4j.properties", tplContext);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Copy Platform JAR Module files
@@ -280,6 +288,16 @@ module.exports = yeoman.Base.extend({
       fileDst = shareModulePathDst;
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
 
+      var messagesDirPath = 'messages/';
+      fileSrc = shareJarTemplateWebExtensionDir + messagesDirPath;
+      fileDst = shareJarArtifactId + webExtensionPath + messagesDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
+
+      var siteDataExtensionsDirPath = 'site-data/extensions/';
+      fileSrc = shareJarTemplateWebExtensionDir + siteDataExtensionsDirPath;
+      fileDst = shareJarArtifactId + webExtensionPath + siteDataExtensionsDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
+
       webScriptDirPath = 'site-webscripts/com/example/pages/';
       fileSrc = shareJarTemplateWebExtensionDir + webScriptDirPath;
       fileDst = shareJarArtifactId + webExtensionPath + webScriptDirPath;
@@ -287,20 +305,25 @@ module.exports = yeoman.Base.extend({
       this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
 
-
-      var widgetsResourcesPath = 'META-INF/resources/' + templateShareModuleId + "/js/tutorials/widgets";
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesPath + '/css/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesPath + '/css/';
+      var tutorialWidgetsPath = "/js/tutorials/widgets";
+      var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
+      var widgetsResourcesDstPath = metaInfResourcesDirPath + shareJarArtifactId + tutorialWidgetsPath;
+      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
+      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesPath + '/i18n/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesPath + '/i18n/';
+      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
+      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesPath + '/templates/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesPath + '/templates/';
+      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
+      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesPath + "/";
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesPath + '/';
+      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
+      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
+
+      fileSrc = shareJarTemplateSrcMainDir + 'resources/META-INF/';
+      fileDst = shareJarArtifactId + '/src/main/resources/META-INF/';
+      this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
     }
   },
 

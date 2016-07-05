@@ -11,7 +11,7 @@
     <bean id="<%- groupId %>.<%- platformJarArtifactId %>.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${project.artifactId}/model/mycontent-model.xml</value>
+                <value>alfresco/module/${project.artifactId}/model/content-model.xml</value>
             </list>
         </property>
     </bean>
@@ -21,7 +21,7 @@
             <list>
                 <props>
                     <prop key="engineId">activiti</prop>
-                    <prop key="location">alfresco/module/${project.artifactId}/workflow/my-process.bpmn20.xml</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/sample-process.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                 </props>
             </list>

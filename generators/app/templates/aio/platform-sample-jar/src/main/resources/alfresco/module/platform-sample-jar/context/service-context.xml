@@ -18,11 +18,12 @@
 -->
 <beans>
 
+  <% if (generateSampleSrcCode == true) { %>
     <!-- A simple class that is initialized by Spring -->
-    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.exampleBean" class="org.alfresco.tutorial.platformsample.Demo" init-method="init" />
+    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.exampleBean" class="<%- package %>.platformsample.Demo" init-method="init" />
 
     <!-- A simple module component that will be executed once -->
-    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.exampleComponent" class="org.alfresco.tutorial.platformsample.DemoComponent" parent="module.baseComponent" >
+    <bean id="<%- groupId %>.<%- platformJarArtifactId %>.exampleComponent" class="<%- package %>.platformsample.DemoComponent" parent="module.baseComponent" >
         <property name="moduleId" value="<%- platformJarArtifactId %>" />  <!-- See module.properties -->
         <property name="name" value="exampleComponent" />
         <property name="description" value="A demonstration component" />
@@ -31,5 +32,5 @@
         <property name="nodeService" ref="NodeService" />
         <property name="nodeLocatorService" ref="nodeLocatorService" />
     </bean>
-
+  <% } %>
 </beans>

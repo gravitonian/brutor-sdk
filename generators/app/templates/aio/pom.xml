@@ -60,6 +60,11 @@
         <env>local</env>
     </properties>
 
+    <modules>
+        <module><%- platformJarArtifactId %></module>
+        <module><%- shareJarArtifactId %></module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <!-- This will import the dependencyManagement for all artifacts in the selected Alfresco platform.
@@ -180,7 +185,7 @@
                         </moduleDependency>
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>platform-sample-jar</artifactId>
+                            <artifactId><%- platformJarArtifactId %></artifactId>
                             <version>${project.version}</version>
                         </moduleDependency>
                     </platformModules>
@@ -191,7 +196,7 @@
                     <shareModules>
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>share-sample-jar</artifactId>
+                            <artifactId><%- shareJarArtifactId %></artifactId>
                             <version>${project.version}</version>
                         </moduleDependency>
                     </shareModules>
@@ -293,10 +298,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
-    <modules>
-        <module>platform-sample-jar</module>
-        <module>share-sample-jar</module>
-    </modules>
 
 </project>

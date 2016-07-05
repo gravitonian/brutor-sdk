@@ -3,9 +3,7 @@
   <img title="yeoman generator" src='https://github.com/yeoman/media/blob/master/optimized/yeoman-150x150-opaque.png' alt='yeoman logo'  />
 </p>
 
->Yeoman generator for Alfresco SDK Projects
-
-## Installing Yeoman and the App Generator
+## Installing Yeoman and the Alfresco SDK Generator
 
 First, install [Yeoman](http://yeoman.io):
 
@@ -19,7 +17,7 @@ Then the Alfresco SDK Generator:
 $ sudo npm install -g alfresco-sdk-generator
 ```
  
-##  Generating a new application project:
+##  Generating a new SDK project:
 
 First, move in the folder where you want create your project.
 

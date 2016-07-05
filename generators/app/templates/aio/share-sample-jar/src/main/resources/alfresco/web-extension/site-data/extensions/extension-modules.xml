@@ -9,7 +9,7 @@
           <web-framework>
             <dojo-pages>
               <packages>
-                <package name="tutorials" location="resources/share-sample-jar/js/tutorials"/>
+                <package name="tutorials" location="resources/<%- shareJarArtifactId %>/js/tutorials"/>
               </packages>
             </dojo-pages>
           </web-framework>
