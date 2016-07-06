@@ -52,3 +52,38 @@ $ yo alfresco-sdk
 ? Should sample source code be generated for modules? Yes
 ```
 
+##  Adding a platform action to the new project
+This uses the platformaction sub-generator:
+
+```
+aio-gen/aio-gen-platform-sample-jar$ yo alfresco-sdk:platformaction
+
+Just found a `.yo-rc.json` in a parent directory.
+Setting the project root at: /home/martin/src/sdk3/alfresco-generator-tests/aio-gen
+              ,****.          
+         ,.**. `*****  <-_    
+        ******** ***** ####   
+       $********::**** ####;  
+       _.-._`***::*** ######  
+     ,*******, *::* .;##### @ 
+     **********,' -=#####',@@@
+     ***' .,---, ,.-==@@@@@@@@
+      * /@@@@@',@ @\ '@@@@@@@ 
+       '@@@@/ @@@ @@@\ ':#'   
+       !@@@@ @@@@ @@@@@@@@@^  
+        @@@@ @@@@@ @@@@@@@'   
+         `"$ '@@@@@. '##'     
+              '@@@@;'         
+     
+     Welcome to the Alfresco SDK Platform Action Generator!
+                 
+? Base Java package for this platform module? org.alfresco.test
+? Java package name for all platform actions? actions
+? Platform Action Title? Sample
+? Platform Action Description? Sample platform action, also called repository action
+Writing platform action files...
+Artifact ID: aio-gen-platform-sample-jar
+   create src/main/java/org/alfresco/test/actions/SampleActionExecuter.java
+   create src/main/resources/alfresco/module/aio-gen-platform-sample-jar/context/action-sample-context.xml
+   create src/main/resources/alfresco/module/aio-gen-platform-sample-jar/messages/aio-gen-platform-sample-jar-sample-platform-action.properties
+```

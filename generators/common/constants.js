@@ -1,9 +1,6 @@
 'use strict';
 
 module.exports = {
-  FILE_RUN_SH: 'run.sh',
-  FILE_RUN_BAT: 'run.bat',
-
   PROP_COMMUNITY_OR_ENTERPRISE: 'communityOrEnterprise',
   PROP_PROJECT_ARTIFACT_ID: 'projectArtifactId',
   PROP_PROJECT_ARTIFACT_ID_PREFIX: 'projectArtifactIdPrefix',
@@ -16,8 +13,8 @@ module.exports = {
   PROP_ALFRESCO_PLATFORM_VERSION: 'alfrescoPlatformVersion',
   PROP_ALFRESCO_SHARE_VERSION: 'alfrescoShareVersion',
 
-  VAR_PROJECT_GROUPID: '${project.groupId}',
-  VAR_PROJECT_ARTIFACTID: '${project.artifactId}',
-  VAR_PROJECT_VERSION: '${project.version}'
+  PROP_PLATFORM_ACTION_TITLE: 'platformActionTitle',
+  PROP_PLATFORM_ACTION_DESC: 'platformActionDesc',
+  PROP_PLATFORM_ACTIONS_PACKAGE_NAME: 'platformActionsPackageName'
 
 };

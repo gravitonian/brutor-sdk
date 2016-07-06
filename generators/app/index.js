@@ -47,7 +47,7 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Show a welcome message
     this.log(alflogo(
-      'Welcome to the Alfresco SDK Project generator!\n',
+      'Welcome to the Alfresco SDK Project Generator!\n',
       {'left-pad': '     '}));
 
     // Set up a list of properties we need user to supply values for
@@ -118,8 +118,28 @@ module.exports = yeoman.Base.extend({
 
     return this.prompt(prompts).then(function (props) {
       this.props = props;
+    }.bind(this));
+  },
 
+  default: {
+    checkRootDir: function () {
+      this.log('Checking root dir...');
+
+      var projectArtifactId = this.props.projectArtifactId;
+      if (path.basename(this.destinationPath()) !== projectArtifactId) {
+        this.log(
+          "Your SDK project must be inside a directory named " + projectArtifactId + "\n" +
+          "This directory will be automatically created."
+        );
+        mkdirp(projectArtifactId);
+        this.destinationRoot(this.destinationPath(projectArtifactId));
+      }
+    },
+    saveConfig: function () {
+
+      this.log('Creating .yo-rc.json file...');
       // To access props later use for example this.config.get(constants.PROP_PROJECT_ARTIFACT_ID)
+
       this._saveProps([
         constants.PROP_PROJECT_GROUP_ID,
         constants.PROP_PROJECT_ARTIFACT_ID,
@@ -131,34 +151,7 @@ module.exports = yeoman.Base.extend({
         constants.PROP_ALFRESCO_PLATFORM_VERSION,
         constants.PROP_ALFRESCO_SHARE_VERSION,
         constants.PROP_GENERATE_SAMPLE_SRC
-      ], props);
-    }.bind(this));
-  },
-
-  /* TODO: remove, no need to do this if you do individual saves
-   configuring: {
-   saveConfig: function () {
-
-   this.log('Saving project configuration...');
-
-   // Need to do this otherwise config is not available when writing files
-   this.config.save();
-   },
-   },*/
-
-  default: {
-    checkRootDir: function () {
-      this.log('Checking root dir...');
-
-      var projectArtifactId = this.config.get(constants.PROP_PROJECT_ARTIFACT_ID);
-      if (path.basename(this.destinationPath()) !== projectArtifactId) {
-        this.log(
-          "Your SDK project must be inside a directory named " + projectArtifactId + "\n" +
-          "This directory will be automatically created."
-        );
-        mkdirp(projectArtifactId);
-        this.destinationRoot(this.destinationPath(projectArtifactId));
-      }
+      ], this.props);
     }
   },
 
@@ -328,9 +321,9 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function () {
-    this.log('Installing stuff...');
+    this.log('Nothing to install in npm repo...');
 
-    this.installDependencies();
+    //this.installDependencies();
   },
 
   /*********************************************************************************************************************
