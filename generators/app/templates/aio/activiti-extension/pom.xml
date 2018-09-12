@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId><%- activitiJarArtifactId %>
+  </artifactId>
+  <name>Activiti Extension Module</name>
+  <description>Activiti Extension Module that produces a JAR file with Java extensions such as service task delegates.
+  </description>
+  <packaging>jar</packaging>
+
+  <parent>
+    <groupId><%- groupId %></groupId>
+    <artifactId><%- artifactId %></artifactId>
+    <version><%- version %></version>
+  </parent>
+
+  <properties>
+    <!-- Properties used in dependency declarations, need to shell script into APS container to see exact versions -->
+    <activiti.groupId>com.activiti</activiti.groupId>
+    <activiti.version>1.8.1</activiti.version>
+    <activiti.engine.version>5.22.0.6</activiti.engine.version>
+
+    <!-- Compile with Java 8, default is 5 -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- The main Activiti Enterprise application dependency that brings in all
+         needed classes to compile your customizations -->
+    <dependency>
+      <groupId>${activiti.groupId}</groupId>
+      <artifactId>activiti-app-logic</artifactId>
+      <version>${activiti.version}</version>
+    </dependency>
+
+    <!-- HTTP Lib to make ACS ReST calls -->
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>3.10.0</version>
+    </dependency>
+    <!-- JSON Processing -->
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+
+    <!-- Bring in Alfresco Data model, which includes the org.alfresco.util.ISO9075.encode class and method to encode paths in repo -->
+    <dependency>
+      <groupId>org.alfresco</groupId>
+      <artifactId>alfresco-data-model</artifactId>
+      <version>8.5</version>
+    </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <!-- Filter the resource files in this project and do property substitutions -->
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <testResources>
+      <!-- Filter the test resource files in this project and do property substitutions -->
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+  </build>
+</project>

@@ -1,25 +1,28 @@
 'use strict';
 var alflogo = require('alfresco-logo');
-var yeoman = require('yeoman-generator');
+var Generator = require('yeoman-generator');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
 
 var constants = require('./../common/constants.js');
 
-module.exports = yeoman.Base.extend({
+module.exports = class extends Generator {
 
   // Arguments and options should be defined in the constructor.
-  constructor: function () {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    // Calling the super ctor is important so our generator is correctly set up
+    super(args, opts);
+
+    // Now add our custom code
 
     // This makes `projectType` a command line argument.
-    this.argument('projectType', {
-      type: String,
-      desc: 'SDK Project Type [AIO | PlatformJAR | ShareJAR | RepoAction]',
-      optional: false,
-      defaults: 'AIO'
-    });
+    //this.argument('projectType', {
+    //  type: String,
+    //  desc: 'Alfresco Project Type [AIO | PlatformJAR | ShareJAR | RepoAction | Activiti | Activiti7 ]',
+    //  optional: false,
+    //  defaults: 'AIO'
+    //});
   },
 
   /*********************************************************************************************************************
@@ -28,18 +31,21 @@ module.exports = yeoman.Base.extend({
   initializing: function () {
     this.props = {};
 
-    this.projectType = "AIO";
-
     this.defaultConfig = {
-      projectGroupId: 'com.mycompany',
+      projectGroupId: 'org.alfresco',
       projectArtifactId: path.basename(process.cwd()),
       projectVersion: '1.0.0-SNAPSHOT',
-      projectPackage: 'com.mycompany',
-      projectName: this.projectType + ' SDK 3.0 Project',
-      projectDescription: this.projectType + ' SDK 3.0 Project',
+      projectPackage: 'org.alfresco',
+      projectName: ' Alfresco Extension Project',
+      projectDescription: ' Alfresco extension project for a containerized environment',
       communityOrEnterprise: 'Community',
-      alfrescoPlatformVersion: '5.2.a-EA',
-      alfrescoShareVersion: '5.1.g',
+      includeRepositoryExtension: true,
+      includeShareExtension: true,
+      includeActivitiExtension: true,
+      alfrescoRepositoryVersion: '6.0.7-ga',
+      alfrescoShareVersion: '6.0',
+      repoModuleName: 'repo-extension',
+      shareModuleName: 'share-extension',
       generateSampleSrcCode: true
     };
   },
@@ -47,11 +53,11 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Show a welcome message
     this.log(alflogo(
-      'Welcome to the Alfresco SDK Project Generator!\n',
+      'Welcome to the Alfresco Extension Project Generator!\n',
       {'left-pad': '     '}));
 
-    // Set up a list of properties we need user to supply values for
-    var prompts = [{
+    // Set up a list of initial questions that we need to know the answers for before asking more specific questions
+    var questionPrompts = [{
       type: 'input',
       name: constants.PROP_PROJECT_GROUP_ID,
       message: "Maven project groupId?",
@@ -82,13 +88,13 @@ module.exports = yeoman.Base.extend({
       name: constants.PROP_PROJECT_NAME,
       message: "Project name?",
       default: this._getConfigValue(constants.PROP_PROJECT_NAME),
-      store: true
+      store: false
     }, {
       type: 'input',
       name: constants.PROP_PROJECT_DESCRIPTION,
       message: "Project description?",
       default: this._getConfigValue(constants.PROP_PROJECT_DESCRIPTION),
-      store: true
+      store: false
     }, {
       type: 'list',
       name: constants.PROP_COMMUNITY_OR_ENTERPRISE,
@@ -97,26 +103,74 @@ module.exports = yeoman.Base.extend({
       default: this._getConfigValue(constants.PROP_COMMUNITY_OR_ENTERPRISE),
       store: true
     }, {
+      type: 'confirm',
+      name: constants.PROP_INCLUDE_ALFRESCO_REPOSITORY_EXTENSION,
+      message: 'Include Alfresco Repository Extension?',
+      default: this._getConfigValue(constants.PROP_INCLUDE_ALFRESCO_REPOSITORY_EXTENSION),
+      store: true
+    },{
       type: 'input',
-      name: constants.PROP_ALFRESCO_PLATFORM_VERSION,
-      message: 'Alfresco Platform (i.e. Repository) version?',
-      default: this._getConfigValue(constants.PROP_ALFRESCO_PLATFORM_VERSION),
+      name: constants.PROP_ALFRESCO_REPOSITORY_VERSION,
+      message: 'Alfresco Repository version?',
+      default: this._getConfigValue(constants.PROP_ALFRESCO_REPOSITORY_VERSION),
+      store: true,
+      when : this._includeRepoExtension()
+    }, {
+      type: 'input',
+      name: constants.PROP_ALFRESCO_REPO_EXTENSION_NAME,
+      message: 'Alfresco Repository Extension Name?',
+      default: this._getConfigValue(constants.PROP_ALFRESCO_REPO_EXTENSION_NAME),
+      store: true,
+      when : this._includeRepoExtension()
+    }, {
+      type: 'confirm',
+      name: constants.PROP_GENERATE_REPO_DOCKER_BUILD,
+      message: 'Should project for Repository Docker build be generated (i.e. build Repo Docker image with repo extension)?',
+      default: this._getConfigValue(constants.PROP_GENERATE_REPO_DOCKER_BUILD),
+      store: true,
+      when : this._includeRepoExtension()
+    }, {
+      type: 'confirm',
+      name: constants.PROP_INCLUDE_ALFRESCO_SHARE_EXTENSION,
+      message: 'Include Alfresco Share Extension?',
+      default: this._getConfigValue(constants.PROP_INCLUDE_ALFRESCO_SHARE_EXTENSION),
       store: true
     }, {
       type: 'input',
       name: constants.PROP_ALFRESCO_SHARE_VERSION,
       message: 'Alfresco Share version?',
       default: this._getConfigValue(constants.PROP_ALFRESCO_SHARE_VERSION),
-      store: true
+      store: true,
+      when : this._includeShareExtension()
+    }, {
+      type: 'input',
+      name: constants.PROP_ALFRESCO_SHARE_EXTENSION_NAME,
+      message: 'Alfresco Share Extension Name?',
+      default: this._getConfigValue(constants.PROP_ALFRESCO_SHARE_EXTENSION_NAME),
+      store: true,
+      when : this._includeShareExtension()
     }, {
       type: 'confirm',
-      name: constants.PROP_GENERATE_SAMPLE_SRC,
-      message: 'Should sample source code be generated for modules?',
-      default: this._getConfigValue(constants.PROP_GENERATE_SAMPLE_SRC),
-      store: true
-    }];
+      name: constants.PROP_GENERATE_SHARE_DOCKER_BUILD,
+      message: 'Should project for Share Docker build be generated (i.e. build Share Docker image with share extension)?',
+      default: this._getConfigValue(constants.PROP_GENERATE_SHARE_DOCKER_BUILD),
+      store: true,
+      when : this._includeShareExtension()
+    }, {
+     type: 'confirm',
+     name: constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
+     message: 'Include Activiti Extension?',
+     default: this._getConfigValue(constants.PROP_INCLUDE_ACTIVITI_EXTENSION),
+     store: true
+   }, {
+     type: 'confirm',
+     name: constants.PROP_GENERATE_SAMPLE_SRC,
+     message: 'Should sample source code be generated?',
+     default: this._getConfigValue(constants.PROP_GENERATE_SAMPLE_SRC),
+     store: true
+   }];
 
-    return this.prompt(prompts).then(function (props) {
+    return this.prompt(questionPrompts).then(function (props) {
       this.props = props;
     }.bind(this));
   },
@@ -128,7 +182,7 @@ module.exports = yeoman.Base.extend({
       var projectArtifactId = this.props.projectArtifactId;
       if (path.basename(this.destinationPath()) !== projectArtifactId) {
         this.log(
-          "Your SDK project must be inside a directory named " + projectArtifactId + "\n" +
+          "Your Alfresco extension project must be inside a directory named " + projectArtifactId + "\n" +
           "This directory will be automatically created."
         );
         mkdirp(projectArtifactId);
@@ -148,8 +202,13 @@ module.exports = yeoman.Base.extend({
         constants.PROP_PROJECT_NAME,
         constants.PROP_PROJECT_DESCRIPTION,
         constants.PROP_COMMUNITY_OR_ENTERPRISE,
-        constants.PROP_ALFRESCO_PLATFORM_VERSION,
+        constants.PROP_INCLUDE_ALFRESCO_REPOSITORY_EXTENSION,
+        constants.PROP_INCLUDE_ALFRESCO_SHARE_EXTENSION,
+        constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
+        constants.PROP_ALFRESCO_REPOSITORY_VERSION,
         constants.PROP_ALFRESCO_SHARE_VERSION,
+        constants.PROP_ALFRESCO_REPOSITORY_EXTENSION_NAME,
+        constants.PROP_ALFRESCO_SHARE_EXTENSION_NAME,
         constants.PROP_GENERATE_SAMPLE_SRC
       ], this.props);
     }
@@ -160,10 +219,10 @@ module.exports = yeoman.Base.extend({
       this.log('Writing project files...');
 
       // Set up new artifact ids
-      var platformJarBaseArtifactId = "-platform-sample-jar";
-      var shareJarBaseArtifactId = "-share-sample-jar";
-      var platformJarArtifactId = this.props.projectArtifactId + platformJarBaseArtifactId;
-      var shareJarArtifactId = this.props.projectArtifactId + shareJarBaseArtifactId;
+//      var repoJarBaseArtifactId = "-repo-extension";
+  //    var shareJarBaseArtifactId = "-share-extension";
+    //  var repoExtensionArtifactId = this.props.projectArtifactId + repoJarBaseArtifactId;
+   //   var shareExtensionArtifactId = this.props.projectArtifactId + shareJarBaseArtifactId;
 
       // Template Context
       var tplContext = {
@@ -173,11 +232,11 @@ module.exports = yeoman.Base.extend({
         package: this.props.projectPackage,
         name: this.props.projectName,
         description: this.props.projectDescription,
-        platformVersion: this.props.alfrescoPlatformVersion,
+        repositoryVersion: this.props.alfrescoRepositoryVersion,
         shareVersion: this.props.alfrescoShareVersion,
         generateSampleSrcCode: this.props.generateSampleSrcCode,
-        platformJarArtifactId: platformJarArtifactId,
-        shareJarArtifactId: shareJarArtifactId
+        repoExtensionArtifactId: repoExtensionArtifactId,
+        shareExtensionArtifactId: shareExtensionArtifactId
 
       };
 
@@ -196,126 +255,126 @@ module.exports = yeoman.Base.extend({
       this._copyAsTemplate("aio/" + resourcesPath, resourcesPath, "log4j.properties", tplContext);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // Copy Platform JAR Module files
-      var templatePlatformModuleId = 'platform-sample-jar';
-      var platformJarTemplateSrcMainDir = 'aio/' + templatePlatformModuleId + '/src/main/';
+      // Copy Repository Extension Module files
+      var templateRepoModuleId = 'repo-extension';
+      var repoExtensionTemplateSrcMainDir = 'aio/' + templateRepoModuleId + '/src/main/';
       var alfrescoModulePath = '/src/main/resources/alfresco/module/';
-      var platformJarTemplateModuleDir = 'aio/' + templatePlatformModuleId + '/' + alfrescoModulePath + templatePlatformModuleId + '/';
+      var repoExtensionTemplateModuleDir = 'aio/' + templateRepoModuleId + '/' + alfrescoModulePath + templateRepoModuleId + '/';
 
-      this._copyAsTemplate("aio/" + templatePlatformModuleId + "/", platformJarArtifactId + "/", "pom.xml", tplContext);
+      this._copyAsTemplate("aio/" + templateRepoModuleId + "/", repoExtensionArtifactId + "/", "pom.xml", tplContext);
 
-      var fileSrc = platformJarTemplateSrcMainDir + 'assembly/';
-      var fileDst = platformJarArtifactId + '/src/main/assembly/';
+      var fileSrc = repoExtensionTemplateSrcMainDir + 'assembly/';
+      var fileDst = repoExtensionArtifactId + '/src/main/assembly/';
       this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
 
       if (this.props.generateSampleSrcCode) {
-        fileSrc = platformJarTemplateSrcMainDir + 'java/org/alfresco/tutorial/platformsample/';
-        fileDst = platformJarArtifactId + '/src/main/java/' + this.props.projectPackage.replace(/\./gi, '/') +
-          '/platformsample/';
+        fileSrc = repoExtensionTemplateSrcMainDir + 'java/org/alfresco/tutorial/reposample/';
+        fileDst = repoExtensionArtifactId + '/src/main/java/' + this.props.projectPackage.replace(/\./gi, '/') +
+          '/reposample/';
         this._copyAsTemplate(fileSrc, fileDst, "Demo.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "DemoComponent.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "HelloWorldWebScript.java", tplContext);
 
         var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
-        fileSrc = platformJarTemplateSrcMainDir + 'resources/' + webScriptDirPath;
-        fileDst = platformJarArtifactId + '/src/main/resources/' + webScriptDirPath;
+        fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + webScriptDirPath;
+        fileDst = repoExtensionArtifactId + '/src/main/resources/' + webScriptDirPath;
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
       }
 
-      var platformModulePathDst = platformJarArtifactId + alfrescoModulePath + platformJarArtifactId + '/';
+      var repoModulePathDst = repoExtensionArtifactId + alfrescoModulePath + repoExtensionArtifactId + '/';
       var springContextDirPath = 'context/';
-      fileSrc = platformJarTemplateModuleDir + springContextDirPath;
-      fileDst = platformModulePathDst + springContextDirPath;
+      fileSrc = repoExtensionTemplateModuleDir + springContextDirPath;
+      fileDst = repoModulePathDst + springContextDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "bootstrap-context.xml", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "service-context.xml", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "webscript-context.xml", tplContext);
 
       var contentModelDirPath = 'model/';
-      fileSrc = platformJarTemplateModuleDir + contentModelDirPath;
-      fileDst = platformModulePathDst + contentModelDirPath;
+      fileSrc = repoExtensionTemplateModuleDir + contentModelDirPath;
+      fileDst = repoModulePathDst + contentModelDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "content-model.xml", tplContext);
 
       var workflowDirPath = 'workflow/';
-      fileSrc = platformJarTemplateModuleDir + workflowDirPath;
-      fileDst = platformModulePathDst + workflowDirPath;
+      fileSrc = repoExtensionTemplateModuleDir + workflowDirPath;
+      fileDst = repoModulePathDst + workflowDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "sample-process.bpmn20.xml", tplContext);
 
-      fileSrc = platformJarTemplateModuleDir;
-      fileDst = platformModulePathDst;
+      fileSrc = repoExtensionTemplateModuleDir;
+      fileDst = repoModulePathDst;
       this._copyAsTemplate(fileSrc, fileDst, "alfresco-global.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "log4j.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "module-context.xml", tplContext);
 
       var metaInfResourcesDirPath = 'META-INF/resources/';
-      fileSrc = platformJarTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
-      fileDst = platformJarArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
+      fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
+      fileDst = repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // Copy Share JAR Module files
-      var templateShareModuleId = 'share-sample-jar';
-      var shareJarTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
-      var shareJarTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
+      // Copy Share Extension Module files
+      var templateShareModuleId = 'share-extension';
+      var shareExtensionTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
+      var shareExtensionTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
       var webExtensionPath = '/src/main/resources/alfresco/web-extension/';
-      var shareJarTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
+      var shareExtensionTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
 
-      this._copyAsTemplate("aio/" + templateShareModuleId + "/", shareJarArtifactId + "/", "pom.xml", tplContext);
+      this._copyAsTemplate("aio/" + templateShareModuleId + "/", shareExtensionArtifactId + "/", "pom.xml", tplContext);
 
-      fileSrc = shareJarTemplateSrcMainDir + 'assembly/';
-      fileDst = shareJarArtifactId + '/src/main/assembly/';
+      fileSrc = shareExtensionTemplateSrcMainDir + 'assembly/';
+      fileDst = shareExtensionArtifactId + '/src/main/assembly/';
       this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
 
-      var shareModulePathDst = shareJarArtifactId + alfrescoModulePath + shareJarArtifactId + '/';
-      fileSrc = shareJarTemplateModuleDir;
+      var shareModulePathDst = shareExtensionArtifactId + alfrescoModulePath + shareExtensionArtifactId + '/';
+      fileSrc = shareExtensionTemplateModuleDir;
       fileDst = shareModulePathDst;
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
 
-      fileSrc = shareJarTemplateWebExtensionDir;
-      fileDst = shareJarArtifactId + webExtensionPath;
+      fileSrc = shareExtensionTemplateWebExtensionDir;
+      fileDst = shareExtensionArtifactId + webExtensionPath;
       this._copyAsTemplate(fileSrc, fileDst, "custom-slingshot-application-context.xml", tplContext);
 
-      fileSrc = shareJarTemplateModuleDir;
+      fileSrc = shareExtensionTemplateModuleDir;
       fileDst = shareModulePathDst;
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
 
       var messagesDirPath = 'messages/';
-      fileSrc = shareJarTemplateWebExtensionDir + messagesDirPath;
-      fileDst = shareJarArtifactId + webExtensionPath + messagesDirPath;
+      fileSrc = shareExtensionTemplateWebExtensionDir + messagesDirPath;
+      fileDst = shareExtensionArtifactId + webExtensionPath + messagesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
 
       var siteDataExtensionsDirPath = 'site-data/extensions/';
-      fileSrc = shareJarTemplateWebExtensionDir + siteDataExtensionsDirPath;
-      fileDst = shareJarArtifactId + webExtensionPath + siteDataExtensionsDirPath;
+      fileSrc = shareExtensionTemplateWebExtensionDir + siteDataExtensionsDirPath;
+      fileDst = shareExtensionArtifactId + webExtensionPath + siteDataExtensionsDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
 
       webScriptDirPath = 'site-webscripts/com/example/pages/';
-      fileSrc = shareJarTemplateWebExtensionDir + webScriptDirPath;
-      fileDst = shareJarArtifactId + webExtensionPath + webScriptDirPath;
+      fileSrc = shareExtensionTemplateWebExtensionDir + webScriptDirPath;
+      fileDst = shareExtensionArtifactId + webExtensionPath + webScriptDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.desc.xml", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
 
       var tutorialWidgetsPath = "/js/tutorials/widgets";
       var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
-      var widgetsResourcesDstPath = metaInfResourcesDirPath + shareJarArtifactId + tutorialWidgetsPath;
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
+      var widgetsResourcesDstPath = metaInfResourcesDirPath + shareExtensionArtifactId + tutorialWidgetsPath;
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
+      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
+      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
+      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
-      fileDst = shareJarArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
+      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
       this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
 
-      fileSrc = shareJarTemplateSrcMainDir + 'resources/META-INF/';
-      fileDst = shareJarArtifactId + '/src/main/resources/META-INF/';
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
+      fileDst = shareExtensionArtifactId + '/src/main/resources/META-INF/';
       this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
     }
   },
@@ -327,7 +386,19 @@ module.exports = yeoman.Base.extend({
   },
 
   /*********************************************************************************************************************
-   *  Private methods not part of Yemoan run loop */
+   *  Private methods not part of Yeoman run loop */
+
+   _includeRepoExtension: function (currentAnswers) {
+      return currentAnswers.includeRepositoryExtension;
+   },
+
+   _includeShareExtension: function (currentAnswers) {
+      return currentAnswers.includeShareExtension;
+   },
+
+   _includeActivitiExtension: function (currentAnswers) {
+      return currentAnswers.includeActivitiExtension;
+   },
 
   _getConfigValue: function (key) {
     if (!_.isNil(key)) {
@@ -359,5 +430,4 @@ module.exports = yeoman.Base.extend({
       tplContext
     );
   }
-
-});
+}
