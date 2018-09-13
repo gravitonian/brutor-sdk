@@ -3,7 +3,7 @@
   <img title="yeoman generator" src='https://github.com/yeoman/media/blob/master/optimized/yeoman-150x150-opaque.png' alt='yeoman logo'  />
 </p>
 
-## Installing Yeoman and the Alfresco Project Generator
+## Installing Yeoman 
 
 First, install [Yeoman](http://yeoman.io):
 
@@ -11,10 +11,20 @@ First, install [Yeoman](http://yeoman.io):
 $ sudo npm install -g yo
 ```
 
-Then the Alfresco Project Generator:
- 
+## Installing Alfresco Project Generator 
+Since we’re developing the generator locally, it’s not yet available as a global npm module. 
+A global module may be created and symlinked to a local one, using npm. 
+
+Here’s what you’ll want to do:
+
+On the command line, from the root of your generator project (in the brutor/ folder), type:
+
 ```bash
-$ sudo npm install -g alfresco-project-generator
+$ npm link
+```
+
+```bash
+$ yo alfresco-extension-project
 ```
  
 ##  Generating a new project:

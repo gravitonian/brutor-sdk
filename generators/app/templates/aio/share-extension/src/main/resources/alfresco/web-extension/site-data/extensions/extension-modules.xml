@@ -1,7 +1,7 @@
 <extension>
   <modules>
     <module>
-      <id>aio-share-sample-jar - Tutorial Aikau Widgets</id>
+      <id>Share extension - Tutorial Aikau Widgets</id>
       <version>1.0</version>
       <auto-deploy>true</auto-deploy>
       <configurations>

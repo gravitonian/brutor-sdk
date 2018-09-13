@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd <%- activitiJarArtifactId %>
+cd <%- activitiExtensionArtifactId %>
 mvn clean install
 
 

@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId><%- activitiJarArtifactId %>
+  <artifactId><%- activitiExtensionArtifactId %>
   </artifactId>
   <name>Activiti Extension Module</name>
   <description>Activiti Extension Module that produces a JAR file with Java extensions such as service task delegates.

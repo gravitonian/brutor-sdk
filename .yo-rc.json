@@ -1,0 +1,29 @@
+{
+  "generator-alfresco-extension-project": {
+    "promptValues": {
+      "projectGroupId": "org.alfresco",
+      "projectVersion": "1.0.0-SNAPSHOT",
+      "projectPackage": "org.alfresco",
+      "communityOrEnterprise": "Community",
+      "includeRepoExtension": true,
+      "repoExtensionArtifactId": "repo-extension",
+      "repoExtensionName": "Repository Module",
+      "repoExtensionDescription": "Repository extension module JAR (to be included in the alfresco.war)",
+      "repoVersion": "6.0.7-ga",
+      "repoExtensionGenerateDockerBuild": true,
+      "includeShareExtension": true,
+      "shareExtensionArtifactId": "share-extension",
+      "shareExtensionName": "Share Module",
+      "shareExtensionDescription": "Share extension module JAR (to be included in the share.war)",
+      "shareVersion": "6.0",
+      "shareExtensionGenerateDockerBuild": true,
+      "includeActivitiExtension": true,
+      "activitiExtensionArtifactId": "activiti-extension",
+      "activitiExtensionName": "Activiti Extension",
+      "activitiExtensionDescription": "Activiti extension JAR (to be included in the activiti_app.war)",
+      "activitiVersion": "6.0",
+      "activitiExtensionGenerateDockerBuild": true,
+      "generateSampleSrcCode": true
+    }
+  }
+}

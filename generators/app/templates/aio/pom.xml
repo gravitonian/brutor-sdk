@@ -13,7 +13,7 @@
   <!-- Module declarations need to be here so IDEs scans the modules and set up libs,
        otherwise Alfresco and Activiti classes are not recognized -->
   <modules>
-    <module><%- activitiJarArtifactId %></module>
+    <module><%- activitiExtensionArtifactId %></module>
     <module><%- repoExtensionArtifactId %></module>
     <module><%- shareExtensionArtifactId %></module>
   </modules>

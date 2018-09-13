@@ -23,18 +23,19 @@ module.exports = class extends Generator {
     //  optional: false,
     //  defaults: 'AIO'
     //});
-  },
+  }
 
   /*********************************************************************************************************************
-   * Methods that are part of Yeoman environment run loop */
+   * Methods that are part of Yeoman environment run loop, in priority order */
 
-  initializing: function () {
+  // Initialization methods (checking current project state, getting configs, etc)
+  initializing() {
     this.props = {};
 
     this.defaultConfig = {
       // Default config for general project properties
       projectGroupId: 'org.alfresco',
-      projectArtifactId: path.basename(process.cwd()),
+      projectArtifactId: 'my_alf_proj',
       projectVersion: '1.0.0-SNAPSHOT',
       projectPackage: 'org.alfresco',
       projectName: ' Alfresco Extension Project',
@@ -66,9 +67,10 @@ module.exports = class extends Generator {
       activitiExtensionGenerateDockerBuild: true,
       activitiVersion: '6.0',
     };
-  },
+  }
 
-  prompting: function () {
+  // Where you prompt users for options (where you’d call this.prompt())
+  prompting() {
     // Show a welcome message
     this.log(alflogo(
       'Welcome to the Alfresco Extension Project Generator!\n',
@@ -138,35 +140,45 @@ module.exports = class extends Generator {
       message: 'Repository extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID),
       store: true,
-      when : this._includeRepoExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_REPOSITORY_EXTENSION_NAME,
       message: 'Repository Extension Name?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_NAME),
       store: true,
-      when : this._includeRepoExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION,
       message: 'Repository Extension Description?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION),
       store: true,
-      when : this._includeRepoExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
     },{
       type: 'input',
       name: constants.PROP_REPOSITORY_VERSION,
       message: 'Alfresco Repository version?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_VERSION),
       store: true,
-      when : this._includeRepoExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
     }, {
       type: 'confirm',
       name: constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
       message: 'Should a project for Repository Docker build be generated (i.e. build Repo Docker image with repo extension)?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD),
       store: true,
-      when : this._includeRepoExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
     },
 
     // Questions related to the Alfresco Share Extension Module
@@ -182,35 +194,45 @@ module.exports = class extends Generator {
       message: 'Share extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_ARTIFACT_ID),
       store: true,
-      when : this._includeShareExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_SHARE_EXTENSION_NAME,
       message: 'Share Extension Name?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_NAME),
       store: true,
-      when : this._includeShareExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_SHARE_EXTENSION_DESCRIPTION,
       message: 'Share Extension Description?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_DESCRIPTION),
       store: true,
-      when : this._includeShareExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension;
+      }
     },{
       type: 'input',
       name: constants.PROP_SHARE_VERSION,
       message: 'Alfresco Share version?',
       default: this._getConfigValue(constants.PROP_SHARE_VERSION),
       store: true,
-      when : this._includeShareExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension;
+      }
     }, {
       type: 'confirm',
       name: constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
       message: 'Should a project for Share Docker build be generated (i.e. build Share Docker image with Share extension)?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD),
       store: true,
-      when : this._includeShareExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension;
+      }
     },
 
     // Questions related to the Activiti Extension Module
@@ -226,35 +248,45 @@ module.exports = class extends Generator {
       message: 'Activiti extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_ARTIFACT_ID),
       store: true,
-      when : this._includeActivitiExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_ACTIVITI_EXTENSION_NAME,
       message: 'Activiti Extension Name?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_NAME),
       store: true,
-      when : this._includeActivitiExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
     }, {
       type: 'input',
       name: constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION,
       message: 'Activiti Extension Description?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION),
       store: true,
-      when : this._includeActivitiExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
     },{
       type: 'input',
       name: constants.PROP_ACTIVITI_VERSION,
       message: 'Activiti version?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_VERSION),
       store: true,
-      when : this._includeActivitiExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
     }, {
       type: 'confirm',
       name: constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
       message: 'Should a project for Activiti Docker build be generated (i.e. build Activiti Docker image with Activiti extension)?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD),
       store: true,
-      when : this._includeActivitiExtension()
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
     },
 
     {
@@ -268,245 +300,251 @@ module.exports = class extends Generator {
     return this.prompt(questionPrompts).then(function (props) {
       this.props = props;
     }.bind(this));
-  },
+  }
 
-  default: {
-    checkRootDir: function () {
-      this.log('Checking root dir...');
+  // If the method name doesn’t match a priority, it will be pushed to this group
+  default() {
+    // Check root directory
+    this.log('Checking root dir...');
 
-      var projectArtifactId = this.props.projectArtifactId;
-      if (path.basename(this.destinationPath()) !== projectArtifactId) {
-        this.log(
-          "Your Alfresco extension project must be inside a directory named " + projectArtifactId + "\n" +
-          "This directory will be automatically created."
-        );
-        mkdirp(projectArtifactId);
-        this.destinationRoot(this.destinationPath(projectArtifactId));
-      }
-    },
-
-    saveConfig: function () {
-
-      this.log('Creating .yo-rc.json file...');
-      // To access props later use for example this.config.get(constants.PROP_PROJECT_ARTIFACT_ID)
-
-      this._saveProps([
-        constants.PROP_PROJECT_GROUP_ID,
-        constants.PROP_PROJECT_ARTIFACT_ID,
-        constants.PROP_PROJECT_VERSION,
-        constants.PROP_PROJECT_PACKAGE,
-        constants.PROP_PROJECT_NAME,
-        constants.PROP_PROJECT_DESCRIPTION,
-        constants.PROP_COMMUNITY_OR_ENTERPRISE,
-        constants.PROP_INCLUDE_REPOSITORY_EXTENSION,
-        constants.PROP_INCLUDE_ALFRESCO_SHARE_EXTENSION,
-        constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
-        constants.PROP_REPOSITORY_VERSION,
-        constants.PROP_SHARE_VERSION,
-        constants.PROP_REPOSITORY_EXTENSION_NAME,
-        constants.PROP_ALFRESCO_SHARE_EXTENSION_NAME,
-        constants.PROP_GENERATE_SAMPLE_SRC
-      ], this.props);
+    var projectArtifactId = this.props.projectArtifactId;
+    if (path.basename(this.destinationPath()) !== projectArtifactId) {
+      this.log(
+        "Your Alfresco extension project must be inside a directory named " + projectArtifactId + "\n" +
+        "This directory will be automatically created."
+      );
+      mkdirp(projectArtifactId);
+      this.destinationRoot(this.destinationPath(projectArtifactId));
     }
-  },
 
-  writing: {
-    writeProjectFiles: function () {
-      this.log('Writing project files...');
+    // Save configuration
+    this.log('Creating .yo-rc.json file...');
+    // To access props later use for example this.config.get(constants.PROP_PROJECT_ARTIFACT_ID)
 
-      // Template Context
-      var tplContext = {
+    this._saveProps([
+      // General project props
+      constants.PROP_COMMUNITY_OR_ENTERPRISE,
+      constants.PROP_PROJECT_ARTIFACT_ID,
+      constants.PROP_PROJECT_ARTIFACT_ID_PREFIX,
+      constants.PROP_PROJECT_GROUP_ID,
+      constants.PROP_PROJECT_PACKAGE,
+      constants.PROP_PROJECT_VERSION,
+      constants.PROP_PROJECT_NAME,
+      constants.PROP_PROJECT_DESCRIPTION,
+      constants.PROP_GENERATE_SAMPLE_SRC,
 
-        // General project properties
-        groupId: this.props.projectGroupId,
-        artifactId: this.props.projectArtifactId,
-        version: this.props.projectVersion,
-        package: this.props.projectPackage,
-        name: this.props.projectName,
-        description: this.props.projectDescription,
-        generateSampleSrcCode: this.props.generateSampleSrcCode,
+      // Repo extension props
+      constants.PROP_INCLUDE_REPOSITORY_EXTENSION,
+      constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID,
+      constants.PROP_REPOSITORY_EXTENSION_NAME,
+      constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION,
+      constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
+      constants.PROP_REPOSITORY_VERSION,
 
-        // Repository Extension properties
-        includeRepoExtension: this.props.includeRepoExtension,
-        repoExtensionArtifactId: this.props.repoExtensionArtifactId,
-        repoExtensionName: this.props.repoExtensionName,
-        repoExtensionDescription: this.props.repoExtensionDescription,
-        repoExtensionGenerateDockerBuild: this.props.repoExtensionGenerateDockerBuild,
-        repoVersion: this.props.repoVersion,
+      // Share extension props
+      constants.PROP_INCLUDE_SHARE_EXTENSION,
+      constants.PROP_SHARE_EXTENSION_ARTIFACT_ID,
+      constants.PROP_SHARE_EXTENSION_NAME,
+      constants.PROP_SHARE_EXTENSION_DESCRIPTION,
+      constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
+      constants.PROP_SHARE_VERSION,
 
-        // Share Extension properties
-        includeShareExtension: this.props.includeShareExtension,
-        shareExtensionArtifactId: this.props.shareExtensionArtifactId,
-        shareExtensionName: this.props.shareExtensionName,
-        shareExtensionDescription: this.props.shareExtensionDescription,
-        shareExtensionGenerateDockerBuild: this.props.shareExtensionGenerateDockerBuild,
-        shareVersion: this.props.shareVersion,
+      // Activiti extension props
+      constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
+      constants.PROP_ACTIVITI_EXTENSION_ARTIFACT_ID,
+      constants.PROP_ACTIVITI_EXTENSION_NAME,
+      constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION,
+      constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
+      constants.PROP_ACTIVITI_VERSION
+    ],
+    this.props);
+  }
 
-        // Activiti Extension properties
-        includeActivitiExtension: this.props.includeActivitiExtension,
-        activitiExtensionArtifactId: this.props.activitiExtensionArtifactId,
-        activitiExtensionName: this.props.activitiExtensionName,
-        activitiExtensionDescription: this.props.activitiExtensionDescription,
-        activitiExtensionGenerateDockerBuild: this.props.activitiExtensionGenerateDockerBuild,
-        activitiVersion: this.props.activitiVersion,
-      };
+  // Where you write the generator specific files (routes, controllers, etc)
+  writing() {
+    this.log('Writing project files...');
 
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // Copy Parent Project files
-      this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
-      this._copyAsTemplate("aio/", "", "README.md", tplContext);
-      this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
-      this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
-      this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
-      this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
+    // Template Context
+    var tplContext = {
 
-      // Common paths
-      var alfrescoModulePath = '/src/main/resources/alfresco/module/';
-      var webExtensionPath = '/src/main/resources/alfresco/web-extension/';
+      // General project properties
+      groupId: this.props.projectGroupId,
+      artifactId: this.props.projectArtifactId,
+      version: this.props.projectVersion,
+      package: this.props.projectPackage,
+      name: this.props.projectName,
+      description: this.props.projectDescription,
+      generateSampleSrcCode: this.props.generateSampleSrcCode,
 
-      if (this.props.includeRepoExtension) {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Copy Repository Extension Module files
-        var templateRepoModuleId = 'repo-extension';
-        var repoExtensionTemplateSrcMainDir = 'aio/' + templateRepoModuleId + '/src/main/';
-        var repoExtensionTemplateModuleDir = 'aio/' + templateRepoModuleId + '/' + alfrescoModulePath + templateRepoModuleId + '/';
+      // Repository Extension properties
+      includeRepoExtension: this.props.includeRepoExtension,
+      repoExtensionArtifactId: this.props.repoExtensionArtifactId,
+      repoExtensionName: this.props.repoExtensionName,
+      repoExtensionDescription: this.props.repoExtensionDescription,
+      repoExtensionGenerateDockerBuild: this.props.repoExtensionGenerateDockerBuild,
+      repoVersion: this.props.repoVersion,
 
-        this._copyAsTemplate("aio/" + templateRepoModuleId + "/", repoExtensionArtifactId + "/", "pom.xml", tplContext);
+      // Share Extension properties
+      includeShareExtension: this.props.includeShareExtension,
+      shareExtensionArtifactId: this.props.shareExtensionArtifactId,
+      shareExtensionName: this.props.shareExtensionName,
+      shareExtensionDescription: this.props.shareExtensionDescription,
+      shareExtensionGenerateDockerBuild: this.props.shareExtensionGenerateDockerBuild,
+      shareVersion: this.props.shareVersion,
 
-        var fileSrc = repoExtensionTemplateSrcMainDir + 'assembly/';
-        var fileDst = repoExtensionArtifactId + '/src/main/assembly/';
-        this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+      // Activiti Extension properties
+      includeActivitiExtension: this.props.includeActivitiExtension,
+      activitiExtensionArtifactId: this.props.activitiExtensionArtifactId,
+      activitiExtensionName: this.props.activitiExtensionName,
+      activitiExtensionDescription: this.props.activitiExtensionDescription,
+      activitiExtensionGenerateDockerBuild: this.props.activitiExtensionGenerateDockerBuild,
+      activitiVersion: this.props.activitiVersion,
+    };
 
-        if (this.props.generateSampleSrcCode) {
-          fileSrc = repoExtensionTemplateSrcMainDir + 'java/org/alfresco/tutorial/reposamples/';
-          fileDst = repoExtensionArtifactId + '/src/main/java/' + this.props.projectPackage.replace(/\./gi, '/') +
-            '/reposamples/';
-          this._copyAsTemplate(fileSrc, fileDst, "Demo.java", tplContext);
-          this._copyAsTemplate(fileSrc, fileDst, "DemoComponent.java", tplContext);
-          this._copyAsTemplate(fileSrc, fileDst, "DemoRepoAction.java", tplContext);
-          this._copyAsTemplate(fileSrc, fileDst, "HelloWorldWebScript.java", tplContext);
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Copy Parent Project files
+    this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
+    this._copyAsTemplate("aio/", "", "README.md", tplContext);
+    this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
+    this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
+    this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
+    this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
 
-          var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
-          fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + webScriptDirPath;
-          fileDst = repoExtensionArtifactId + '/src/main/resources/' + webScriptDirPath;
-          this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
-          this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
-          this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
-        }
+    // Common paths
+    var alfrescoModulePath = '/src/main/resources/alfresco/module/';
 
-        var repoModulePathDst = repoExtensionArtifactId + alfrescoModulePath + repoExtensionArtifactId + '/';
-        var springContextDirPath = 'context/';
-        fileSrc = repoExtensionTemplateModuleDir + springContextDirPath;
-        fileDst = repoModulePathDst + springContextDirPath;
-        this._copyAsTemplate(fileSrc, fileDst, "bootstrap-context.xml", tplContext);
-        this._copyAsTemplate(fileSrc, fileDst, "service-context.xml", tplContext);
-        this._copyAsTemplate(fileSrc, fileDst, "webscript-context.xml", tplContext);
+    if (this.props.includeRepoExtension) {
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy Repository Extension Module files
+      var templateRepoModuleId = 'repo-extension';
+      var repoExtensionTemplateSrcMainDir = 'aio/' + templateRepoModuleId + '/src/main/';
+      var repoExtensionTemplateModuleDir = 'aio/' + templateRepoModuleId + '/' + alfrescoModulePath + templateRepoModuleId + '/';
 
-        var contentModelDirPath = 'model/';
-        fileSrc = repoExtensionTemplateModuleDir + contentModelDirPath;
-        fileDst = repoModulePathDst + contentModelDirPath;
-        this._copyAsTemplate(fileSrc, fileDst, "content-model.xml", tplContext);
+      this._copyAsTemplate("aio/" + templateRepoModuleId + "/", this.props.repoExtensionArtifactId + "/", "pom.xml", tplContext);
 
-        fileSrc = repoExtensionTemplateModuleDir;
-        fileDst = repoModulePathDst;
-        this._copyAsTemplate(fileSrc, fileDst, "alfresco-global.properties", tplContext);
-        this._copyAsTemplate(fileSrc, fileDst, "log4j.properties", tplContext);
-        this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
-        this._copyAsTemplate(fileSrc, fileDst, "module-context.xml", tplContext);
-
-        var metaInfResourcesDirPath = 'META-INF/resources/';
-        fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
-        fileDst = repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
-        this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
-      }
-
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // Copy Share Extension Module files
-      var templateShareModuleId = 'share-extension';
-      var shareExtensionTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
-      var shareExtensionTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
-      var shareExtensionTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
-
-      this._copyAsTemplate("aio/" + templateShareModuleId + "/", shareExtensionArtifactId + "/", "pom.xml", tplContext);
-
-      fileSrc = shareExtensionTemplateSrcMainDir + 'assembly/';
-      fileDst = shareExtensionArtifactId + '/src/main/assembly/';
+      var fileSrc = repoExtensionTemplateSrcMainDir + 'assembly/';
+      var fileDst = this.props.repoExtensionArtifactId + '/src/main/assembly/';
       this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
 
-      var shareModulePathDst = shareExtensionArtifactId + alfrescoModulePath + shareExtensionArtifactId + '/';
-      fileSrc = shareExtensionTemplateModuleDir;
-      fileDst = shareModulePathDst;
+      if (this.props.generateSampleSrcCode) {
+        fileSrc = repoExtensionTemplateSrcMainDir + 'java/org/alfresco/tutorial/reposamples/';
+        fileDst = this.props.repoExtensionArtifactId + '/src/main/java/' + this.props.projectPackage.replace(/\./gi, '/') +
+          '/reposamples/';
+        this._copyAsTemplate(fileSrc, fileDst, "Demo.java", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "DemoComponent.java", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "DemoRepoAction.java", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "HelloWorldWebScript.java", tplContext);
+
+        var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
+        fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + webScriptDirPath;
+        fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + webScriptDirPath;
+        this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
+      }
+
+      var repoModulePathDst = this.props.repoExtensionArtifactId + alfrescoModulePath + this.props.repoExtensionArtifactId + '/';
+      var springContextDirPath = 'context/';
+      fileSrc = repoExtensionTemplateModuleDir + springContextDirPath;
+      fileDst = repoModulePathDst + springContextDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "bootstrap-context.xml", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "service-context.xml", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "webscript-context.xml", tplContext);
+
+      var contentModelDirPath = 'model/';
+      fileSrc = repoExtensionTemplateModuleDir + contentModelDirPath;
+      fileDst = repoModulePathDst + contentModelDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "content-model.xml", tplContext);
+
+      fileSrc = repoExtensionTemplateModuleDir;
+      fileDst = repoModulePathDst;
+      this._copyAsTemplate(fileSrc, fileDst, "alfresco-global.properties", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "log4j.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
+      this._copyAsTemplate(fileSrc, fileDst, "module-context.xml", tplContext);
 
-      fileSrc = shareExtensionTemplateWebExtensionDir;
-      fileDst = shareExtensionArtifactId + webExtensionPath;
-      this._copyAsTemplate(fileSrc, fileDst, "custom-slingshot-application-context.xml", tplContext);
-
-      fileSrc = shareExtensionTemplateModuleDir;
-      fileDst = shareModulePathDst;
-      this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
-
-      var messagesDirPath = 'messages/';
-      fileSrc = shareExtensionTemplateWebExtensionDir + messagesDirPath;
-      fileDst = shareExtensionArtifactId + webExtensionPath + messagesDirPath;
-      this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
-
-      var siteDataExtensionsDirPath = 'site-data/extensions/';
-      fileSrc = shareExtensionTemplateWebExtensionDir + siteDataExtensionsDirPath;
-      fileDst = shareExtensionArtifactId + webExtensionPath + siteDataExtensionsDirPath;
-      this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
-
-      webScriptDirPath = 'site-webscripts/com/example/pages/';
-      fileSrc = shareExtensionTemplateWebExtensionDir + webScriptDirPath;
-      fileDst = shareExtensionArtifactId + webExtensionPath + webScriptDirPath;
-      this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.desc.xml", tplContext);
-      this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
-      this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
-
-      var tutorialWidgetsPath = "/js/tutorials/widgets";
-      var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
-      var widgetsResourcesDstPath = metaInfResourcesDirPath + shareExtensionArtifactId + tutorialWidgetsPath;
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
-      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
-      this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
-      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
-      this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
-      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
-      this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
-      fileDst = shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
-      this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
-
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
-      fileDst = shareExtensionArtifactId + '/src/main/resources/META-INF/';
-      this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+      var metaInfResourcesDirPath = 'META-INF/resources/';
+      fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
+      fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
     }
-  },
 
-  install: function () {
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Copy Share Extension Module files
+    var templateShareModuleId = 'share-extension';
+    var webExtensionPath = '/src/main/resources/alfresco/web-extension/';
+    var shareExtensionTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
+    var shareExtensionTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
+    var shareExtensionTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
+
+    this._copyAsTemplate("aio/" + templateShareModuleId + "/", this.props.shareExtensionArtifactId + "/", "pom.xml", tplContext);
+
+    fileSrc = shareExtensionTemplateSrcMainDir + 'assembly/';
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/assembly/';
+    this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+
+    var shareModulePathDst = this.props.shareExtensionArtifactId + alfrescoModulePath + this.props.shareExtensionArtifactId + '/';
+    fileSrc = shareExtensionTemplateModuleDir;
+    fileDst = shareModulePathDst;
+    this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
+
+    fileSrc = shareExtensionTemplateWebExtensionDir;
+    fileDst = this.props.shareExtensionArtifactId + webExtensionPath;
+    this._copyAsTemplate(fileSrc, fileDst, "custom-slingshot-application-context.xml", tplContext);
+
+    fileSrc = shareExtensionTemplateModuleDir;
+    fileDst = shareModulePathDst;
+    this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
+
+    var messagesDirPath = 'messages/';
+    fileSrc = shareExtensionTemplateWebExtensionDir + messagesDirPath;
+    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + messagesDirPath;
+    this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
+
+    var siteDataExtensionsDirPath = 'site-data/extensions/';
+    fileSrc = shareExtensionTemplateWebExtensionDir + siteDataExtensionsDirPath;
+    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + siteDataExtensionsDirPath;
+    this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
+
+    webScriptDirPath = 'site-webscripts/com/example/pages/';
+    fileSrc = shareExtensionTemplateWebExtensionDir + webScriptDirPath;
+    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + webScriptDirPath;
+    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.desc.xml", tplContext);
+    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
+    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
+
+    var tutorialWidgetsPath = "/js/tutorials/widgets";
+    var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
+    var widgetsResourcesDstPath = metaInfResourcesDirPath + this.props.shareExtensionArtifactId + tutorialWidgetsPath;
+    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
+    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
+    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
+    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
+    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
+    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
+    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
+    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
+
+    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
+    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/META-INF/';
+    this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+  }
+
+  // Where installations are run (npm, bower)
+  install() {
     this.log('Nothing to install in npm repo...');
 
     //this.installDependencies();
-  },
+  }
 
   /*********************************************************************************************************************
    *  Private methods not part of Yeoman run loop */
 
-   _includeRepoExtension: function (currentAnswers) {
-      return currentAnswers.includeRepoExtension;
-   },
-
-   _includeShareExtension: function (currentAnswers) {
-      return currentAnswers.includeShareExtension;
-   },
-
-   _includeActivitiExtension: function (currentAnswers) {
-      return currentAnswers.includeActivitiExtension;
-   },
-
-  _getConfigValue: function (key) {
+  _getConfigValue(key) {
     if (!_.isNil(key)) {
       if (!_.isNil(this.config.get(key))) {
         return this.config.get(key);
@@ -515,21 +553,21 @@ module.exports = class extends Generator {
       }
     }
     return undefined;
-  },
+  }
 
-  _saveProp: function (propName, propObject) {
+  _saveProp(propName, propObject) {
     var value = propObject[propName];
     this[propName] = value;
     this.config.set(propName, value);
-  },
+  }
 
-  _saveProps: function (propNames, propObject) {
+  _saveProps(propNames, propObject) {
     propNames.forEach(function (propName) {
       this._saveProp(propName, propObject);
     }.bind(this));
-  },
+  }
 
-  _copyAsTemplate: function (fileSrcDir, fileDstDir, fileName, tplContext) {
+  _copyAsTemplate(fileSrcDir, fileDstDir, fileName, tplContext) {
     this.fs.copyTpl(
       this.templatePath(fileSrcDir + fileName),
       this.destinationPath(fileDstDir + fileName),
