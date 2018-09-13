@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd repo-extension
+cd <%- repoExtensionArtifactId %>
 mvn clean install
 
 

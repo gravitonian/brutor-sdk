@@ -9,7 +9,7 @@
 		  workflow, and loading custom content models.  -->
 
     <!-- Registration of new models -->
-    <bean id="<%- groupId %>.<%- platformExtensionArtifactId %>.dictionaryBootstrap"
+    <bean id="<%- groupId %>.<%- repoExtensionArtifactId %>.dictionaryBootstrap"
           parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap">
         <property name="models">

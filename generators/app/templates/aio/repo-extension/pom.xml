@@ -1,44 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId><%- repoExtensionArtifactId %></artifactId>
-    <name>Repository Sample Jar Module</name>
-    <description>Repository sample JAR Module (to be included in the alfresco.war)</description>
-    <packaging>jar</packaging>
-
-    <parent>
-        <groupId><%- groupId %></groupId>
-        <artifactId><%- artifactId %></artifactId>
-        <version><%- version %></version>
-    </parent>
-
-    <properties>
-    </properties>
-
-    <dependencies>
-        <!-- The main Alfresco Repo dependency for compiling Java code in src/main/java -->
-        <dependency>
-            <groupId>${alfresco.groupId}</groupId>
-            <artifactId>alfresco-repository</artifactId>
-
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
-
-</project>
-
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -48,15 +8,15 @@
 <parent>
   <groupId>org.alfresco</groupId>
   <artifactId>acs-community-packaging</artifactId>
-  <version><%- repositoryVersion %></version>
+  <version><%- repoVersion %></version>
   <relativePath></relativePath> <!-- Add empty parent POM path so it resolves from repositories, and not from ../pom.xml -->
 </parent>
 
 <groupId><%- groupId %></groupId>
 <artifactId><%- repoExtensionArtifactId %></artifactId>
 <version><%- version %></version>
-<name>Repository Sample Jar Module</name>
-<description>Repository sample JAR Module (to be included in the alfresco.war)</description>
+<name><%- repoExtensionName %></name>
+<description><%- repoExtensionDescription %></description>
 <packaging>jar</packaging>
 
 <dependencies>
@@ -66,22 +26,24 @@
     <!-- No need to specify version, it is picked up from dependency management in parent POM -->
   </dependency>
 
-  <!-- HTTP Lib to make ACS ReST calls -->
+  <!-- HTTP Lib to make APS ReST calls
   <dependency>
     <groupId>com.squareup.okhttp3</groupId>
     <artifactId>okhttp</artifactId>
     <version>3.10.0</version>
   </dependency>
-  <!-- JSON Processing -->
+  -->
+  <!-- JSON Processing
   <dependency>
     <groupId>com.googlecode.json-simple</groupId>
     <artifactId>json-simple</artifactId>
     <version>1.1.1</version>
   </dependency>
+  -->
 </dependencies>
 
 <build>
-  <!-- Make sure resources are filtered (e.g. module.id=${project.artifactId} -> module.id=custom-repo-extension) -->
+  <!-- Make sure resources are filtered (e.g. module.id=${project.artifactId} -> module.id=repo-extension) -->
   <resources>
     <resource>
       <directory>src/main/resources</directory>

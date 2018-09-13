@@ -10,7 +10,7 @@
   <description>This pom is used to define the sub-modules so IDEs scan them and set up libs</description>
   <packaging>pom</packaging>
 
-  <!-- Module declarations need to be here so IDEA scans the modules and set up libs,
+  <!-- Module declarations need to be here so IDEs scans the modules and set up libs,
        otherwise Alfresco and Activiti classes are not recognized -->
   <modules>
     <module><%- activitiJarArtifactId %></module>

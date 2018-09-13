@@ -24,10 +24,10 @@ module.exports = yeoman.Base.extend({
   initializing: function () {
     this.props = {};
 
-    var defaultActionTitle = "Sample";
-    var defaultActionDesc = "Sample platform action, also called repository action";
+    var defaultActionTitle = "Sample Action";
+    var defaultActionDesc = "Sample Repository Action";
     this.defaultConfig = {
-      projectPackage: 'com.mycompany',
+      projectPackage: 'org.alfresco',
       repoActionsPackageName: 'actions',
       repoActionTitle: defaultActionTitle,
       repoActionDesc: defaultActionDesc
@@ -37,33 +37,33 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Show a welcome message
     this.log(alflogo(
-      'Welcome to the Alfresco Platform Action Generator!\n',
+      'Welcome to the Alfresco Repository Action Generator!\n',
       {'left-pad': '     '}));
 
     // Set up a list of properties we need user to supply values for
     var prompts = [{
       type: 'input',
       name: constants.PROP_PROJECT_PACKAGE,
-      message: "Base Java package for this platform module?",
+      message: "Base Java package for this repository module?",
       default: this._getConfigValue(constants.PROP_PROJECT_PACKAGE),
       store: true
     }, {
       type: 'input',
-      name: constants.PROP_PLATFORM_ACTIONS_PACKAGE_NAME,
-      message: "Java package name for all platform actions?",
-      default: this._getConfigValue(constants.PROP_PLATFORM_ACTIONS_PACKAGE_NAME),
+      name: constants.PROP_REPOSITORY_ACTIONS_PACKAGE_NAME,
+      message: "Java package name for all repository actions?",
+      default: this._getConfigValue(constants.PROP_REPOSITORY_ACTIONS_PACKAGE_NAME),
       store: true
     }, {
       type: 'input',
-      name: constants.PROP_PLATFORM_ACTION_TITLE,
-      message: "Platform Action Title?",
-      default: this._getConfigValue(constants.PROP_PLATFORM_ACTION_TITLE),
+      name: constants.PROP_REPOSITORY_ACTION_TITLE,
+      message: "Repository Action Title?",
+      default: this._getConfigValue(constants.PROP_REPOSITORY_ACTION_TITLE),
       store: true
     }, {
       type: 'input',
-      name: constants.PROP_PLATFORM_ACTION_DESC,
-      message: "Platform Action Description?",
-      default: this._getConfigValue(constants.PROP_PLATFORM_ACTION_DESC),
+      name: constants.PROP_REPOSITORY_ACTION_DESC,
+      message: "Repository Action Description?",
+      default: this._getConfigValue(constants.PROP_REPOSITORY_ACTION_DESC),
       store: true
     }];
 
@@ -73,9 +73,9 @@ module.exports = yeoman.Base.extend({
       // To access props later use for example this.config.get(constants.PROP_PROJECT_ARTIFACT_ID)
       this._saveProps([
         constants.PROP_PROJECT_PACKAGE,
-        constants.PROP_PLATFORM_ACTIONS_PACKAGE_NAME,
-        constants.PROP_PLATFORM_ACTION_TITLE,
-        constants.PROP_PLATFORM_ACTION_DESC
+        constants.PROP_REPOSITORY_ACTIONS_PACKAGE_NAME,
+        constants.PROP_REPOSITORY_ACTION_TITLE,
+        constants.PROP_REPOSITORY_ACTION_DESC
       ], props);
     }.bind(this));
   },

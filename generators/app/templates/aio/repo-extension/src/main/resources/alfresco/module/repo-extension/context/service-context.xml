@@ -20,15 +20,15 @@
 
   <% if (generateSampleSrcCode == true) { %>
     <!-- A simple class that is initialized by Spring -->
-    <bean id="<%- groupId %>.<%- platformExtensionArtifactId %>.exampleBean"
-          class="<%- package %>.platformsample.Demo"
+    <bean id="<%- groupId %>.<%- repoExtensionArtifactId %>.exampleBean"
+          class="<%- package %>.reposamples.Demo"
           init-method="init" />
 
     <!-- A simple module component that will be executed once -->
-    <bean id="<%- groupId %>.<%- platformExtensionArtifactId %>.exampleComponent"
-          class="<%- package %>.platformsample.DemoComponent"
+    <bean id="<%- groupId %>.<%- repoExtensionArtifactId %>.exampleComponent"
+          class="<%- package %>.reposamples.DemoComponent"
           parent="module.baseComponent" >
-        <property name="moduleId" value="<%- platformExtensionArtifactId %>" />  <!-- See module.properties -->
+        <property name="moduleId" value="<%- repoExtensionArtifactId %>" />  <!-- See module.properties -->
         <property name="name" value="exampleComponent" />
         <property name="description" value="A demonstration component" />
         <property name="sinceVersion" value="1.0-SNAPSHOT" />
@@ -37,8 +37,8 @@
         <property name="nodeLocatorService" ref="nodeLocatorService" />
     </bean>
 
-    <bean id="<%- groupId %>.<%- platformExtensionArtifactId %>.DemoAction"
-          class="<%- package %>.platformsample.DemoRepoAction"
+    <bean id="<%- groupId %>.<%- repoExtensionArtifactId %>.DemoAction"
+          class="<%- package %>.reposamples.DemoRepoAction"
           parent="action-executer">
     </bean>
   <% } %>

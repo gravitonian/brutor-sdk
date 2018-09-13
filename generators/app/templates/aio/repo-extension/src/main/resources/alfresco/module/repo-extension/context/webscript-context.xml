@@ -19,7 +19,7 @@
 <beans>
   <% if (generateSampleSrcCode == true) { %>
 	<bean id="webscript.alfresco.tutorials.helloworld.get"
-		  class="<%- package %>.platformsample.HelloWorldWebScript"
+		  class="<%- package %>.reposamples.HelloWorldWebScript"
 		  parent="webscript">
 	</bean>
   <% } %>
