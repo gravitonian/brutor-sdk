@@ -17,7 +17,6 @@ limitations under the License.
 package com.activiti.extension.bean;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

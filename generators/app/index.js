@@ -50,6 +50,7 @@ module.exports = class extends Generator {
       repoExtensionDescription: 'Repository extension module JAR (to be included in the alfresco.war)',
       repoExtensionGenerateDockerBuild: true,
       repoVersion: '6.0.7-ga',
+      repoJarOrAmp: 'JAR',
 
       // Default config for Share extension properties
       includeShareExtension: true,
@@ -58,6 +59,7 @@ module.exports = class extends Generator {
       shareExtensionDescription: 'Share extension module JAR (to be included in the share.war)',
       shareExtensionGenerateDockerBuild: true,
       shareVersion: '6.0',
+      shareJarOrAmp: 'JAR',
 
       // Default config for Activiti extension properties
       includeActivitiExtension: true,
@@ -65,7 +67,8 @@ module.exports = class extends Generator {
       activitiExtensionName: 'Activiti Extension',
       activitiExtensionDescription: 'Activiti extension JAR (to be included in the activiti_app.war)',
       activitiExtensionGenerateDockerBuild: true,
-      activitiVersion: '6.0',
+      activitiVersion: '1.9.0.3', // Alfresco Process Services (APS) version (Enterprise)
+      activitiProjectPackage: 'com.activiti.extension.bean' // Standard place where Activiti searches for Spring Beans
     };
   }
 
@@ -113,7 +116,7 @@ module.exports = class extends Generator {
     }, {
       type: 'input',
       name: constants.PROP_PROJECT_PACKAGE,
-      message: "Package for Java sample classes?",
+      message: "Package for Java classes?",
       default: function (readonlyProps) {
         return readonlyProps.projectGroupId;
       },
@@ -139,7 +142,7 @@ module.exports = class extends Generator {
       name: constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID,
       message: 'Repository extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeRepoExtension;
       }
@@ -148,7 +151,7 @@ module.exports = class extends Generator {
       name: constants.PROP_REPOSITORY_EXTENSION_NAME,
       message: 'Repository Extension Name?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_NAME),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeRepoExtension;
       }
@@ -157,7 +160,7 @@ module.exports = class extends Generator {
       name: constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION,
       message: 'Repository Extension Description?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeRepoExtension;
       }
@@ -179,6 +182,16 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeRepoExtension;
       }
+    }, {
+      type: 'list',
+      name: constants.PROP_REPOSITORY_JAR_OR_AMP,
+      message: 'Package Repo extension as JAR or AMP?',
+      choices: ['JAR', 'AMP'],
+      default: this._getConfigValue(constants.PROP_REPOSITORY_JAR_OR_AMP),
+      store: false,
+      when: function (currentAnswers) {
+       return currentAnswers.includeRepoExtension;
+      }
     },
 
     // Questions related to the Alfresco Share Extension Module
@@ -193,7 +206,7 @@ module.exports = class extends Generator {
       name: constants.PROP_SHARE_EXTENSION_ARTIFACT_ID,
       message: 'Share extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_ARTIFACT_ID),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
       }
@@ -202,7 +215,7 @@ module.exports = class extends Generator {
       name: constants.PROP_SHARE_EXTENSION_NAME,
       message: 'Share Extension Name?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_NAME),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
       }
@@ -211,7 +224,7 @@ module.exports = class extends Generator {
       name: constants.PROP_SHARE_EXTENSION_DESCRIPTION,
       message: 'Share Extension Description?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_DESCRIPTION),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
       }
@@ -233,6 +246,16 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
       }
+    }, {
+      type: 'list',
+      name: constants.PROP_SHARE_JAR_OR_AMP,
+      message: 'Package Share extension as JAR or AMP?',
+      choices: ['JAR', 'AMP'],
+      default: this._getConfigValue(constants.PROP_SHARE_JAR_OR_AMP),
+      store: false,
+      when: function (currentAnswers) {
+       return currentAnswers.includeShareExtension;
+      }
     },
 
     // Questions related to the Activiti Extension Module
@@ -247,7 +270,7 @@ module.exports = class extends Generator {
       name: constants.PROP_ACTIVITI_EXTENSION_ARTIFACT_ID,
       message: 'Activiti extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_ARTIFACT_ID),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension;
       }
@@ -256,7 +279,7 @@ module.exports = class extends Generator {
       name: constants.PROP_ACTIVITI_EXTENSION_NAME,
       message: 'Activiti Extension Name?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_NAME),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension;
       }
@@ -265,7 +288,7 @@ module.exports = class extends Generator {
       name: constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION,
       message: 'Activiti Extension Description?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension;
       }
@@ -277,6 +300,15 @@ module.exports = class extends Generator {
       store: true,
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension;
+      }
+    },{
+      type: 'input',
+      name: constants.PROP_ACTIVITI_PROJECT_PACKAGE,
+      message: "Package for Activiti Java classes (don't change unless you know what you are doing)?",
+      default: this._getConfigValue(constants.PROP_ACTIVITI_PROJECT_PACKAGE),
+      store: false,
+      when: function (currentAnswers) {
+       return currentAnswers.includeActivitiExtension;
       }
     }, {
       type: 'confirm',
@@ -292,8 +324,14 @@ module.exports = class extends Generator {
     {
      type: 'confirm',
      name: constants.PROP_GENERATE_SAMPLE_SRC,
-     message: 'Should sample source code be generated?',
+     message: 'Generate sample source code for all extensions?',
      default: this._getConfigValue(constants.PROP_GENERATE_SAMPLE_SRC),
+     store: true
+   }, {
+     type: 'confirm',
+     name: constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT,
+     message: 'Generate a developer runtime environment based on Docker Compose?',
+     default: this._getConfigValue(constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT),
      store: true
    }];
 
@@ -340,6 +378,7 @@ module.exports = class extends Generator {
       constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION,
       constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
       constants.PROP_REPOSITORY_VERSION,
+      constants.PROP_REPOSITORY_JAR_OR_AMP,
 
       // Share extension props
       constants.PROP_INCLUDE_SHARE_EXTENSION,
@@ -348,6 +387,7 @@ module.exports = class extends Generator {
       constants.PROP_SHARE_EXTENSION_DESCRIPTION,
       constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
       constants.PROP_SHARE_VERSION,
+      constants.PROP_SHARE_JAR_OR_AMP,
 
       // Activiti extension props
       constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
@@ -355,7 +395,8 @@ module.exports = class extends Generator {
       constants.PROP_ACTIVITI_EXTENSION_NAME,
       constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION,
       constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
-      constants.PROP_ACTIVITI_VERSION
+      constants.PROP_ACTIVITI_VERSION,
+      constants.PROP_ACTIVITI_PROJECT_PACKAGE
     ],
     this.props);
   }
@@ -383,6 +424,7 @@ module.exports = class extends Generator {
       repoExtensionDescription: this.props.repoExtensionDescription,
       repoExtensionGenerateDockerBuild: this.props.repoExtensionGenerateDockerBuild,
       repoVersion: this.props.repoVersion,
+      repoJarOrAmp: this.props.repoJarOrAmp,
 
       // Share Extension properties
       includeShareExtension: this.props.includeShareExtension,
@@ -391,6 +433,7 @@ module.exports = class extends Generator {
       shareExtensionDescription: this.props.shareExtensionDescription,
       shareExtensionGenerateDockerBuild: this.props.shareExtensionGenerateDockerBuild,
       shareVersion: this.props.shareVersion,
+      shareJarOrAmp: this.props.shareJarOrAmp,
 
       // Activiti Extension properties
       includeActivitiExtension: this.props.includeActivitiExtension,
@@ -399,6 +442,7 @@ module.exports = class extends Generator {
       activitiExtensionDescription: this.props.activitiExtensionDescription,
       activitiExtensionGenerateDockerBuild: this.props.activitiExtensionGenerateDockerBuild,
       activitiVersion: this.props.activitiVersion,
+      activitiPackage: this.props.activitiProjectPackage,
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,9 +450,15 @@ module.exports = class extends Generator {
     this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
     this._copyAsTemplate("aio/", "", "README.md", tplContext);
     this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
-    this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
-    this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
-    this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
+    if (this.props.includeActivitiExtension) {
+      this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
+    }
+    if (this.props.includeRepoExtension) {
+      this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
+    }
+    if (this.props.includeShareExtension) {
+      this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
+    }
 
     // Common paths
     var alfrescoModulePath = '/src/main/resources/alfresco/module/';
@@ -422,9 +472,11 @@ module.exports = class extends Generator {
 
       this._copyAsTemplate("aio/" + templateRepoModuleId + "/", this.props.repoExtensionArtifactId + "/", "pom.xml", tplContext);
 
-      var fileSrc = repoExtensionTemplateSrcMainDir + 'assembly/';
-      var fileDst = this.props.repoExtensionArtifactId + '/src/main/assembly/';
-      this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+      if (this.props.repoJarOrAmp == 'AMP') {
+        var fileSrc = repoExtensionTemplateSrcMainDir + 'assembly/';
+        var fileDst = this.props.repoExtensionArtifactId + '/src/main/assembly/';
+        this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+      }
 
       if (this.props.generateSampleSrcCode) {
         fileSrc = repoExtensionTemplateSrcMainDir + 'java/org/alfresco/tutorial/reposamples/';
@@ -469,69 +521,91 @@ module.exports = class extends Generator {
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Copy Share Extension Module files
-    var templateShareModuleId = 'share-extension';
-    var webExtensionPath = '/src/main/resources/alfresco/web-extension/';
-    var shareExtensionTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
-    var shareExtensionTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
-    var shareExtensionTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
+    if (this.props.includeShareExtension) {
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy Share Extension Module files
+      var templateShareModuleId = 'share-extension';
+      var webExtensionPath = '/src/main/resources/alfresco/web-extension/';
+      var shareExtensionTemplateSrcMainDir = 'aio/' + templateShareModuleId + '/src/main/';
+      var shareExtensionTemplateModuleDir = 'aio/' + templateShareModuleId + '/' + alfrescoModulePath + templateShareModuleId + '/';
+      var shareExtensionTemplateWebExtensionDir = 'aio/' + templateShareModuleId + webExtensionPath;
 
-    this._copyAsTemplate("aio/" + templateShareModuleId + "/", this.props.shareExtensionArtifactId + "/", "pom.xml", tplContext);
+      this._copyAsTemplate("aio/" + templateShareModuleId + "/", this.props.shareExtensionArtifactId + "/", "pom.xml", tplContext);
 
-    fileSrc = shareExtensionTemplateSrcMainDir + 'assembly/';
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/assembly/';
-    this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+      if (this.props.shareJarOrAmp == 'AMP') {
+        fileSrc = shareExtensionTemplateSrcMainDir + 'assembly/';
+        fileDst = this.props.shareExtensionArtifactId + '/src/main/assembly/';
+        this._copyAsTemplate(fileSrc, fileDst, "amp.xml", tplContext);
+      }
 
-    var shareModulePathDst = this.props.shareExtensionArtifactId + alfrescoModulePath + this.props.shareExtensionArtifactId + '/';
-    fileSrc = shareExtensionTemplateModuleDir;
-    fileDst = shareModulePathDst;
-    this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
+      var shareModulePathDst = this.props.shareExtensionArtifactId + alfrescoModulePath + this.props.shareExtensionArtifactId + '/';
+      fileSrc = shareExtensionTemplateModuleDir;
+      fileDst = shareModulePathDst;
+      this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
 
-    fileSrc = shareExtensionTemplateWebExtensionDir;
-    fileDst = this.props.shareExtensionArtifactId + webExtensionPath;
-    this._copyAsTemplate(fileSrc, fileDst, "custom-slingshot-application-context.xml", tplContext);
+      fileSrc = shareExtensionTemplateWebExtensionDir;
+      fileDst = this.props.shareExtensionArtifactId + webExtensionPath;
+      this._copyAsTemplate(fileSrc, fileDst, "custom-slingshot-application-context.xml", tplContext);
 
-    fileSrc = shareExtensionTemplateModuleDir;
-    fileDst = shareModulePathDst;
-    this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
+      fileSrc = shareExtensionTemplateModuleDir;
+      fileDst = shareModulePathDst;
+      this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
 
-    var messagesDirPath = 'messages/';
-    fileSrc = shareExtensionTemplateWebExtensionDir + messagesDirPath;
-    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + messagesDirPath;
-    this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
+      var messagesDirPath = 'messages/';
+      fileSrc = shareExtensionTemplateWebExtensionDir + messagesDirPath;
+      fileDst = this.props.shareExtensionArtifactId + webExtensionPath + messagesDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "custom.properties", tplContext);
 
-    var siteDataExtensionsDirPath = 'site-data/extensions/';
-    fileSrc = shareExtensionTemplateWebExtensionDir + siteDataExtensionsDirPath;
-    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + siteDataExtensionsDirPath;
-    this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
+      var siteDataExtensionsDirPath = 'site-data/extensions/';
+      fileSrc = shareExtensionTemplateWebExtensionDir + siteDataExtensionsDirPath;
+      fileDst = this.props.shareExtensionArtifactId + webExtensionPath + siteDataExtensionsDirPath;
+      this._copyAsTemplate(fileSrc, fileDst, "extension-modules.xml", tplContext);
 
-    webScriptDirPath = 'site-webscripts/com/example/pages/';
-    fileSrc = shareExtensionTemplateWebExtensionDir + webScriptDirPath;
-    fileDst = this.props.shareExtensionArtifactId + webExtensionPath + webScriptDirPath;
-    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.desc.xml", tplContext);
-    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
-    this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
+      if (this.props.generateSampleSrcCode) {
+        webScriptDirPath = 'site-webscripts/com/example/pages/';
+        fileSrc = shareExtensionTemplateWebExtensionDir + webScriptDirPath;
+        fileDst = this.props.shareExtensionArtifactId + webExtensionPath + webScriptDirPath;
+        this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.desc.xml", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.html.ftl", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "simple-page.get.js", tplContext);
 
-    var tutorialWidgetsPath = "/js/tutorials/widgets";
-    var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
-    var widgetsResourcesDstPath = metaInfResourcesDirPath + this.props.shareExtensionArtifactId + tutorialWidgetsPath;
-    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
-    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
-    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
-    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
-    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
-    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
-    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
-    this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
+        var tutorialWidgetsPath = "/js/tutorials/widgets";
+        var widgetsResourcesSrcPath = metaInfResourcesDirPath + templateShareModuleId + tutorialWidgetsPath;
+        var widgetsResourcesDstPath = metaInfResourcesDirPath + this.props.shareExtensionArtifactId + tutorialWidgetsPath;
+        fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/css/';
+        fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/css/';
+        this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.css", tplContext);
+        fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/i18n/';
+        fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/i18n/';
+        this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.properties", tplContext);
+        fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + '/templates/';
+        fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/templates/';
+        this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.html", tplContext);
+        fileSrc = shareExtensionTemplateSrcMainDir + 'resources/' + widgetsResourcesSrcPath + "/";
+        fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/' + widgetsResourcesDstPath + '/';
+        this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
+      }
 
-    fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
-    fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/META-INF/';
-    this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
+      fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/META-INF/';
+      this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+    }
+
+    if (this.props.includeActivitiExtension) {
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy Activiti Extension Module files
+      var templateActivitiModuleId = 'activiti-extension';
+      var activitiExtensionTemplateSrcMainDir = 'aio/' + templateActivitiModuleId + '/src/main/';
+
+      this._copyAsTemplate("aio/" + templateActivitiModuleId + "/", this.props.activitiExtensionArtifactId + "/", "pom.xml", tplContext);
+
+      if (this.props.generateSampleSrcCode) {
+        fileSrc = activitiExtensionTemplateSrcMainDir + 'java/com/activiti/extension/bean/';
+        fileDst = this.props.activitiExtensionArtifactId + '/src/main/java/' + this.props.activitiProjectPackage.replace(/\./gi, '/') + '/';
+        this._copyAsTemplate(fileSrc, fileDst, "SimpleJavaDelegate.java", tplContext);
+        this._copyAsTemplate(fileSrc, fileDst, "SimpleSpringJavaDelegate.java", tplContext);
+      }
+    }
   }
 
   // Where installations are run (npm, bower)

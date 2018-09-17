@@ -17,26 +17,14 @@ limitations under the License.
 package com.activiti.extension.bean;
 
 
-import com.activiti.domain.integration.AlfrescoEndpoint;
-import com.activiti.service.api.AlfrescoEndpointService;
+import com.activiti.domain.idm.User;
+import com.activiti.service.api.UserService;
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static com.activiti.alfrescoconnector.AlfrescoConnectorConstants.ON_PREM_API_LOCATION;
 
 /**
  * A simple Service Task delegate implemented as a Spring Bean.
@@ -46,15 +34,18 @@ import static com.activiti.alfrescoconnector.AlfrescoConnectorConstants.ON_PREM_
 public class SimpleSpringJavaDelegate implements JavaDelegate {
     private static Logger logger = LoggerFactory.getLogger(SimpleSpringJavaDelegate.class);
 
-    // TODO: find some other bean to inject
     @Autowired
-    protected AlfrescoEndpointService alfrescoEndpointService;
+    protected UserService userService;
 
     /**
      * Service Task implementation
      */
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        logger.info("Calling SimpleSpringJavaDelegate");
+      logger.info("Calling SimpleSpringJavaDelegate");
+
+      User user = userService.findUser(Long.parseLong((String)execution.getVariable("initiator")));
+      String username = user.getFirstName() + " " + user.getLastName();
+      logger.info("Initiator is: " + username);
     }
 }

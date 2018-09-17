@@ -13,8 +13,14 @@
   <!-- Module declarations need to be here so IDEs scans the modules and set up libs,
        otherwise Alfresco and Activiti classes are not recognized -->
   <modules>
+    <% if (includeActivitiExtension == true) { %>
     <module><%- activitiExtensionArtifactId %></module>
+    <% } %>
+    <% if (includeRepoExtension == true) { %>
     <module><%- repoExtensionArtifactId %></module>
+    <% } %>
+    <% if (includeShareExtension == true) { %>
     <module><%- shareExtensionArtifactId %></module>
+    <% } %>
   </modules>
 </project>

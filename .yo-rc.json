@@ -19,11 +19,15 @@
       "shareExtensionGenerateDockerBuild": true,
       "includeActivitiExtension": true,
       "activitiExtensionArtifactId": "activiti-extension",
-      "activitiExtensionName": "Activiti Extension",
-      "activitiExtensionDescription": "Activiti extension JAR (to be included in the activiti_app.war)",
-      "activitiVersion": "6.0",
+      "activitiExtensionName": "Activiti Extension 2",
+      "activitiExtensionDescription": "Activiti Extension Description bla bla",
+      "activitiVersion": "1.9.0.1",
       "activitiExtensionGenerateDockerBuild": true,
-      "generateSampleSrcCode": true
+      "generateSampleSrcCode": false,
+      "activitiProjectPackage": "com.bla",
+      "repoJarOrAmp": "AMP",
+      "shareJarOrAmp": "JAR",
+      "includeDevRuntimeEnv": true
     }
   }
 }
