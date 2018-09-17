@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>share-docker-image</artifactId>
+    <name>Alfresco Share Docker Image Build</name>
+    <description>Alfresco Share Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
+    <packaging>pom</packaging>
+
+    <parent>
+      <groupId><%- groupId %></groupId>
+      <artifactId><%- artifactId %></artifactId>
+      <version><%- version %></version>
+    </parent>
+
+    <!-- Define the dependencies that should be part of custom Alfresco Share image -->
+    <dependencies>
+        <!-- Our custom share JAR extension -->
+        <dependency>
+          <groupId><%- groupId %></groupId>
+          <artifactId><%- shareExtensionArtifactId %></artifactId>
+          <version><%- version %></version>
+        </dependency>
+
+        <!-- Other UI extensions (JARs or AMPs) that need to be included
+
+       ...
+
+       -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-share-extensions</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId><%- groupId %></groupId>
+                                    <artifactId><%- shareExtensionArtifactId %></artifactId>
+                                    <version><%- version %></version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <!-- Other UI extensions (JARs or AMPs) that need to be included
+
+                                 ...
+
+                                -->
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build the custom Alfresco Share Docker Image -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.25.2</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>share-custom</alias>
+                            <name>alfresco-share-custom:${project.version}</name>
+                            <build>
+                                <dockerFileDir>${project.basedir}</dockerFileDir>
+                            </build>
+                        </image>
+                  </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>docker</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>registry</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                      </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

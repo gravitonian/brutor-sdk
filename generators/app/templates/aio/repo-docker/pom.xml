@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>repo-docker-image</artifactId>
+    <name>Alfresco Repository Docker Image Build</name>
+    <description>Alfresco Repository Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
+    <packaging>pom</packaging>
+
+    <parent>
+      <groupId><%- groupId %></groupId>
+      <artifactId><%- artifactId %></artifactId>
+      <version><%- version %></version>
+    </parent>
+
+    <!-- Define the dependencies that should be part of custom Alfresco Repo (ACS) image -->
+    <dependencies>
+        <!-- Our custom repo JAR extension with custom content model -->
+        <dependency>
+            <groupId><%- groupId %></groupId>
+            <artifactId><%- repoExtensionArtifactId %></artifactId>
+            <version><%- version %></version>
+        </dependency>
+
+        <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+
+       ...
+
+       -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-repo-extensions</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId><%- groupId %></groupId>
+                                    <artifactId><%- repoExtensionArtifactId %></artifactId>
+                                    <version><%- version %></version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                              <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+
+                              ...
+
+                              -->
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build the custom Alfresco Repository (ACS) Docker Image -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.25.2</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>acs-custom</alias>
+                            <name>alfresco-content-services-custom:${project.version}</name>
+                            <build>
+                                <dockerFileDir>${project.basedir}</dockerFileDir>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>docker</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>registry</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

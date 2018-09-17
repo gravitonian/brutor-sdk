@@ -39,26 +39,32 @@ module.exports = class extends Generator {
       projectVersion: '1.0.0-SNAPSHOT',
       projectPackage: 'org.alfresco',
       projectName: ' Alfresco Extension Project',
-      projectDescription: ' Alfresco extension project for a containerized environment',
-      communityOrEnterprise: 'Community',
+      projectDescription: ' Alfresco project for working with multiple extensions in a containerized environment',
+      communityOrEnterprise: 'Community', // Only relevant for Repo and Share, Activiti is always Enterprise
       generateSampleSrcCode: true,
 
       // Default config for Repo extension properties
       includeRepoExtension: true,
       repoExtensionArtifactId: 'repo-extension',
-      repoExtensionName: 'Repository Module',
+      repoExtensionName: 'Repository Extension',
       repoExtensionDescription: 'Repository extension module JAR (to be included in the alfresco.war)',
       repoExtensionGenerateDockerBuild: true,
-      repoVersion: '6.0.7-ga',
+      repoCommunityVersion: '6.0.7-ga',
+      repoDockerImageCommunityVersion: '6.0.7-ga',
+      repoEnterpriseVersion: '6.0.0.2',
+      repoDockerImageEnterpriseVersion: '6.0.0.2',
       repoJarOrAmp: 'JAR',
 
       // Default config for Share extension properties
       includeShareExtension: true,
       shareExtensionArtifactId: 'share-extension',
-      shareExtensionName: 'Share Module',
+      shareExtensionName: 'Share Extension',
       shareExtensionDescription: 'Share extension module JAR (to be included in the share.war)',
       shareExtensionGenerateDockerBuild: true,
-      shareVersion: '6.0',
+      shareVersion: '6.0.c',
+      shareDockerImageVersion: '6.0.c',
+      shareEnterpriseVersion: '6.0',
+      shareDockerImageEnterpriseVersion: '6.0',
       shareJarOrAmp: 'JAR',
 
       // Default config for Activiti extension properties
@@ -68,6 +74,7 @@ module.exports = class extends Generator {
       activitiExtensionDescription: 'Activiti extension JAR (to be included in the activiti_app.war)',
       activitiExtensionGenerateDockerBuild: true,
       activitiVersion: '1.9.0.3', // Alfresco Process Services (APS) version (Enterprise)
+      activitiDockerImageVersion: '1.9.0.1', // Docker image does not exist for latest build 1.9.0.3
       activitiProjectPackage: 'com.activiti.extension.bean' // Standard place where Activiti searches for Spring Beans
     };
   }
@@ -164,14 +171,41 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeRepoExtension;
       }
-    },{
+    }, {
       type: 'input',
-      name: constants.PROP_REPOSITORY_VERSION,
-      message: 'Alfresco Repository version?',
-      default: this._getConfigValue(constants.PROP_REPOSITORY_VERSION),
+      name: constants.PROP_REPOSITORY_COMMUNITY_VERSION,
+      message: 'Alfresco Repository Community version?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_COMMUNITY_VERSION),
       store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeRepoExtension;
+        return currentAnswers.includeRepoExtension && currentAnswers.communityOrEnterprise == 'Community';
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_REPOSITORY_ENTERPRISE_VERSION,
+      message: 'Alfresco Repository Enterprise version?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_ENTERPRISE_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_REPOSITORY_DOCKER_IMAGE_COMMUNITY_VERSION,
+      message: 'Alfresco Repository Docker Image version?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_DOCKER_IMAGE_COMMUNITY_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension && currentAnswers.communityOrEnterprise == 'Community';
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION,
+      message: 'Alfresco Repository Docker Image version?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
       }
     }, {
       type: 'confirm',
@@ -233,9 +267,18 @@ module.exports = class extends Generator {
       name: constants.PROP_SHARE_VERSION,
       message: 'Alfresco Share version?',
       default: this._getConfigValue(constants.PROP_SHARE_VERSION),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_SHARE_DOCKER_IMAGE_VERSION,
+      message: 'Alfresco Share Docker Image version?',
+      default: this._getConfigValue(constants.PROP_SHARE_DOCKER_IMAGE_VERSION),
+      store: false,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
       }
     }, {
       type: 'confirm',
@@ -301,7 +344,16 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension;
       }
-    },{
+    }, {
+      type: 'input',
+      name: constants.PROP_ACTIVITI_DOCKER_IMAGE_VERSION,
+      message: 'Activiti Docker Image version?',
+      default: this._getConfigValue(constants.PROP_ACTIVITI_DOCKER_IMAGE_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
+    }, {
       type: 'input',
       name: constants.PROP_ACTIVITI_PROJECT_PACKAGE,
       message: "Package for Activiti Java classes (don't change unless you know what you are doing)?",
@@ -377,7 +429,10 @@ module.exports = class extends Generator {
       constants.PROP_REPOSITORY_EXTENSION_NAME,
       constants.PROP_REPOSITORY_EXTENSION_DESCRIPTION,
       constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
-      constants.PROP_REPOSITORY_VERSION,
+      constants.PROP_REPOSITORY_COMMUNITY_VERSION,
+      constants.PROP_REPOSITORY_DOCKER_IMAGE_COMMUNITY_VERSION,
+      constants.PROP_REPOSITORY_ENTERPRISE_VERSION,
+      constants.PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION,
       constants.PROP_REPOSITORY_JAR_OR_AMP,
 
       // Share extension props
@@ -387,6 +442,7 @@ module.exports = class extends Generator {
       constants.PROP_SHARE_EXTENSION_DESCRIPTION,
       constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
       constants.PROP_SHARE_VERSION,
+      constants.PROP_SHARE_DOCKER_IMAGE_VERSION,
       constants.PROP_SHARE_JAR_OR_AMP,
 
       // Activiti extension props
@@ -396,6 +452,7 @@ module.exports = class extends Generator {
       constants.PROP_ACTIVITI_EXTENSION_DESCRIPTION,
       constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
       constants.PROP_ACTIVITI_VERSION,
+      constants.PROP_ACTIVITI_DOCKER_IMAGE_VERSION,
       constants.PROP_ACTIVITI_PROJECT_PACKAGE
     ],
     this.props);
@@ -409,6 +466,7 @@ module.exports = class extends Generator {
     var tplContext = {
 
       // General project properties
+      communityOrEnterprise: this.props.communityOrEnterprise,
       groupId: this.props.projectGroupId,
       artifactId: this.props.projectArtifactId,
       version: this.props.projectVersion,
@@ -423,7 +481,13 @@ module.exports = class extends Generator {
       repoExtensionName: this.props.repoExtensionName,
       repoExtensionDescription: this.props.repoExtensionDescription,
       repoExtensionGenerateDockerBuild: this.props.repoExtensionGenerateDockerBuild,
-      repoVersion: this.props.repoVersion,
+      if (this.props.communityOrEnterprise == 'Community') {
+        repoVersion: this.props.repoCommunityVersion,
+        repoDockerImageVersion: this.props.repoDockerImageCommunityVersion,
+      } else {
+        repoVersion: this.props.repoEnterpriseVersion,
+        repoDockerImageVersion: this.props.repoDockerImageEnterpriseVersion,
+      }
       repoJarOrAmp: this.props.repoJarOrAmp,
 
       // Share Extension properties
@@ -433,6 +497,7 @@ module.exports = class extends Generator {
       shareExtensionDescription: this.props.shareExtensionDescription,
       shareExtensionGenerateDockerBuild: this.props.shareExtensionGenerateDockerBuild,
       shareVersion: this.props.shareVersion,
+      shareDockerImageVersion: this.props.shareDockerImageVersion,
       shareJarOrAmp: this.props.shareJarOrAmp,
 
       // Activiti Extension properties
@@ -442,22 +507,32 @@ module.exports = class extends Generator {
       activitiExtensionDescription: this.props.activitiExtensionDescription,
       activitiExtensionGenerateDockerBuild: this.props.activitiExtensionGenerateDockerBuild,
       activitiVersion: this.props.activitiVersion,
+      activitiDockerImageVersion: this.props.activitiDockerImageVersion,
       activitiPackage: this.props.activitiProjectPackage,
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Copy Parent Project files
+    // Copy parent project files and some general build files
     this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
     this._copyAsTemplate("aio/", "", "README.md", tplContext);
     this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
     if (this.props.includeActivitiExtension) {
       this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
+      if (this.props.activitiExtensionGenerateDockerBuild) {
+        this._copyAsTemplate("aio/", "", "build-activiti-docker-image.sh", tplContext);
+      }
     }
     if (this.props.includeRepoExtension) {
       this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
+      if (this.props.repoExtensionGenerateDockerBuild) {
+        this._copyAsTemplate("aio/", "", "build-repo-docker-image.sh", tplContext);
+      }
     }
     if (this.props.includeShareExtension) {
       this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
+      if (this.props.shareExtensionGenerateDockerBuild) {
+        this._copyAsTemplate("aio/", "", "build-share-docker-image.sh", tplContext);
+      }
     }
 
     // Common paths
@@ -519,6 +594,12 @@ module.exports = class extends Generator {
       fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
       fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
+
+      if (this.props.repoExtensionGenerateDockerBuild) {
+        var templateRepoDockerDir = 'repo-docker';
+        this._copyAsTemplate("aio/" + templateRepoDockerDir + "/", templateRepoDockerDir + "/", "pom.xml", tplContext);
+        this._copyAsTemplate("aio/" + templateRepoDockerDir + "/", templateRepoDockerDir + "/", "Dockerfile", tplContext);
+      }
     }
 
     if (this.props.includeShareExtension) {
@@ -589,6 +670,12 @@ module.exports = class extends Generator {
       fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
       fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/META-INF/';
       this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+
+      if (this.props.shareExtensionGenerateDockerBuild) {
+        var templateShareDockerDir = 'share-docker';
+        this._copyAsTemplate("aio/" + templateShareDockerDir + "/", templateShareDockerDir + "/", "pom.xml", tplContext);
+        this._copyAsTemplate("aio/" + templateShareDockerDir + "/", templateShareDockerDir + "/", "Dockerfile", tplContext);
+      }
     }
 
     if (this.props.includeActivitiExtension) {
@@ -605,6 +692,12 @@ module.exports = class extends Generator {
         this._copyAsTemplate(fileSrc, fileDst, "SimpleJavaDelegate.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "SimpleSpringJavaDelegate.java", tplContext);
       }
+
+      if (this.props.activitiExtensionGenerateDockerBuild) {
+        var templateActivitiDockerDir = 'activiti-docker';
+        this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "pom.xml", tplContext);
+        this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "Dockerfile", tplContext);
+      }
     }
   }
 
@@ -618,11 +711,16 @@ module.exports = class extends Generator {
   /*********************************************************************************************************************
    *  Private methods not part of Yeoman run loop */
 
+  /**
+   * Get saved property value or the default one.
+   */
   _getConfigValue(key) {
     if (!_.isNil(key)) {
       if (!_.isNil(this.config.get(key))) {
+        // The user has set this property before to a custom value, use it
         return this.config.get(key);
       } else if (this.defaultConfig) {
+        // No previous saved custom value, use default
         return this.defaultConfig[key];
       }
     }

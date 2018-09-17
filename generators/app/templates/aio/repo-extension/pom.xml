@@ -7,7 +7,12 @@
     <!-- Parent Community POM with all dependency versions -->
     <parent>
       <groupId>org.alfresco</groupId>
-      <artifactId>acs-community-packaging</artifactId>
+      <% if (communityOrEnterprise == 'Community') { %>
+        <artifactId>acs-community-packaging</artifactId>
+      <% } %>
+      <% if (communityOrEnterprise == 'Enterprise') { %>
+        <artifactId>acs-packaging</artifactId>
+      <% } %>
       <version><%- repoVersion %></version>
       <relativePath></relativePath> <!-- Add empty parent POM path so it resolves from repositories, and not from ../pom.xml -->
     </parent>
