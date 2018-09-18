@@ -1,4 +1,20 @@
+# Mac
+.DS_Store
+
+# Eclipse
+.classpath
+.settings
+.project
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# NodeJs
 /npm-debug.log
-/.idea
 node_modules
 coverage
+
+# Don't upload Enterprise Activiti license
+generators/app/templates/aio/runner/docker-compose/aps/enterprise-license/activiti.lic

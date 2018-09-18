@@ -42,6 +42,9 @@ module.exports = class extends Generator {
       projectDescription: ' Alfresco project for working with multiple extensions in a containerized environment',
       communityOrEnterprise: 'Community', // Only relevant for Repo and Share, Activiti is always Enterprise
       generateSampleSrcCode: true,
+      includeDevRuntimeEnv: true,
+      enableInboundEmailServer: false,
+      enableOutboundEmailServer: true,
 
       // Default config for Repo extension properties
       includeRepoExtension: true,
@@ -392,18 +395,36 @@ module.exports = class extends Generator {
     },
 
     {
-     type: 'confirm',
-     name: constants.PROP_GENERATE_SAMPLE_SRC,
-     message: 'Generate sample source code for all extensions?',
-     default: this._getConfigValue(constants.PROP_GENERATE_SAMPLE_SRC),
-     store: true
-   }, {
-     type: 'confirm',
-     name: constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT,
-     message: 'Generate a developer runtime environment based on Docker Compose?',
-     default: this._getConfigValue(constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT),
-     store: true
-   }];
+      type: 'confirm',
+      name: constants.PROP_GENERATE_SAMPLE_SRC,
+      message: 'Generate sample source code for all extensions?',
+      default: this._getConfigValue(constants.PROP_GENERATE_SAMPLE_SRC),
+      store: true
+    }, {
+      type: 'confirm',
+      name: constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT,
+      message: 'Generate a developer runtime environment based on Docker Compose?',
+      default: this._getConfigValue(constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT),
+      store: true
+    }, {
+      type: 'confirm',
+      name: constants.PROP_ENABLE_INBOUND_EMAIL_SERVER,
+      message: 'Enable Inbound Email Server?',
+      default: this._getConfigValue(constants.PROP_ENABLE_INBOUND_EMAIL_SERVER),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeDevRuntimeEnv;
+      }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_ENABLE_OUTBOUND_EMAIL_SERVER,
+      message: 'Enable Outbound Email Server?',
+      default: this._getConfigValue(constants.PROP_ENABLE_OUTBOUND_EMAIL_SERVER),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeDevRuntimeEnv;
+      }
+    }];
 
     return this.prompt(questionPrompts).then(function (props) {
       this.props = props;
@@ -440,6 +461,9 @@ module.exports = class extends Generator {
       constants.PROP_PROJECT_NAME,
       constants.PROP_PROJECT_DESCRIPTION,
       constants.PROP_GENERATE_SAMPLE_SRC,
+      constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT,
+      constants.PROP_ENABLE_INBOUND_EMAIL_SERVER,
+      constants.PROP_ENABLE_OUTBOUND_EMAIL_SERVER,
 
       // Repo extension props
       constants.PROP_INCLUDE_REPOSITORY_EXTENSION,
@@ -510,6 +534,9 @@ module.exports = class extends Generator {
       name: this.props.projectName,
       description: this.props.projectDescription,
       generateSampleSrcCode: this.props.generateSampleSrcCode,
+      includeDevRuntimeEnv: this.props.includeDevRuntimeEnv,
+      enableInboundEmailServer: this.props.enableInboundEmailServer,
+      enableOutboundEmailServer: this.props.enableOutboundEmailServer,
 
       // Repository Extension properties
       includeRepoExtension: this.props.includeRepoExtension,
@@ -564,6 +591,9 @@ module.exports = class extends Generator {
       if (this.props.shareExtensionGenerateDockerBuild) {
         this._copyAsTemplate("aio/", "", "build-share-docker-image.sh", tplContext);
       }
+    }
+    if (this.props.includeDevRuntimeEnv) {
+      this._copyAsTemplate("aio/", "", "run.sh", tplContext);
     }
 
     // Common paths
@@ -729,6 +759,25 @@ module.exports = class extends Generator {
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "pom.xml", tplContext);
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "Dockerfile", tplContext);
       }
+    }
+
+    if (this.props.includeDevRuntimeEnv) {
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Copy Runner files
+      var fileSrc = 'aio/runner/docker-compose/';
+      var fileDst = 'runner/docker-compose/';
+      var acsRunnerConfigSrcDir = fileSrc + 'acs/';
+      var apsRunnerConfigSrcDir = fileSrc + 'aps/';
+      var apsLicenseRunnerConfigSrcDir = apsRunnerConfigSrcDir + 'enterprise-license/'
+      var dbRunnerConfigSrcDir = fileSrc + 'docker-postgresql-multiple-databases/';
+
+      this._copyAsTemplate(fileSrc, fileDst, "docker-compose.yml", tplContext);
+      this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "alfresco-global.properties", tplContext);
+      this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "log4j.properties", tplContext);
+      this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "activiti-app.properties", tplContext);
+      this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "log4j.properties", tplContext);
+      this._copyAsTemplate(apsLicenseRunnerConfigSrcDir, fileDst + 'aps/enterprise-license/', "README.md", tplContext);
+      this._copyAsTemplate(dbRunnerConfigSrcDir, fileDst + 'docker-postgresql-multiple-databases/', "create-multiple-postgresql-databases.sh", tplContext);
     }
   }
 

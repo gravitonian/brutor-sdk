@@ -12,6 +12,8 @@ module.exports = {
   PROP_PROJECT_DESCRIPTION: 'projectDescription',
   PROP_GENERATE_SAMPLE_SRC: 'generateSampleSrcCode',
   PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT: 'includeDevRuntimeEnv',
+  PROP_ENABLE_INBOUND_EMAIL_SERVER: 'enableInboundEmailServer',
+  PROP_ENABLE_OUTBOUND_EMAIL_SERVER: 'enableOutboundEmailServer',
 
   // Repo extension props
   PROP_INCLUDE_REPOSITORY_EXTENSION: 'includeRepoExtension',

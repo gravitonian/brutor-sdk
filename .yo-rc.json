@@ -22,7 +22,9 @@
       "repoCommunityVersion": "6.0.7-ga",
       "repoDockerImageCommunityVersion": "6.0.7-ga",
       "shareCommunityVersion": "6.0.c",
-      "shareDockerImageCommunityVersion": "6.0.c"
+      "shareDockerImageCommunityVersion": "6.0.c",
+      "enableInboundEmailServer": false,
+      "enableOutboundEmailServer": true
     }
   }
 }

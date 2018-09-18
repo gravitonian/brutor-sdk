@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export ACTIVITIDB=activiti
+
+echo "  Creating database '$ACTIVITIDB'"
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE $ACTIVITIDB;
+	    GRANT ALL PRIVILEGES ON DATABASE $ACTIVITIDB TO $POSTGRES_USER;
+EOSQL
