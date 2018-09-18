@@ -17,7 +17,7 @@ A global module may be created and symlinked to a local one, using npm.
 
 Here’s what you’ll want to do:
 
-On the command line, from the root of your generator project (in the brutor/ folder), type:
+On the command line, from the root of your generator project (in the brutor-sdk/ folder), type:
 
 ```bash
 $ npm link

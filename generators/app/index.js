@@ -462,6 +462,16 @@ module.exports = class extends Generator {
   writing() {
     this.log('Writing project files...');
 
+    var tempRepoVersion;
+    var tempRepoDockerImageVersion;
+    if (this.props.communityOrEnterprise == 'Community') {
+      tempRepoVersion: this.props.repoCommunityVersion,
+      tempRepoDockerImageVersion: this.props.repoDockerImageCommunityVersion,
+    } else {
+      tempRepoVersion: this.props.repoEnterpriseVersion,
+      tempRepoDockerImageVersion: this.props.repoDockerImageEnterpriseVersion,
+    }
+
     // Template Context
     var tplContext = {
 
@@ -481,13 +491,8 @@ module.exports = class extends Generator {
       repoExtensionName: this.props.repoExtensionName,
       repoExtensionDescription: this.props.repoExtensionDescription,
       repoExtensionGenerateDockerBuild: this.props.repoExtensionGenerateDockerBuild,
-      if (this.props.communityOrEnterprise == 'Community') {
-        repoVersion: this.props.repoCommunityVersion,
-        repoDockerImageVersion: this.props.repoDockerImageCommunityVersion,
-      } else {
-        repoVersion: this.props.repoEnterpriseVersion,
-        repoDockerImageVersion: this.props.repoDockerImageEnterpriseVersion,
-      }
+      repoVersion: tempRepoVersion,
+      repoDockerImageVersion: tempRepoDockerImageVersion,
       repoJarOrAmp: this.props.repoJarOrAmp,
 
       // Share Extension properties
