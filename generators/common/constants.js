@@ -19,16 +19,10 @@ module.exports = {
   PROP_REPOSITORY_EXTENSION_NAME: 'repoExtensionName',
   PROP_REPOSITORY_EXTENSION_DESCRIPTION: 'repoExtensionDescription',
   PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD: 'repoExtensionGenerateDockerBuild',
-  PROP_REPOSITORY_VERSION: 'repoVersion',
-  PROP_REPOSITORY_DOCKER_IMAGE_VERSION: 'repoDockerImageVersion',
-
-
-  PROP_REPOSITORY_COMMUNITY_VERSION:  'repoCommunityVersion',
-  PROP_REPOSITORY_DOCKER_IMAGE_COMMUNITY_VERSION:      'repoDockerImageCommunityVersion',
-  PROP_REPOSITORY_ENTERPRISE_VERSION:      'repoEnterpriseVersion',
-  PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION:      'repoDockerImageEnterpriseVersion',
-
-
+  PROP_REPOSITORY_COMMUNITY_VERSION: 'repoCommunityVersion',
+  PROP_REPOSITORY_DOCKER_IMAGE_COMMUNITY_VERSION: 'repoDockerImageCommunityVersion',
+  PROP_REPOSITORY_ENTERPRISE_VERSION: 'repoEnterpriseVersion',
+  PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION: 'repoDockerImageEnterpriseVersion',
   PROP_REPOSITORY_JAR_OR_AMP: 'repoJarOrAmp',
 
   // Share extension props
@@ -37,8 +31,10 @@ module.exports = {
   PROP_SHARE_EXTENSION_NAME: 'shareExtensionName',
   PROP_SHARE_EXTENSION_DESCRIPTION: 'shareExtensionDescription',
   PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD: 'shareExtensionGenerateDockerBuild',
-  PROP_SHARE_VERSION: 'shareVersion',
-  PROP_SHARE_DOCKER_IMAGE_VERSION: 'shareDockerImageVersion',
+  PROP_SHARE_COMMUNITY_VERSION: 'shareCommunityVersion',
+  PROP_SHARE_DOCKER_IMAGE_COMMUNITY_VERSION: 'shareDockerImageCommunityVersion',
+  PROP_SHARE_ENTERPRISE_VERSION: 'shareEnterpriseVersion',
+  PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION: 'shareDockerImageEnterpriseVersion',
   PROP_SHARE_JAR_OR_AMP: 'shareJarOrAmp',
 
   // Activiti extension props

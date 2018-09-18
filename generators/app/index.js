@@ -61,8 +61,8 @@ module.exports = class extends Generator {
       shareExtensionName: 'Share Extension',
       shareExtensionDescription: 'Share extension module JAR (to be included in the share.war)',
       shareExtensionGenerateDockerBuild: true,
-      shareVersion: '6.0.c',
-      shareDockerImageVersion: '6.0.c',
+      shareCommunityVersion: '6.0.c',
+      shareDockerImageCommunityVersion: '6.0.c',
       shareEnterpriseVersion: '6.0',
       shareDockerImageEnterpriseVersion: '6.0',
       shareJarOrAmp: 'JAR',
@@ -262,23 +262,41 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeShareExtension;
       }
-    },{
+    }, {
       type: 'input',
-      name: constants.PROP_SHARE_VERSION,
-      message: 'Alfresco Share version?',
-      default: this._getConfigValue(constants.PROP_SHARE_VERSION),
-      store: false,
+      name: constants.PROP_SHARE_COMMUNITY_VERSION,
+      message: 'Alfresco Share Community version?',
+      default: this._getConfigValue(constants.PROP_SHARE_COMMUNITY_VERSION),
+      store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeShareExtension;
+        return currentAnswers.includeShareExtension && currentAnswers.communityOrEnterprise == 'Community';
       }
     }, {
       type: 'input',
-      name: constants.PROP_SHARE_DOCKER_IMAGE_VERSION,
-      message: 'Alfresco Share Docker Image version?',
-      default: this._getConfigValue(constants.PROP_SHARE_DOCKER_IMAGE_VERSION),
-      store: false,
+      name: constants.PROP_SHARE_ENTERPRISE_VERSION,
+      message: 'Alfresco Share Enterprise version?',
+      default: this._getConfigValue(constants.PROP_SHARE_ENTERPRISE_VERSION),
+      store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeRepoExtension;
+        return currentAnswers.includeShareExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_SHARE_DOCKER_IMAGE_COMMUNITY_VERSION,
+      message: 'Alfresco Share Docker Image version?',
+      default: this._getConfigValue(constants.PROP_SHARE_DOCKER_IMAGE_COMMUNITY_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension && currentAnswers.communityOrEnterprise == 'Community';
+      }
+    }, {
+      type: 'input',
+      name: constants.PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION,
+      message: 'Alfresco Share Docker Image version?',
+      default: this._getConfigValue(constants.PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeShareExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
       }
     }, {
       type: 'confirm',
@@ -441,8 +459,10 @@ module.exports = class extends Generator {
       constants.PROP_SHARE_EXTENSION_NAME,
       constants.PROP_SHARE_EXTENSION_DESCRIPTION,
       constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
-      constants.PROP_SHARE_VERSION,
-      constants.PROP_SHARE_DOCKER_IMAGE_VERSION,
+      constants.PROP_SHARE_COMMUNITY_VERSION,
+      constants.PROP_SHARE_DOCKER_IMAGE_COMMUNITY_VERSION,
+      constants.PROP_SHARE_ENTERPRISE_VERSION,
+      constants.PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION,
       constants.PROP_SHARE_JAR_OR_AMP,
 
       // Activiti extension props
@@ -464,12 +484,18 @@ module.exports = class extends Generator {
 
     var tempRepoVersion;
     var tempRepoDockerImageVersion;
+    var tempShareVersion;
+    var tempShareDockerImageVersion;
     if (this.props.communityOrEnterprise == 'Community') {
-      tempRepoVersion: this.props.repoCommunityVersion,
-      tempRepoDockerImageVersion: this.props.repoDockerImageCommunityVersion,
+      tempRepoVersion = this.props.repoCommunityVersion;
+      tempRepoDockerImageVersion = this.props.repoDockerImageCommunityVersion;
+      tempShareVersion = this.props.shareCommunityVersion;
+      tempShareDockerImageVersion = this.props.shareDockerImageCommunityVersion;
     } else {
-      tempRepoVersion: this.props.repoEnterpriseVersion,
-      tempRepoDockerImageVersion: this.props.repoDockerImageEnterpriseVersion,
+      tempRepoVersion = this.props.repoEnterpriseVersion;
+      tempRepoDockerImageVersion = this.props.repoDockerImageEnterpriseVersion;
+      tempShareVersion = this.props.shareEnterpriseVersion;
+      tempShareDockerImageVersion = this.props.shareDockerImageEnterpriseVersion;
     }
 
     // Template Context
@@ -501,8 +527,8 @@ module.exports = class extends Generator {
       shareExtensionName: this.props.shareExtensionName,
       shareExtensionDescription: this.props.shareExtensionDescription,
       shareExtensionGenerateDockerBuild: this.props.shareExtensionGenerateDockerBuild,
-      shareVersion: this.props.shareVersion,
-      shareDockerImageVersion: this.props.shareDockerImageVersion,
+      shareVersion: tempShareVersion,
+      shareDockerImageVersion: tempShareDockerImageVersion,
       shareJarOrAmp: this.props.shareJarOrAmp,
 
       // Activiti Extension properties

@@ -32,7 +32,7 @@ $ yo alfresco-extension-project
 First, move in the folder where you want create your project.
 
 ```bash
-$ yo alfresco-project
+$ yo alfresco-extension-project
               ,****.          
          ,.**. `*****  <-_    
         ******** ***** ####   
@@ -48,52 +48,51 @@ $ yo alfresco-project
          `"$ '@@@@@. '##'     
               '@@@@;'         
      
-     Welcome to the Alfresco Project generator!
+     Welcome to the Alfresco Extension Project Generator!
                  
-? Maven project groupId? org.alfresco.test
-? Maven project artifactId? aio-gen
+? Project name?  Alfresco Extension Project
+? Project description?  Alfresco project for working with multiple extensions in a containerized environment
+? Maven project groupId? org.alfresco
+? Maven project artifactId? my_alf_proj
 ? Maven project version? 1.0.0-SNAPSHOT
-? Package for Java sample classes? org.alfresco.test
-? Project name? AIO SDK 3.0 Project
-? Project description? AIO SDK 3.0 Project
+? Package for Java classes? org.alfresco
 ? Would you like to use Community or Enterprise Edition? Community
-? Alfresco Platform (i.e. Repository) version? 5.2.a-EA
-? Alfresco Share version? 5.1.g
-? Should sample source code be generated for modules? Yes
+? Include Alfresco Repository Extension? Yes
+? Repository extension maven artifactId? repo-extension
+? Repository Extension Name? Repository Extension
+? Repository Extension Description? Repository extension module JAR (to be included in the alfresco.war)
+? Alfresco Repository Community version? 6.0.7-ga
+? Alfresco Repository Docker Image version? 6.0.7-ga
+? Should a project for Repository Docker build be generated (i.e. build Repo Docker image with repo extension)? Yes
+? Package Repo extension as JAR or AMP? JAR
+? Include Alfresco Share Extension? Yes
+? Share extension maven artifactId? share-extension
+? Share Extension Name? Share Extension
+? Share Extension Description? Share extension module JAR (to be included in the share.war)
+? Alfresco Share Community version? 6.0.c
+? Alfresco Share Docker Image version? 6.0.c
+? Should a project for Share Docker build be generated (i.e. build Share Docker image with Share extension)? Yes
+? Package Share extension as JAR or AMP? JAR
+? Include Activiti Extension? Yes
+? Activiti extension maven artifactId? activiti-extension
+? Activiti Extension Name? Activiti Extension
+? Activiti Extension Description? Activiti extension JAR (to be included in the activiti_app.war)
+? Activiti version? 1.9.0.3
+? Activiti Docker Image version? 1.9.0.1
+? Package for Activiti Java classes (don't change unless you know what you are doing)? com.activiti.extension.bean
+? Should a project for Activiti Docker build be generated (i.e. build Activiti Docker image with Activiti extension)? Yes
+? Generate sample source code for all extensions? Yes
+? Generate a developer runtime environment based on Docker Compose? Yes
+Checking root dir...
+Your Alfresco extension project must be inside a directory named my_alf_proj
+This directory will be automatically created.
+Creating .yo-rc.json file...
+Writing project files...
+  ...
+Nothing to install in npm repo...
 ```
 
 ##  Adding a platform action to the new project
 This uses the platformaction sub-generator:
 
-```
-aio-gen/aio-gen-platform-sample-jar$ yo alfresco-sdk:platformaction
-
-Just found a `.yo-rc.json` in a parent directory.
-Setting the project root at: /home/martin/src/sdk3/alfresco-generator-tests/aio-gen
-              ,****.          
-         ,.**. `*****  <-_    
-        ******** ***** ####   
-       $********::**** ####;  
-       _.-._`***::*** ######  
-     ,*******, *::* .;##### @ 
-     **********,' -=#####',@@@
-     ***' .,---, ,.-==@@@@@@@@
-      * /@@@@@',@ @\ '@@@@@@@ 
-       '@@@@/ @@@ @@@\ ':#'   
-       !@@@@ @@@@ @@@@@@@@@^  
-        @@@@ @@@@@ @@@@@@@'   
-         `"$ '@@@@@. '##'     
-              '@@@@;'         
-     
-     Welcome to the Alfresco SDK Platform Action Generator!
-                 
-? Base Java package for this platform module? org.alfresco.test
-? Java package name for all platform actions? actions
-? Platform Action Title? Sample
-? Platform Action Description? Sample platform action, also called repository action
-Writing platform action files...
-Artifact ID: aio-gen-platform-sample-jar
-   create src/main/java/org/alfresco/test/actions/SampleActionExecuter.java
-   create src/main/resources/alfresco/module/aio-gen-platform-sample-jar/context/action-sample-context.xml
-   create src/main/resources/alfresco/module/aio-gen-platform-sample-jar/messages/aio-gen-platform-sample-jar-sample-platform-action.properties
-```
+TODO

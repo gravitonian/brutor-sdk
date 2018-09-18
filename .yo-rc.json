@@ -4,7 +4,7 @@
       "projectGroupId": "org.alfresco",
       "projectVersion": "1.0.0-SNAPSHOT",
       "projectPackage": "org.alfresco",
-      "communityOrEnterprise": "Enterprise",
+      "communityOrEnterprise": "Community",
       "includeRepoExtension": true,
       "repoExtensionGenerateDockerBuild": true,
       "includeShareExtension": true,
@@ -14,7 +14,15 @@
       "activitiDockerImageVersion": "1.9.0.1",
       "activitiExtensionGenerateDockerBuild": true,
       "generateSampleSrcCode": true,
-      "includeDevRuntimeEnv": true
+      "includeDevRuntimeEnv": true,
+      "repoEnterpriseVersion": "6.0.0.2",
+      "repoDockerImageEnterpriseVersion": "6.0.0.2",
+      "shareEnterpriseVersion": "6.0",
+      "shareDockerImageEnterpriseVersion": "6.0",
+      "repoCommunityVersion": "6.0.7-ga",
+      "repoDockerImageCommunityVersion": "6.0.7-ga",
+      "shareCommunityVersion": "6.0.c",
+      "shareDockerImageCommunityVersion": "6.0.c"
     }
   }
 }
