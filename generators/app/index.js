@@ -574,26 +574,31 @@ module.exports = class extends Generator {
     this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
     this._copyAsTemplate("aio/", "", "README.md", tplContext);
     this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
+    this._copyAsTemplate("aio/", "", "build-all-docker-images.sh", tplContext);
     if (this.props.includeActivitiExtension) {
       this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
       if (this.props.activitiExtensionGenerateDockerBuild) {
         this._copyAsTemplate("aio/", "", "build-activiti-docker-image.sh", tplContext);
+        this._copyAsTemplate("aio/", "", "update-activiti-container.sh", tplContext);
       }
     }
     if (this.props.includeRepoExtension) {
       this._copyAsTemplate("aio/", "", "build-repo-extension.sh", tplContext);
       if (this.props.repoExtensionGenerateDockerBuild) {
         this._copyAsTemplate("aio/", "", "build-repo-docker-image.sh", tplContext);
+        this._copyAsTemplate("aio/", "", "update-repo-container.sh", tplContext);
       }
     }
     if (this.props.includeShareExtension) {
       this._copyAsTemplate("aio/", "", "build-share-extension.sh", tplContext);
       if (this.props.shareExtensionGenerateDockerBuild) {
         this._copyAsTemplate("aio/", "", "build-share-docker-image.sh", tplContext);
+        this._copyAsTemplate("aio/", "", "update-share-container.sh", tplContext);
       }
     }
     if (this.props.includeDevRuntimeEnv) {
       this._copyAsTemplate("aio/", "", "run.sh", tplContext);
+      this._copyAsTemplate("aio/", "", "stop.sh", tplContext);
     }
 
     // Common paths

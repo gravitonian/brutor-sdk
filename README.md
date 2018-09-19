@@ -1,9 +1,23 @@
-<h1 align="center">Yeoman Generator - Alfresco SDK Projects</h1>
+<h1 align="center">Yeoman Generator - Alfresco Extension Projects</h1>
 <p align="center">
   <img title="yeoman generator" src='https://github.com/yeoman/media/blob/master/optimized/yeoman-150x150-opaque.png' alt='yeoman logo'  />
 </p>
 
+## Introduction
+This code generator can generate an Alfresco extension project similar to the Alfresco SDK 3.0 All-In-One (AIO).
+It supports Alfresco Content Services (ACS) 6.x and Alfresco Process Services (APS) 1.9.x. As ACS 6.0 is run
+in a Docker container environment this project also supports a runner that is based on Docker Compose.
+
+The code generator is flexible and you have many options to choose from when you decide what you want to be 
+generated, as can be seen below. After you have generated an Alfresco extension project have a look at its
+README file for more information about how to use it.
+
+The way you code extensions has not changed, have a look [here](https://docs.alfresco.com/6.0/concepts/dev-for-developers.html) for full documentation on how to build
+Alfresco extensions for Platform/Repository and Share.
+ 
+
 ## Installing Yeoman 
+**You only need to do this once.**
 
 First, install [Yeoman](http://yeoman.io):
 
@@ -12,24 +26,25 @@ $ sudo npm install -g yo
 ```
 
 ## Installing Alfresco Project Generator 
+**You only need to do this once.**
+
 Since we’re developing the generator locally, it’s not yet available as a global npm module. 
 A global module may be created and symlinked to a local one, using npm. 
 
 Here’s what you’ll want to do:
 
-On the command line, from the root of your generator project (in the brutor-sdk/ folder), type:
+On the command line, from the root of your generator project 
+(in the folder where you cloned this project, such as *brutor-sdk*), type:
 
 ```bash
 $ npm link
 ```
-
-```bash
-$ yo alfresco-extension-project
-```
  
-##  Generating a new project:
+## Generating a new project:
 
-First, move in the folder where you want create your project.
+First, move into the folder where you want create the project.
+
+Then run the Alfresco extension project code generator as follows:
 
 ```bash
 $ yo alfresco-extension-project
@@ -93,6 +108,6 @@ Nothing to install in npm repo...
 ```
 
 ##  Adding a platform action to the new project
-This uses the platformaction sub-generator:
+This uses the repoaction sub-generator:
 
 TODO

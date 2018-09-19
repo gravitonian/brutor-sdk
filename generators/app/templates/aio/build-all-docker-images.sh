@@ -1,14 +1,14 @@
 #!/bin/bash
 
 <% if (includeActivitiExtension == true) { %>
-./build-activiti-extension.sh
+./build-activiti-docker-image.sh
 <% } %>
 
 <% if (includeRepoExtension == true) { %>
-./build-repo-extension.sh
+./build-repo-docker-image.sh
 <% } %>
 
 <% if (includeShareExtension == true) { %>
-./build-share-extension.sh
+./build-share-docker-image.sh
 <% } %>
 
