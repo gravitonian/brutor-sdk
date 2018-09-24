@@ -97,6 +97,7 @@ $ yo alfresco-extension-project
 ? Package for Activiti Java classes (don't change unless you know what you are doing)? com.activiti.extension.bean
 ? Should a project for Activiti Docker build be generated (i.e. build Activiti Docker image with Activiti extension)? Yes
 ? Generate sample source code for all extensions? Yes
+? Generate Service Task sample with ACS Rest Call in the Activiti Extension project? Yes
 ? Generate a developer runtime environment based on Docker Compose? Yes
 ? Enable Inbound Email Server? No
 ? Enable Outbound Email Server? Yes
