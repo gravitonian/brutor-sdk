@@ -21,7 +21,47 @@
             <version><%- version %></version>
         </dependency>
 
-        <!-- Other libs that need to be included, such as libs to make HTTP calls to for example ACS
+        <% if (includeActivitiCallAcsSample) { %>
+        <!--  This requires you to first clone https://github.com/gravitonian/acs-rest-api-java-client
+              and then run mvn install so you have this lib in your local maven repo. -->
+        <!-- ACS ReST API Java Client -->
+        <dependency>
+          <groupId>org.alfresco</groupId>
+          <artifactId>acs-rest-api-java-client</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <!-- ACS ReST API Java Client Dependencies - HTTP Lib -->
+        <dependency>
+          <groupId>com.squareup.okhttp</groupId>
+          <artifactId>okhttp</artifactId>
+          <version>2.7.5</version>
+        </dependency>
+        <!-- ACS ReST API Java Client Dependencies - I/O Lib -->
+        <dependency>
+          <groupId>com.squareup.okio</groupId>
+          <artifactId>okio</artifactId>
+          <version>1.6.0</version>
+        </dependency>
+        <!-- ACS ReST API Java Client Dependencies - JSON Parsing Lib -->
+        <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.8.1</version>
+        </dependency>
+        <dependency>
+          <groupId>io.gsonfire</groupId>
+          <artifactId>gson-fire</artifactId>
+          <version>1.8.0</version>
+        </dependency>
+        <!-- ACS ReST API Java Client Dependencies - ThreeTen-Backport provides a backport of the Java SE 8 date-time classes to Java SE 6 and 7 -->
+        <dependency>
+          <groupId>org.threeten</groupId>
+          <artifactId>threetenbp</artifactId>
+          <version>1.3.5</version>
+        </dependency>
+        <% } %>
+
+        <!-- Other libs that your extension is using
 
         ...
 
@@ -51,7 +91,51 @@
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/jars</outputDirectory>
                                 </artifactItem>
-                                <!-- Other libs that need to be included, such as libs to make HTTP calls to for example ACS
+                                <% if (includeActivitiCallAcsSample) { %>
+                                <artifactItem>
+                                  <groupId>org.alfresco</groupId>
+                                  <artifactId>acs-rest-api-java-client</artifactId>
+                                  <version>1.0.0-SNAPSHOT</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                  <groupId>com.squareup.okhttp</groupId>
+                                  <artifactId>okhttp</artifactId>
+                                  <version>2.7.5</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                  <groupId>com.squareup.okio</groupId>
+                                  <artifactId>okio</artifactId>
+                                  <version>1.6.0</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                  <groupId>com.google.code.gson</groupId>
+                                  <artifactId>gson</artifactId>
+                                  <version>2.8.1</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                  <groupId>io.gsonfire</groupId>
+                                  <artifactId>gson-fire</artifactId>
+                                  <version>1.8.0</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                  <groupId>org.threeten</groupId>
+                                  <artifactId>threetenbp</artifactId>
+                                  <version>1.3.5</version>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
+                                <% } %>
+                                <!-- Other libs that your extension is using
 
                                  ...
 
@@ -66,7 +150,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.25.2</version>
+                <version>0.26.1</version>
                 <configuration>
                     <images>
                         <image>

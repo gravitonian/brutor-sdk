@@ -98,6 +98,8 @@ $ yo alfresco-extension-project
 ? Should a project for Activiti Docker build be generated (i.e. build Activiti Docker image with Activiti extension)? Yes
 ? Generate sample source code for all extensions? Yes
 ? Generate a developer runtime environment based on Docker Compose? Yes
+? Enable Inbound Email Server? No
+? Enable Outbound Email Server? Yes
 Checking root dir...
 Your Alfresco extension project must be inside a directory named my_alf_proj
 This directory will be automatically created.
@@ -107,7 +109,7 @@ Writing project files...
 Nothing to install in npm repo...
 ```
 
-##  Adding a platform action to the new project
+##  Adding a Repository action to the new project
 This uses the repoaction sub-generator:
 
 TODO

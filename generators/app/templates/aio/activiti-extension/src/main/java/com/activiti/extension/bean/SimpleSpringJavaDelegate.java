@@ -16,7 +16,6 @@ limitations under the License.
 */
 package com.activiti.extension.bean;
 
-
 import com.activiti.domain.idm.User;
 import com.activiti.service.api.UserService;
 import org.activiti.engine.delegate.DelegateExecution;

@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Stop the share container
-cd runner/docker-compose
-docker-compose stop share
-cd ../..
-
 # Now build extension first and then build the Docker Image via Fabric 8 Maven plugin
 ./build-share-docker-image.sh
 

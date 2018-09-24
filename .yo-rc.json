@@ -24,7 +24,8 @@
       "shareCommunityVersion": "6.0.c",
       "shareDockerImageCommunityVersion": "6.0.c",
       "enableInboundEmailServer": false,
-      "enableOutboundEmailServer": true
+      "enableOutboundEmailServer": true,
+      "includeActivitiCallAcsSample": true
     }
   }
 }

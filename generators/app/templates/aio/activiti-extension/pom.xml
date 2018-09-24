@@ -33,6 +33,17 @@
       <version>${activiti.version}</version>
     </dependency>
 
+    <% if (includeActivitiCallAcsSample) { %>
+    <!--  This requires you to first clone https://github.com/gravitonian/acs-rest-api-java-client
+          and then run mvn install so you have this lib in your local maven repo. -->
+    <!-- ACS ReST API Java Client -->
+    <dependency>
+      <groupId>org.alfresco</groupId>
+      <artifactId>acs-rest-api-java-client</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <% } %>
+
     <!-- Testing -->
     <dependency>
       <groupId>junit</groupId>

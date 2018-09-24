@@ -78,7 +78,8 @@ module.exports = class extends Generator {
       activitiExtensionGenerateDockerBuild: true,
       activitiVersion: '1.9.0.3', // Alfresco Process Services (APS) version (Enterprise)
       activitiDockerImageVersion: '1.9.0.1', // Docker image does not exist for latest build 1.9.0.3
-      activitiProjectPackage: 'com.activiti.extension.bean' // Standard place where Activiti searches for Spring Beans
+      activitiProjectPackage: 'com.activiti.extension.bean', // Standard place where Activiti searches for Spring Beans
+      includeActivitiCallAcsSample: false
     };
   }
 
@@ -402,6 +403,15 @@ module.exports = class extends Generator {
       store: true
     }, {
       type: 'confirm',
+      name: constants.PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE,
+      message: 'Generate Service Task sample with ACS Rest Call in the Activiti Extension project?',
+      default: this._getConfigValue(constants.PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeActivitiExtension;
+      }
+    }, {
+      type: 'confirm',
       name: constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT,
       message: 'Generate a developer runtime environment based on Docker Compose?',
       default: this._getConfigValue(constants.PROP_INCLUDE_DEVELOPMENT_RUNTIME_ENVIRONMENT),
@@ -497,7 +507,8 @@ module.exports = class extends Generator {
       constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
       constants.PROP_ACTIVITI_VERSION,
       constants.PROP_ACTIVITI_DOCKER_IMAGE_VERSION,
-      constants.PROP_ACTIVITI_PROJECT_PACKAGE
+      constants.PROP_ACTIVITI_PROJECT_PACKAGE,
+      constants.PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE
     ],
     this.props);
   }
@@ -521,6 +532,10 @@ module.exports = class extends Generator {
       tempShareVersion = this.props.shareEnterpriseVersion;
       tempShareDockerImageVersion = this.props.shareDockerImageEnterpriseVersion;
     }
+
+    // Find out the Activiti Minor version, used when producing the custom Docker Image
+    var imageMinorVersionStr = this.props.activitiDockerImageVersion.substr(0,3);
+    var activitiDockerImageMinorVersion = parseFloat(imageMinorVersionStr);
 
     // Template Context
     var tplContext = {
@@ -566,7 +581,9 @@ module.exports = class extends Generator {
       activitiExtensionGenerateDockerBuild: this.props.activitiExtensionGenerateDockerBuild,
       activitiVersion: this.props.activitiVersion,
       activitiDockerImageVersion: this.props.activitiDockerImageVersion,
+      activitiDockerImageMinorVersion: activitiDockerImageMinorVersion,
       activitiPackage: this.props.activitiProjectPackage,
+      includeActivitiCallAcsSample: this.props.includeActivitiCallAcsSample
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -757,6 +774,14 @@ module.exports = class extends Generator {
         fileDst = this.props.activitiExtensionArtifactId + '/src/main/java/' + this.props.activitiProjectPackage.replace(/\./gi, '/') + '/';
         this._copyAsTemplate(fileSrc, fileDst, "SimpleJavaDelegate.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "SimpleSpringJavaDelegate.java", tplContext);
+        if (this.props.includeActivitiCallAcsSample) {
+          this._copyAsTemplate(fileSrc, fileDst, "CallAcsSpringJavaDelegate.java", tplContext);
+
+          templateActivitiModuleId = 'activiti-process-samples/';
+          fileSrc = 'aio/' + templateActivitiModuleId;
+          fileDst = templateActivitiModuleId;
+          this._copyAsTemplate(fileSrc, fileDst, "process-app-service-task-call-asc.zip", tplContext);
+        }
       }
 
       if (this.props.activitiExtensionGenerateDockerBuild) {
