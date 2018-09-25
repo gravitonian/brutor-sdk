@@ -2,6 +2,7 @@
 version: "2"
 
 services:
+  <% if (includeRepoExtension == true || includeShareExtension == true) { %>
   content:
       image: alfresco-content-services-custom:1.0.0-SNAPSHOT
       mem_limit: 1500m
@@ -71,7 +72,9 @@ services:
         - ./data/solr/data:/opt/alfresco-search-services/data/
       ports:
         - 8083:8983 #Browser port
+  <% } %>
 
+  <% if (includeActivitiExtension == true) { %>
   process:
     image: alfresco-process-services-custom:1.0.0-SNAPSHOT
     environment:
@@ -102,6 +105,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:1.7.3
+  <% } %>
 
   postgres:
     image: postgres:10.1

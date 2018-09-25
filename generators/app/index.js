@@ -97,31 +97,31 @@ module.exports = class extends Generator {
     {
        type: 'input',
        name: constants.PROP_PROJECT_NAME,
-       message: "Project name?",
+       message: "Parent Project name?",
        default: this._getConfigValue(constants.PROP_PROJECT_NAME),
        store: false
     }, {
        type: 'input',
        name: constants.PROP_PROJECT_DESCRIPTION,
-       message: "Project description?",
+       message: "Parent Project description?",
        default: this._getConfigValue(constants.PROP_PROJECT_DESCRIPTION),
        store: false
     },{
       type: 'input',
       name: constants.PROP_PROJECT_GROUP_ID,
-      message: "Maven project groupId?",
+      message: "Maven projects groupId?",
       default: this._getConfigValue(constants.PROP_PROJECT_GROUP_ID),
       store: true
     }, {
       type: 'input',
       name: constants.PROP_PROJECT_ARTIFACT_ID,
-      message: "Maven project artifactId?",
+      message: "Maven parent project artifactId?",
       default: this._getConfigValue(constants.PROP_PROJECT_ARTIFACT_ID),
       store: false
     }, {
       type: 'input',
       name: constants.PROP_PROJECT_VERSION,
-      message: "Maven project version?",
+      message: "Maven projects version?",
       default: this._getConfigValue(constants.PROP_PROJECT_VERSION),
       store: true
     }, {
@@ -373,7 +373,7 @@ module.exports = class extends Generator {
       default: this._getConfigValue(constants.PROP_ACTIVITI_DOCKER_IMAGE_VERSION),
       store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeRepoExtension;
+        return currentAnswers.includeActivitiExtension;
       }
     }, {
       type: 'input',
@@ -534,8 +534,10 @@ module.exports = class extends Generator {
     }
 
     // Find out the Activiti Minor version, used when producing the custom Docker Image
-    var imageMinorVersionStr = this.props.activitiDockerImageVersion.substr(0,3);
-    var activitiDockerImageMinorVersion = parseFloat(imageMinorVersionStr);
+    if (typeof this.props.activitiDockerImageVersion !== "undefined") {
+      var imageMinorVersionStr = this.props.activitiDockerImageVersion.substr(0,3);
+      var activitiDockerImageMinorVersion = parseFloat(imageMinorVersionStr);
+    }
 
     // Template Context
     var tplContext = {
@@ -802,11 +804,15 @@ module.exports = class extends Generator {
       var dbRunnerConfigSrcDir = fileSrc + 'docker-postgresql-multiple-databases/';
 
       this._copyAsTemplate(fileSrc, fileDst, "docker-compose.yml", tplContext);
-      this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "alfresco-global.properties", tplContext);
-      this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "log4j.properties", tplContext);
-      this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "activiti-app.properties", tplContext);
-      this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "log4j.properties", tplContext);
-      this._copyAsTemplate(apsLicenseRunnerConfigSrcDir, fileDst + 'aps/enterprise-license/', "README.md", tplContext);
+      if (this.props.includeRepoExtension) {
+        this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "alfresco-global.properties", tplContext);
+        this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "log4j.properties", tplContext);
+      }
+      if (this.props.includeActivitiExtension) {
+        this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "activiti-app.properties", tplContext);
+        this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "log4j.properties", tplContext);
+        this._copyAsTemplate(apsLicenseRunnerConfigSrcDir, fileDst + 'aps/enterprise-license/', "README.md", tplContext);
+      }
       this._copyAsTemplate(dbRunnerConfigSrcDir, fileDst + 'docker-postgresql-multiple-databases/', "create-multiple-postgresql-databases.sh", tplContext);
     }
   }
