@@ -151,7 +151,7 @@ module.exports = class extends Generator {
     },{
       type: 'input',
       name: constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID,
-      message: 'Repository extension maven artifactId?',
+      message: 'Repository Extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_ARTIFACT_ID),
       store: false,
       when: function (currentAnswers) {
@@ -242,7 +242,7 @@ module.exports = class extends Generator {
     },{
       type: 'input',
       name: constants.PROP_SHARE_EXTENSION_ARTIFACT_ID,
-      message: 'Share extension maven artifactId?',
+      message: 'Share Extension maven artifactId?',
       default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_ARTIFACT_ID),
       store: false,
       when: function (currentAnswers) {
@@ -622,6 +622,7 @@ module.exports = class extends Generator {
 
     // Common paths
     var alfrescoModulePath = '/src/main/resources/alfresco/module/';
+    var metaInfResourcesDirPath = 'META-INF/resources/';
 
     if (this.props.includeRepoExtension) {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,7 +676,6 @@ module.exports = class extends Generator {
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "module-context.xml", tplContext);
 
-      var metaInfResourcesDirPath = 'META-INF/resources/';
       fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
       fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
@@ -804,7 +804,7 @@ module.exports = class extends Generator {
       var dbRunnerConfigSrcDir = fileSrc + 'docker-postgresql-multiple-databases/';
 
       this._copyAsTemplate(fileSrc, fileDst, "docker-compose.yml", tplContext);
-      if (this.props.includeRepoExtension) {
+      if (this.props.includeRepoExtension || this.props.includeShareExtension) {
         this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "alfresco-global.properties", tplContext);
         this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "log4j.properties", tplContext);
       }

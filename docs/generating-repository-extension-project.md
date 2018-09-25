@@ -17,7 +17,7 @@ The Yeoman scaffolding tool has been installed and the Alfresco project generato
 has been installed. See this [README](https://github.com/gravitonian/brutor-sdk/blob/master/README.md) if you need to install these. 
 
 ## Generating the extension project
-Standing in the directory where you want to generate the project (it will be created in a new subdirectrory) 
+Standing in the directory where you want to generate the project (it will be created in a new subdirectory) 
 run the `yo` command:
 
 ```bash
@@ -54,15 +54,15 @@ This generator can also be run with: yo alfresco-extension-project
      
      Welcome to the Alfresco Extension Project Generator!
                  
-? Parent Project name?  Alfresco Extension Project
+? Parent Project name? My Repo Project
 ? Parent Project description?  Alfresco project for working with multiple extensions in a containerized environment
 ? Maven projects groupId? org.alfresco
-? Maven parent project artifactId? my_alf_proj
+? Maven parent project artifactId? my-repo-project
 ? Maven projects version? 1.0.0-SNAPSHOT
 ? Package for Java classes? org.alfresco
 ? Would you like to use Community or Enterprise Edition? Community
 ? Include Alfresco Repository Extension? Yes
-? Repository extension maven artifactId? repo-extension
+? Repository Extension maven artifactId? repo-extension
 ? Repository Extension Name? Repository Extension
 ? Repository Extension Description? Repository extension module JAR (to be included in the alfresco.war)
 ? Alfresco Repository Community version? 6.0.7-ga
@@ -74,16 +74,18 @@ This generator can also be run with: yo alfresco-extension-project
 ? Generate sample source code for all extensions? Yes
 ? Generate a developer runtime environment based on Docker Compose? Yes
 ? Enable Inbound Email Server? No
-? Enable Outbound Email Server? (Y/n) 
+? Enable Outbound Email Server? Yes
 ```
 
-Fill in the name bla bla
+The important property for generating a Repository extension project is the `Include Alfresco Repository Extension` property, 
+make sure to answer `Yes`.  Then also answer `No` to the `Include Alfresco Share Extension` and `Include Activiti Extension` 
+properties so those extension projects are not generated. See below for explanation of the rest of the properties.   
 
 The following files should be generated and they make up the Repo Extension project:
 
 ```bash 
 Checking root dir...
-Your Alfresco extension project must be inside a directory named my_alf_proj
+Your Alfresco extension project must be inside a directory named my-repo-project
 This directory will be automatically created.
 Creating .yo-rc.json file...
 Writing project files...
@@ -135,7 +137,7 @@ The following table explains the properties related to Repository extension proj
 | Package for Java classes | `string` | org.alfresco | The base Java package for Java classes. Any generated sample code in any generated project will end up in this package|
 | Would you like to use Community or Enterprise Edition | `string` | Community | Controls whether the Alfresco Community Edition or Enterprise Edition should be used. It determines default versions for artifacts and Docker images.|
 | Include Alfresco Repository Extension | `boolean` | Yes | Controls whether a Repository Extension project should be generated or not.|
-| Repository extension maven artifactId | `string` | repo-extension | The Maven Repository Extension project artifact ID.|
+| Repository Extension maven artifactId | `string` | repo-extension | The Maven Repository Extension project artifact ID.|
 | Repository Extension Name | `string` | Repository Extension | The Maven Repository Extension project name.|
 | Repository Extension Description | `string` | Repository extension module JAR (to be included in the alfresco.war) | The Maven Repository Extension project description.|
 | Alfresco Repository Community version | `string` | 6.0.7-ga | The version of the Alfresco Repository (i.e. alfresco.war) that the Repository Extension should be applied to. If you selected Enterprise Edition, then the default version would be specified accordingly.|
@@ -153,8 +155,8 @@ The following table explains the properties related to Repository extension proj
 To build the project step into the project directory and execute the following command:
 
 ```bash
-brutor-samples mbergljung$ cd my_alf_proj/
-my_alf_proj mbergljung$ ./build-repo-extension.sh 
+brutor-samples mbergljung$ cd my-repo-project/
+my-repo-project mbergljung$ ./build-repo-extension.sh 
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------------------------------------------------------------
@@ -169,11 +171,11 @@ my_alf_proj mbergljung$ ./build-repo-extension.sh
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.6.0:compile (default-compile) @ repo-extension ---
 [INFO] Changes detected - recompiling the module!
-[INFO] Compiling 4 source files to /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/classes
+[INFO] Compiling 4 source files to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/classes
 [INFO] 
 [INFO] --- maven-resources-plugin:3.0.1:testResources (default-testResources) @ repo-extension ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/src/test/resources
+[INFO] skip non existing resourceDirectory /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/src/test/resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.6.0:testCompile (default-testCompile) @ repo-extension ---
 [INFO] No sources to compile
@@ -182,11 +184,11 @@ my_alf_proj mbergljung$ ./build-repo-extension.sh
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ repo-extension ---
-[INFO] Building jar: /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Building jar: /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.5.2:install (default-install) @ repo-extension ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.jar
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.pom
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.pom
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -204,7 +206,7 @@ To do this we will create a custom Repo Docker Image containing the extension JA
 Execute the following command:
 
 ```bash
-my_alf_proj mbergljung$ ./build-repo-docker-image.sh 
+my-repo-project mbergljung$ ./build-repo-docker-image.sh 
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------------------------------------------------------------
@@ -230,13 +232,13 @@ docker-compose_content_1
 [INFO] 
 [INFO] --- maven-dependency-plugin:3.0.2:copy (copy-repo-extensions) @ repo-docker-image ---
 [INFO] Configured Artifact: org.alfresco:repo-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ repo-docker-image ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-docker-image/1.0.0-SNAPSHOT/repo-docker-image-1.0.0-SNAPSHOT.pom
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-docker-image/1.0.0-SNAPSHOT/repo-docker-image-1.0.0-SNAPSHOT.pom
 [INFO] 
 [INFO] --- docker-maven-plugin:0.26.1:build (docker) @ repo-docker-image ---
-[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/target/docker/alfresco-content-services-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
+[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/target/docker/alfresco-content-services-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Created docker-build.tar in 45 milliseconds
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Built image sha256:29100
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Removed old image sha256:63717
@@ -270,7 +272,7 @@ alfresco-content-services-custom                                 1.0.0-SNAPSHOT 
 To run and test the customization use the `run.sh` command:
 
 ```bash
-my_alf_proj mbergljung$ ./run.sh 
+my-repo-project mbergljung$ ./run.sh 
 Creating network "docker-compose_default" with the default driver
 Creating docker-compose_smtp_1     ... done
 Creating docker-compose_solr6_1    ... done
@@ -300,7 +302,7 @@ This can be done quite easily by executing the `update-repo-container.sh` script
 than was used to run the system:
 
 ```bash
-my_alf_proj mbergljung$ ./update-repo-container.sh 
+my-repo-project mbergljung$ ./update-repo-container.sh 
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------------------------------------------------------------
@@ -308,7 +310,7 @@ my_alf_proj mbergljung$ ./update-repo-container.sh
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:3.0.0:clean (default-clean) @ repo-extension ---
-[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target
+[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target
 [INFO] 
 [INFO] --- maven-resources-plugin:3.0.1:resources (default-resources) @ repo-extension ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
@@ -316,11 +318,11 @@ my_alf_proj mbergljung$ ./update-repo-container.sh
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.6.0:compile (default-compile) @ repo-extension ---
 [INFO] Changes detected - recompiling the module!
-[INFO] Compiling 4 source files to /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/classes
+[INFO] Compiling 4 source files to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/classes
 [INFO] 
 [INFO] --- maven-resources-plugin:3.0.1:testResources (default-testResources) @ repo-extension ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/src/test/resources
+[INFO] skip non existing resourceDirectory /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/src/test/resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.6.0:testCompile (default-testCompile) @ repo-extension ---
 [INFO] No sources to compile
@@ -329,11 +331,11 @@ my_alf_proj mbergljung$ ./update-repo-container.sh
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ repo-extension ---
-[INFO] Building jar: /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Building jar: /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.5.2:install (default-install) @ repo-extension ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.jar
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-extension/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.pom
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/target/repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-extension/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-extension/1.0.0-SNAPSHOT/repo-extension-1.0.0-SNAPSHOT.pom
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -350,17 +352,17 @@ docker-compose_content_1
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ repo-docker-image ---
-[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/target
+[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/target
 [INFO] 
 [INFO] --- maven-dependency-plugin:3.0.2:copy (copy-repo-extensions) @ repo-docker-image ---
 [INFO] Configured Artifact: org.alfresco:repo-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ repo-docker-image ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-docker-image/1.0.0-SNAPSHOT/repo-docker-image-1.0.0-SNAPSHOT.pom
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-docker-image/1.0.0-SNAPSHOT/repo-docker-image-1.0.0-SNAPSHOT.pom
 [INFO] 
 [INFO] --- docker-maven-plugin:0.26.1:build (docker) @ repo-docker-image ---
-[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my_alf_proj/repo-docker/target/docker/alfresco-content-services-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
+[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-docker/target/docker/alfresco-content-services-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Created docker-build.tar in 45 milliseconds
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Built image sha256:90dcf
 [INFO] DOCKER> [alfresco-content-services-custom:1.0.0-SNAPSHOT] "acs-custom": Removed old image sha256:29100
@@ -388,7 +390,7 @@ The first way is by running the `stop.sh` script from a different terminal
 than was used to run the system:
 
 ```bash
-my_alf_proj mbergljung$ ./stop.sh 
+my-repo-project mbergljung$ ./stop.sh 
 Stopping docker-compose_content_1  ... done
 Stopping docker-compose_share_1    ... done
 Stopping docker-compose_postgres_1 ... done
