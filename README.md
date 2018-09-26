@@ -39,6 +39,10 @@ On the command line, from the root of your generator project
 ```bash
 $ npm link
 ```
+
+## Configuring Maven
+Before you can build any of the generated projects you need to have Java and Maven installed.
+Then you need to configure Maven according to this [doc](docs/configuring-maven-with-alfresco-repositories.md). 
  
 ## Generating a new project:
 
