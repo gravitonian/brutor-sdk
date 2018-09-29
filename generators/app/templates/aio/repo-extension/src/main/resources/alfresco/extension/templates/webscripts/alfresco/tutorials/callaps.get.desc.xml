@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Call APS Sample Webscript</shortname>
+    <description>Calls APS to start a process</description>
+    <url>/sample/callaps</url>
+    <authentication>user</authentication>
+    <format default="html"></format>
+    <lifecycle>sample</lifecycle>
+</webscript>

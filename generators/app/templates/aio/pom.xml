@@ -15,12 +15,15 @@
   <modules>
     <% if (includeActivitiExtension == true) { %>
     <module><%- activitiExtensionArtifactId %></module>
+    <module>activiti-docker</module>
     <% } %>
     <% if (includeRepoExtension == true) { %>
     <module><%- repoExtensionArtifactId %></module>
+    <module>repo-docker</module>
     <% } %>
     <% if (includeShareExtension == true) { %>
     <module><%- shareExtensionArtifactId %></module>
+    <module>share-docker</module>
     <% } %>
   </modules>
 </project>

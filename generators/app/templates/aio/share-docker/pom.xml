@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>share-docker-image</artifactId>
+    <artifactId>share-docker</artifactId>
     <name>Alfresco Share Docker Image Build</name>
     <description>Alfresco Share Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
     <packaging>pom</packaging>

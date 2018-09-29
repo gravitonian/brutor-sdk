@@ -57,6 +57,7 @@ module.exports = class extends Generator {
       repoEnterpriseVersion: '6.0.0.2',
       repoDockerImageEnterpriseVersion: '6.0.0.2',
       repoJarOrAmp: 'JAR',
+      includeRepoCallApsSample: false,
 
       // Default config for Share extension properties
       includeShareExtension: true,
@@ -403,6 +404,15 @@ module.exports = class extends Generator {
       store: true
     }, {
       type: 'confirm',
+      name: constants.PROP_INCLUDE_REPOSITORY_CALL_APS_SAMPLE,
+      message: 'Generate Web Script sample with APS Rest Call in the Repo Extension project?',
+      default: this._getConfigValue(constants.PROP_INCLUDE_REPOSITORY_CALL_APS_SAMPLE),
+      store: true,
+      when: function (currentAnswers) {
+        return currentAnswers.includeRepoExtension;
+      }
+    }, {
+      type: 'confirm',
       name: constants.PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE,
       message: 'Generate Service Task sample with ACS Rest Call in the Activiti Extension project?',
       default: this._getConfigValue(constants.PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE),
@@ -564,6 +574,7 @@ module.exports = class extends Generator {
       repoVersion: tempRepoVersion,
       repoDockerImageVersion: tempRepoDockerImageVersion,
       repoJarOrAmp: this.props.repoJarOrAmp,
+      includeRepoCallApsSample: this.props.includeRepoCallApsSample,
 
       // Share Extension properties
       includeShareExtension: this.props.includeShareExtension,
@@ -592,8 +603,7 @@ module.exports = class extends Generator {
     // Copy parent project files and some general build files
     this._copyAsTemplate("aio/", "", "pom.xml", tplContext);
     this._copyAsTemplate("aio/", "", "README.md", tplContext);
-    this._copyAsTemplate("aio/", "", "build-all-extensions.sh", tplContext);
-    this._copyAsTemplate("aio/", "", "build-all-docker-images.sh", tplContext);
+    this._copyAsTemplate("aio/", "", "build-all.sh", tplContext);
     if (this.props.includeActivitiExtension) {
       this._copyAsTemplate("aio/", "", "build-activiti-extension.sh", tplContext);
       if (this.props.activitiExtensionGenerateDockerBuild) {
@@ -647,6 +657,9 @@ module.exports = class extends Generator {
         this._copyAsTemplate(fileSrc, fileDst, "DemoComponent.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "DemoRepoAction.java", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "HelloWorldWebScript.java", tplContext);
+        if (this.props.includeRepoCallApsSample) {
+          this._copyAsTemplate(fileSrc, fileDst, "CallApsWebScript.java", tplContext);
+        }
 
         var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
         fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + webScriptDirPath;
@@ -654,6 +667,10 @@ module.exports = class extends Generator {
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
+        if (this.props.includeRepoCallApsSample) {
+          this._copyAsTemplate(fileSrc, fileDst, "callaps.get.desc.xml", tplContext);
+          this._copyAsTemplate(fileSrc, fileDst, "callaps.get.html.ftl", tplContext);
+        }
       }
 
       var repoModulePathDst = this.props.repoExtensionArtifactId + alfrescoModulePath + this.props.repoExtensionArtifactId + '/';

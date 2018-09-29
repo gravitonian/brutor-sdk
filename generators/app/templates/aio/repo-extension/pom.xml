@@ -30,6 +30,17 @@
         <artifactId>alfresco-repository</artifactId>
         <!-- No need to specify version, it is picked up from dependency management in parent POM -->
       </dependency>
+
+      <% if (includeRepoCallApsSample) { %>
+      <!--  This requires you to first clone https://github.com/gravitonian/aps-rest-api-java-client
+            and then run mvn install so you have this lib in your local maven repo. -->
+      <!-- APS ReST API Java Client -->
+      <dependency>
+        <groupId>org.activiti</groupId>
+        <artifactId>aps-rest-api-java-client</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <% } %>
     </dependencies>
 
     <build>

@@ -6,7 +6,7 @@ the Alfresco DBP components (i.e. ACS 6.x and APS 1.9.x).
 Build all extensions and custom Docker Images:
 
 ```bash
-$ ./build-all-docker-images.sh 
+$ ./build-all.sh 
 ...
 ```
 
