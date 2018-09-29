@@ -1,10 +1,13 @@
 # Activiti / APS Process Samples
 This directory contains a number of process definition samples.
 
-## process-app-service-task-call-asc
-This is a Process App with a Process Definition that
-has one Service Task that is implemented as a 
-Spring Delegate. 
+## Sample App.zip
+This is a Process App with two Process Definitions. One that has a User Task
+ and one with a Service Task.
+ 
+### Process with Service Task 
+The 'Sample Process with Service Task' Process definition has one Service 
+Task that is implemented as a Spring Delegate. 
 
 The implementation uses the ACS ReST API Java client 
 wrapper to call ACS and create a folder.
@@ -55,6 +58,15 @@ process_1        | 02:06:34 [http-nio-8080-exec-7] INFO  com.activiti.extension.
 ```
 The folder is created in the Document Library of the default site.
 
+### Process with User Task 
+The 'Sample Process with User Task' Process definition has one User 
+Task that displays a file and a text. This process is used by the 
+following ACS Web Script:
+
+```bash
+repo-extension/src/main/java/org/alfresco/tutorial/reposamples/CallApsWebScript.java
+```
+ 
 
    
   
