@@ -9,5 +9,5 @@ docker container stop docker-compose_process_1
 docker container rm docker-compose_process_1
 
 # Now build the Docker Image via Fabric 8 Maven plugin
-cd activiti-docker
+cd activiti-aggregator-docker
 mvn clean install

@@ -7,7 +7,6 @@ to the *share.war* file.
 -   [Generating the Extension project](#generating-the-extension-project)
     -  [Generator Properties explained](#generator-properties-explained)
 -   [Building the Extension project](#building-the-extension-project)
--   [Building the Docker Image with Extension applied](#building-the-docker-image-with-extension-applied)
 -   [Running the Docker Image with Extension applied](#running-the-docker-image-with-extension-applied)
 -   [Changing the Extension and Rebuilding and Deploying the Docker Image](#changing-the-extension-and-rebuilding-and-deploying-the-docker-image)
 -   [Stopping the Docker Containers](#stopping-the-docker-containers)
@@ -15,6 +14,8 @@ to the *share.war* file.
 ## Prerequisites
 The Yeoman scaffolding tool has been installed and the Alfresco project generator 
 has been installed. See this [README](https://github.com/gravitonian/brutor-sdk/blob/master/README.md) if you need to install these. 
+
+You have configured Maven according to this [doc](docs/configuring-maven-with-alfresco-repositories.md). 
 
 ## Generating the extension project
 Standing in the directory where you want to generate the project (it will be created in a new subdirectory) 
@@ -60,25 +61,27 @@ This generator can also be run with: yo alfresco-extension-project
 ? Maven parent project artifactId? my-share-project
 ? Maven projects version? 1.0.0-SNAPSHOT
 ? Package for Java classes? org.alfresco
-? Would you like to use Community or Enterprise Edition? Community
-? Include Alfresco Repository Extension? No
-? Include Alfresco Share Extension? Yes
+? Would you like to use Community or Enterprise Edition for Repository and Share? Community
+? Include project for Alfresco Repository Extension? No
+? Include project for Alfresco Repository Aggregator and Repository Docker Build? No
+? Include project for Alfresco Share Extension? Yes
 ? Share Extension maven artifactId? share-extension
 ? Share Extension Name? Share Extension
 ? Share Extension Description? Share extension module JAR (to be included in the share.war)
 ? Alfresco Share Community version? 6.0.c
 ? Alfresco Share Docker Image version? 6.0.c
-? Should a project for Share Docker build be generated (i.e. build Share Docker image with Share extension)? Yes
 ? Package Share extension as JAR or AMP? JAR
-? Include Activiti Extension? No
+? Include project for Alfresco Share Aggregator and Share Docker Build? Yes
+? Include project for Activiti Extension? No
+? Include project for Activiti Aggregator and Activiti Docker Build? No
 ? Generate sample source code for all extensions? Yes
 ? Generate a developer runtime environment based on Docker Compose? Yes
 ? Enable Inbound Email Server? No
 ? Enable Outbound Email Server? Yes
 ```
 
-The important property for generating a Share extension project is the `Include Alfresco Share Extension` property, 
-make sure to answer `Yes`.  Then also answer `No` to the `Include Alfresco Repository Extension` and `Include Activiti Extension` 
+The important property for generating a Share extension project is the `Include project for Alfresco Share Extension` property, 
+make sure to answer `Yes`.  Then also answer `No` to the `Include project for Alfresco Repository Extension` and `Include project for Activiti Extension` 
 properties so those extension projects are not generated. See below for explanation of the rest of the properties.   
 
 The following files should be generated and they make up the Repo Extension project:
@@ -91,8 +94,7 @@ Creating .yo-rc.json file...
 Writing project files...
    create pom.xml
    create README.md
-   create build-all-extensions.sh
-   create build-all-docker-images.sh
+   create build-all.sh
    create build-share-extension.sh
    create build-share-docker-image.sh
    create update-share-container.sh
@@ -111,13 +113,20 @@ Writing project files...
    create share-extension/src/main/resources/META-INF/resources/share-extension/js/tutorials/widgets/templates/TemplateWidget.html
    create share-extension/src/main/resources/META-INF/resources/share-extension/js/tutorials/widgets/TemplateWidget.js
    create share-extension/src/main/resources/META-INF/share-config-custom.xml
-   create share-docker/pom.xml
-   create share-docker/Dockerfile
+   create share-aggregator-docker/pom.xml
+   create share-aggregator-docker/Dockerfile
    create runner/docker-compose/docker-compose.yml
    create runner/docker-compose/acs/alfresco-global.properties
    create runner/docker-compose/acs/log4j.properties
    create runner/docker-compose/docker-postgresql-multiple-databases/create-multiple-postgresql-databases.sh
 ```
+
+We can see that we got one project called `share-extension` that can be used to build Share UI customizations
+and one project called `share-aggregator-docker` that are used to assemble (aggregate) all the Share extensions 
+(there are usually more than one in a bigger project) and then build the custom Docker image with the extension(s) applied.
+
+The Share extensions that are aggregated can either be extensions that you develop locally or extensions 
+that are available in a Maven repository somewhere. 
 
 ### Generator Properties explained
 There are a number of properties that we can customize when we run the Alfresco project extension generator.
@@ -132,28 +141,38 @@ The following table explains the properties related to Share extension projects:
 | Maven projects version | `string` | 1.0.0-SNAPSHOT | The Maven project version. This applies to both the parent project and the Share extension project|
 | Package for Java classes | `string` | org.alfresco | The base Java package for Java classes. Any generated sample code in any generated project will end up in this package|
 | Would you like to use Community or Enterprise Edition | `string` | Community | Controls whether the Alfresco Community Edition or Enterprise Edition should be used. It determines default versions for artifacts and Docker images.|
-| Include Alfresco Repository Extension | `boolean` | Yes | Controls whether a Repository Extension project should be generated or not.|
-| Include Alfresco Share Extension | `boolean` | Yes | Controls whether a Share Extension project should be generated or not.|
+| Include project for Alfresco Repository Extension | `boolean` | Yes | Controls whether a Repository Extension project should be generated or not.|
+| Include project for Alfresco Repository Aggregator and Repository Docker Build | `boolean` | Yes | Controls whether we want to generate a project for building custom Repository Docker Image.|
+| Include project for Alfresco Share Extension | `boolean` | Yes | Controls whether a Share Extension project should be generated or not.|
 | Share Extension maven artifactId | `string` | share-extension | The Maven Share Extension project artifact ID.|
 | Share Extension Name | `string` | Share Extension | The Maven Share Extension project name.|
 | Share Extension Description | `string` | Share extension module JAR (to be included in the alfresco.war) | The Maven Share Extension project description.|
 | Alfresco Share Community version | `string` | 6.0.c | The version of the Alfresco Share (i.e. share.war) that the Share Extension should be applied to. If you selected Enterprise Edition, then the default version would be specified accordingly.|
 | Alfresco Share Docker Image version | `string` | 6.0.c | The version of the Alfresco Share Docker Image that should be used as the base for building custom Share Docker Image.|
-| Should a project for Share Docker build be generated (i.e. build Share Docker image with share extension) | `boolean` | Yes | Controls whether we want to generate a project for building custom Share Docker Image.|
 | Package Share extension as JAR or AMP | `string` | JAR | Controls whether we want to also generate an AMP artifact. Choose AMP and the Extension project will generate both a JAR and an AMP artifact.|
-| Include Activiti Extension | `boolean` | Yes | Controls whether an Activiti Extension project should be generated or not.|
+| Include project for Alfresco Share Aggregator and Share Docker Build | `boolean` | Yes | Controls whether we want to generate a project for building custom Share Docker Image.|
+| Include project for Activiti Extension | `boolean` | Yes | Controls whether an Activiti Extension project should be generated or not.|
+| Include project for Activiti Aggregator and Activiti Docker Build | `boolean` | Yes | Controls whether we want to generate a project for building custom Activiti Docker Image.|
 | Generate sample source code for all extensions | `boolean` | Yes | Controls whether sample source code should be generated for the Extension project(s).|
 | Generate a developer runtime environment based on Docker Compose | `boolean` | Yes | Controls whether a Runner project based on Docker Compose should be generated. This project can then be used to start up the whole Alfresco solution, or the parts needed to run the Extension.|
 | Enable Inbound Email Server | `boolean` | No | Controls whether the alfresco-global.properties should be configured to enable Inbound Email.|
 | Enable Outbound Email Server | `boolean` | Yes | Controls whether the alfresco-global.properties should be configured to enable Outbound Email. This also adds an SMTP service to the Docker Compose file so outbound email can be tested.|
 
 ## Building the extension project
-To build the project step into the project directory and execute the following command:
+To build the project step into the project directory and run the `build-all.sh` script:
+
+*Important! If you have another Alfresco extension project running, then you need to stop it first.*
 
 ```bash
-brutor-samples mbergljung$ cd my-share-project/
-MBP512-MBERGLJUNG-0917:my-share-project mbergljung$ ./build-share-extension.sh 
+cd my-share-project/
+my-share-project mbergljung$ ./build-all.sh 
 [INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Share Extension
+[INFO] My Share Project
+[INFO] Alfresco Share Aggregator and Share Docker Image Build
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] Building Share Extension 1.0.0-SNAPSHOT
@@ -185,72 +204,50 @@ MBP512-MBERGLJUNG-0917:my-share-project mbergljung$ ./build-share-extension.sh
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ share-extension ---
 [INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-extension/target/share-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/.m2/repository/org/alfresco/share-extension/1.0.0-SNAPSHOT/share-extension-1.0.0-SNAPSHOT.jar
 [INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-extension/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/share-extension/1.0.0-SNAPSHOT/share-extension-1.0.0-SNAPSHOT.pom
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building My Share Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ my-share-project ---
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ my-share-project ---
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/my-share-project/1.0.0-SNAPSHOT/my-share-project-1.0.0-SNAPSHOT.pom
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Alfresco Share Aggregator and Share Docker Image Build 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ share-aggregator-docker ---
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.0.2:copy (copy-share-extensions) @ share-aggregator-docker ---
+[INFO] Configured Artifact: org.alfresco:share-extension:1.0.0-SNAPSHOT:jar
+[INFO] Copying share-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/target/jars/share-extension-1.0.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ share-aggregator-docker ---
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/share-aggregator-docker/1.0.0-SNAPSHOT/share-aggregator-docker-1.0.0-SNAPSHOT.pom
+[INFO] 
+[INFO] --- docker-maven-plugin:0.26.1:build (docker) @ share-aggregator-docker ---
+[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/target/docker/alfresco-share-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Created docker-build.tar in 36 milliseconds
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Built image sha256:19aad
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Removed old image sha256:019de
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] Share Extension .................................... SUCCESS [  1.050 s]
+[INFO] My Share Project ................................... SUCCESS [  0.007 s]
+[INFO] Alfresco Share Aggregator and Share Docker Image Build SUCCESS [  2.679 s]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1.369 s
-[INFO] Finished at: 2018-09-25T10:57:15+01:00
-[INFO] Final Memory: 11M/245M
+[INFO] Total time: 3.839 s
+[INFO] Finished at: 2018-09-30T08:01:20+01:00
+[INFO] Final Memory: 29M/333M
 [INFO] ------------------------------------------------------------------------
 ``` 
-This builds the JAR file and installs it in the local Maven Repository.
-
-## Building the Docker Image with Extension applied
-To be able to test the Share extension we need somewhere to run it.
-To do this we will create a custom Share Docker Image containing the extension JAR.
-
-Execute the following command:
-
-```bash
-my-share-project mbergljung$ ./build-share-docker-image.sh 
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Share Extension 1.0.0-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-...
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1.159 s
-[INFO] Finished at: 2018-09-25T10:58:05+01:00
-[INFO] Final Memory: 12M/309M
-[INFO] ------------------------------------------------------------------------
-Error response from daemon: No such container: docker-compose_share_1
-Error: No such container: docker-compose_share_1
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Alfresco Share Docker Image Build 1.0.0-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ share-docker-image ---
-[INFO] 
-[INFO] --- maven-dependency-plugin:3.0.2:copy (copy-share-extensions) @ share-docker-image ---
-[INFO] Configured Artifact: org.alfresco:share-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying share-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/target/jars/share-extension-1.0.0-SNAPSHOT.jar
-[INFO] 
-[INFO] --- maven-install-plugin:2.4:install (default-install) @ share-docker-image ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/share-docker-image/1.0.0-SNAPSHOT/share-docker-image-1.0.0-SNAPSHOT.pom
-[INFO] 
-[INFO] --- docker-maven-plugin:0.26.1:build (docker) @ share-docker-image ---
-[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/target/docker/alfresco-share-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Created docker-build.tar in 47 milliseconds
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Built image sha256:07bcb
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Removed old image sha256:06248
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 3.702 s
-[INFO] Finished at: 2018-09-25T10:58:10+01:00
-[INFO] Final Memory: 23M/369M
-[INFO] ------------------------------------------------------------------------
-```
-
-This will actually build the extension again. So you could skip the separate building of the extension and
-just use this script. It then builds the custom Share Docker image with the *share-docker/Dockerfile*, 
-which will take the Alfresco Share image version that was specified during the project generation 
-and then add the Share Extension JAR to it.
+This script will first build the parent project, which acts as an aggregator project. Then it will build the 
+Share extension JAR followed by the custom Share Docker image, which will include the Share extension JAR.  
 
 The custom Docker image that is built is tagged with the version that was specified during project generation.
 In this case **1.0.0-SNAPSHOT**. So when you build the image repeatedly, as you code your extension, there will
@@ -309,15 +306,12 @@ my-share-project mbergljung$ ./update-share-container.sh
 [INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-extension/target
 [INFO] 
 [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ share-extension ---
-[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 [INFO] Copying 12 resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ share-extension ---
 [INFO] No sources to compile
 [INFO] 
 [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ share-extension ---
-[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 [INFO] skip non existing resourceDirectory /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-extension/src/test/resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ share-extension ---
@@ -335,8 +329,8 @@ my-share-project mbergljung$ ./update-share-container.sh
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1.282 s
-[INFO] Finished at: 2018-09-25T11:02:57+01:00
+[INFO] Total time: 1.917 s
+[INFO] Finished at: 2018-09-30T08:03:47+01:00
 [INFO] Final Memory: 11M/245M
 [INFO] ------------------------------------------------------------------------
 docker-compose_share_1
@@ -344,30 +338,30 @@ docker-compose_share_1
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------------------------------------------------------------
-[INFO] Building Alfresco Share Docker Image Build 1.0.0-SNAPSHOT
+[INFO] Building Alfresco Share Aggregator and Share Docker Image Build 1.0.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
 [INFO] 
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ share-docker-image ---
-[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/target
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ share-aggregator-docker ---
+[INFO] Deleting /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/target
 [INFO] 
-[INFO] --- maven-dependency-plugin:3.0.2:copy (copy-share-extensions) @ share-docker-image ---
+[INFO] --- maven-dependency-plugin:3.0.2:copy (copy-share-extensions) @ share-aggregator-docker ---
 [INFO] Configured Artifact: org.alfresco:share-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying share-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/target/jars/share-extension-1.0.0-SNAPSHOT.jar
+[INFO] Copying share-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/target/jars/share-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
-[INFO] --- maven-install-plugin:2.4:install (default-install) @ share-docker-image ---
-[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/share-docker-image/1.0.0-SNAPSHOT/share-docker-image-1.0.0-SNAPSHOT.pom
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ share-aggregator-docker ---
+[INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/share-aggregator-docker/1.0.0-SNAPSHOT/share-aggregator-docker-1.0.0-SNAPSHOT.pom
 [INFO] 
-[INFO] --- docker-maven-plugin:0.26.1:build (docker) @ share-docker-image ---
-[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-docker/target/docker/alfresco-share-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Created docker-build.tar in 51 milliseconds
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Built image sha256:7a83a
-[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Removed old image sha256:07bcb
+[INFO] --- docker-maven-plugin:0.26.1:build (docker) @ share-aggregator-docker ---
+[INFO] Building tar: /Users/mbergljung/IDEAProjects/brutor-samples/my-share-project/share-aggregator-docker/target/docker/alfresco-share-custom/1.0.0-SNAPSHOT/tmp/docker-build.tar
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Created docker-build.tar in 50 milliseconds
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Built image sha256:f276a
+[INFO] DOCKER> [alfresco-share-custom:1.0.0-SNAPSHOT] "share-custom": Removed old image sha256:19aad
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 3.240 s
-[INFO] Finished at: 2018-09-25T11:03:13+01:00
-[INFO] Final Memory: 23M/372M
+[INFO] Total time: 3.834 s
+[INFO] Finished at: 2018-09-30T08:04:04+01:00
+[INFO] Final Memory: 23M/370M
 [INFO] ------------------------------------------------------------------------
 Creating docker-compose_share_1 ... done
 ```
@@ -376,8 +370,9 @@ This script will do the following:
 - Build the Extension so we are sure to get the latest changes
 - Stop the Container 
 - Remove the Container - so we can build a new image
-- Build a new Image with the Extension applied
-- Start the Container 
+- Assemble/Aggregate all Share extension JARs into the target/jars directory
+- Build a new Docker Image with the Extension JAR(s) applied
+- Start the Container based on newly built Image
 
 ## Stopping the Docker Containers
 The whole Alfresco solution can be stopped in two ways.

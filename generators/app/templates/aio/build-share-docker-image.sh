@@ -9,5 +9,5 @@ docker container stop docker-compose_share_1
 docker container rm docker-compose_share_1
 
 # Now build the Docker Image via Fabric 8 Maven plugin
-cd share-docker
+cd share-aggregator-docker
 mvn clean install

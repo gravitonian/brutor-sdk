@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>repo-docker</artifactId>
-    <name>Alfresco Repository Docker Image Build</name>
-    <description>Alfresco Repository Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
+    <artifactId>activiti-aggregator-docker</artifactId>
+    <name>Activiti Aggregator and Docker Image Build</name>
+    <description>Activiti Extension Aggregator and Docker Image Build - JAR assembly under /target for use by Dockerfile</description>
     <packaging>pom</packaging>
 
     <parent>
@@ -12,26 +12,25 @@
       <version><%- version %></version>
     </parent>
 
-    <!-- Define the dependencies that should be part of custom Alfresco Repo (ACS) image -->
+    <!-- Define the dependencies that should be part of custom Activiti/APS Docker Image -->
     <dependencies>
-        <!-- Our custom repo JAR extension with custom content model -->
+        <!-- Our custom Activiti JAR extension -->
         <dependency>
             <groupId><%- groupId %></groupId>
-            <artifactId><%- repoExtensionArtifactId %></artifactId>
+            <artifactId><%- activitiExtensionArtifactId %></artifactId>
             <version><%- version %></version>
         </dependency>
 
-
-        <% if (includeRepoCallApsSample) { %>
-        <!--  This requires you to first clone https://github.com/gravitonian/aps-rest-api-java-client
+        <% if (includeActivitiCallAcsSample) { %>
+        <!--  This requires you to first clone https://github.com/gravitonian/acs-rest-api-java-client
               and then run mvn install so you have this lib in your local maven repo. -->
-        <!-- APS ReST API Java Client -->
+        <!-- ACS ReST API Java Client -->
         <dependency>
-          <groupId>org.activiti</groupId>
-          <artifactId>aps-rest-api-java-client</artifactId>
+          <groupId>org.alfresco</groupId>
+          <artifactId>acs-rest-api-java-client</artifactId>
           <version>1.0.0-SNAPSHOT</version>
         </dependency>
-        <!-- APS ReST API Java Client Dependencies - HTTP Lib -->
+        <!-- ACS ReST API Java Client Dependencies - HTTP Lib -->
         <dependency>
           <groupId>com.squareup.okhttp</groupId>
           <artifactId>okhttp</artifactId>
@@ -62,22 +61,23 @@
         </dependency>
         <% } %>
 
-        <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+        <!-- Other libs that your extension is using
 
-       ...
+        ...
 
-       -->
+        -->
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Copy the JAR extensions we should include in Docker Image to the target/jars directory -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-repo-extensions</id>
+                        <id>copy-activiti-extensions</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy</goal>
@@ -86,15 +86,15 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId><%- groupId %></groupId>
-                                    <artifactId><%- repoExtensionArtifactId %></artifactId>
+                                    <artifactId><%- activitiExtensionArtifactId %></artifactId>
                                     <version><%- version %></version>
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/jars</outputDirectory>
                                 </artifactItem>
-                                <% if (includeRepoCallApsSample) { %>
+                                <% if (includeActivitiCallAcsSample) { %>
                                 <artifactItem>
-                                  <groupId>org.activiti</groupId>
-                                  <artifactId>aps-rest-api-java-client</artifactId>
+                                  <groupId>org.alfresco</groupId>
+                                  <artifactId>acs-rest-api-java-client</artifactId>
                                   <version>1.0.0-SNAPSHOT</version>
                                   <overWrite>false</overWrite>
                                   <outputDirectory>${project.build.directory}/jars</outputDirectory>
@@ -135,18 +135,18 @@
                                   <outputDirectory>${project.build.directory}/jars</outputDirectory>
                                 </artifactItem>
                                 <% } %>
-                              <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+                                <!-- Other libs that your extension is using
 
-                              ...
+                                 ...
 
-                              -->
+                                -->
                             </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Build the custom Alfresco Repository (ACS) Docker Image -->
+            <!-- Build the custom Alfresco Process Services Docker Image -->
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
@@ -154,8 +154,8 @@
                 <configuration>
                     <images>
                         <image>
-                            <alias>acs-custom</alias>
-                            <name>alfresco-content-services-custom:${project.version}</name>
+                            <alias>aps-custom</alias>
+                            <name>alfresco-process-services-custom:${project.version}</name>
                             <build>
                                 <dockerFileDir>${project.basedir}</dockerFileDir>
                             </build>
@@ -180,7 +180,5 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
-
 </project>

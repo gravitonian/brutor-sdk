@@ -136,7 +136,7 @@ module.exports = class extends Generator {
     }, {
       type: 'list',
       name: constants.PROP_COMMUNITY_OR_ENTERPRISE,
-      message: 'Would you like to use Community or Enterprise Edition?',
+      message: 'Would you like to use Community or Enterprise Edition for Repository and Share?',
       choices: ['Community', 'Enterprise'],
       default: this._getConfigValue(constants.PROP_COMMUNITY_OR_ENTERPRISE),
       store: true
@@ -146,7 +146,7 @@ module.exports = class extends Generator {
     {
       type: 'confirm',
       name: constants.PROP_INCLUDE_REPOSITORY_EXTENSION,
-      message: 'Include Alfresco Repository Extension?',
+      message: 'Include project for Alfresco Repository Extension?',
       default: this._getConfigValue(constants.PROP_INCLUDE_REPOSITORY_EXTENSION),
       store: true
     },{
@@ -213,15 +213,6 @@ module.exports = class extends Generator {
         return currentAnswers.includeRepoExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
       }
     }, {
-      type: 'confirm',
-      name: constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
-      message: 'Should a project for Repository Docker build be generated (i.e. build Repo Docker image with repo extension)?',
-      default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD),
-      store: true,
-      when: function (currentAnswers) {
-        return currentAnswers.includeRepoExtension;
-      }
-    }, {
       type: 'list',
       name: constants.PROP_REPOSITORY_JAR_OR_AMP,
       message: 'Package Repo extension as JAR or AMP?',
@@ -231,13 +222,19 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
        return currentAnswers.includeRepoExtension;
       }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD,
+      message: 'Include project for Alfresco Repository Aggregator and Repository Docker Build?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_EXTENSION_GENERATE_DOCKER_BUILD),
+      store: true
     },
 
     // Questions related to the Alfresco Share Extension Module
     {
       type: 'confirm',
       name: constants.PROP_INCLUDE_SHARE_EXTENSION,
-      message: 'Include Alfresco Share Extension?',
+      message: 'Include project for Alfresco Share Extension?',
       default: this._getConfigValue(constants.PROP_INCLUDE_SHARE_EXTENSION),
       store: true
     },{
@@ -304,15 +301,6 @@ module.exports = class extends Generator {
         return currentAnswers.includeShareExtension && currentAnswers.communityOrEnterprise == 'Enterprise';
       }
     }, {
-      type: 'confirm',
-      name: constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
-      message: 'Should a project for Share Docker build be generated (i.e. build Share Docker image with Share extension)?',
-      default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD),
-      store: true,
-      when: function (currentAnswers) {
-        return currentAnswers.includeShareExtension;
-      }
-    }, {
       type: 'list',
       name: constants.PROP_SHARE_JAR_OR_AMP,
       message: 'Package Share extension as JAR or AMP?',
@@ -322,13 +310,19 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
        return currentAnswers.includeShareExtension;
       }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD,
+      message: 'Include project for Alfresco Share Aggregator and Share Docker Build?',
+      default: this._getConfigValue(constants.PROP_SHARE_EXTENSION_GENERATE_DOCKER_BUILD),
+      store: true
     },
 
     // Questions related to the Activiti Extension Module
     {
       type: 'confirm',
       name: constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
-      message: 'Include Activiti Extension?',
+      message: 'Include project for Activiti Extension?',
       default: this._getConfigValue(constants.PROP_INCLUDE_ACTIVITI_EXTENSION),
       store: true
     },{
@@ -388,12 +382,9 @@ module.exports = class extends Generator {
     }, {
       type: 'confirm',
       name: constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD,
-      message: 'Should a project for Activiti Docker build be generated (i.e. build Activiti Docker image with Activiti extension)?',
+      message: 'Include project for Activiti Aggregator and Activiti Docker Build?',
       default: this._getConfigValue(constants.PROP_ACTIVITI_EXTENSION_GENERATE_DOCKER_BUILD),
-      store: true,
-      when: function (currentAnswers) {
-        return currentAnswers.includeActivitiExtension;
-      }
+      store: true
     },
 
     {
@@ -698,7 +689,7 @@ module.exports = class extends Generator {
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
 
       if (this.props.repoExtensionGenerateDockerBuild) {
-        var templateRepoDockerDir = 'repo-docker';
+        var templateRepoDockerDir = 'repo-aggregator-docker';
         this._copyAsTemplate("aio/" + templateRepoDockerDir + "/", templateRepoDockerDir + "/", "pom.xml", tplContext);
         this._copyAsTemplate("aio/" + templateRepoDockerDir + "/", templateRepoDockerDir + "/", "Dockerfile", tplContext);
       }
@@ -774,7 +765,7 @@ module.exports = class extends Generator {
       this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
 
       if (this.props.shareExtensionGenerateDockerBuild) {
-        var templateShareDockerDir = 'share-docker';
+        var templateShareDockerDir = 'share-aggregator-docker';
         this._copyAsTemplate("aio/" + templateShareDockerDir + "/", templateShareDockerDir + "/", "pom.xml", tplContext);
         this._copyAsTemplate("aio/" + templateShareDockerDir + "/", templateShareDockerDir + "/", "Dockerfile", tplContext);
       }
@@ -804,7 +795,7 @@ module.exports = class extends Generator {
       }
 
       if (this.props.activitiExtensionGenerateDockerBuild) {
-        var templateActivitiDockerDir = 'activiti-docker';
+        var templateActivitiDockerDir = 'activiti-aggregator-docker';
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "pom.xml", tplContext);
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "Dockerfile", tplContext);
       }

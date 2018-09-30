@@ -9,5 +9,5 @@ docker container stop docker-compose_content_1
 docker container rm docker-compose_content_1
 
 # Now build the Docker Image via Fabric 8 Maven plugin
-cd repo-docker
+cd repo-aggregator-docker
 mvn clean install
