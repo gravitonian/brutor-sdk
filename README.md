@@ -22,6 +22,14 @@ Getting Started:
 - [Generating, building, and running a project supporting Repo, Share, and Activiti Extensions](docs/generating-repo-and-share-and-activiti-extension-project.md) 
 - [Generating, building, and running a project supporting Repo and Share Extensions](docs/generating-repo-and-share-extension-project.md) 
 - [Generating, building, and running a project supporting Repo Extensions](docs/generating-repository-extension-project.md) 
-- [Generating, building, and running a project supporting Share Extensions](docs/generating-share-extension-project.md) 
+- [Generating, building, and running a project supporting Share Extensions](docs/generating-share-extension-project.md)
+
+If you are integrating ACS and APS you will need the following Java client libraries:
+
+- [Alfresco Content Services (ACS) ReST API Java Client](https://github.com/gravitonian/acs-rest-api-java-client)
+- [Alfresco Process Services (APS) ReST API Java Client](https://github.com/gravitonian/aps-rest-api-java-client) 
+- [Sample code using ACS Java Client - Service Task implementation](https://github.com/gravitonian/brutor-sdk/blob/master/generators/app/templates/aio/activiti-extension/src/main/java/com/activiti/extension/bean/CallAcsSpringJavaDelegate.java)
+- [Sample code using APS Java Client - Web Script implementation](https://github.com/gravitonian/brutor-sdk/blob/master/generators/app/templates/aio/repo-extension/src/main/java/org/alfresco/tutorial/reposamples/CallApsWebScript.java)
+
 
 
