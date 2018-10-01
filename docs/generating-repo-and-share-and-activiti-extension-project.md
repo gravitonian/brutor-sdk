@@ -447,6 +447,9 @@ alfresco-process-services-custom                 1.0.0-SNAPSHOT      8846dce1a3a
 ## Running the Docker Images with Extensions applied
 To run and test the customizations use the `run.sh` command (first time you do this you will see a lot of downloads of Docker images from Docker Hub):
 
+*Important!  Make sure ports 5432, 8080, 8082, 8083, 9080 are open. 
+These are defined in the docker-compose.yml file.*
+
 ```bash
 my-repo-share-activiti-project mbergljung$ ./run.sh 
 Creating network "docker-compose_default" with the default driver
@@ -496,6 +499,18 @@ Share, Solr, Activiti, and PostgreSQL.
 
 The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
 http://localhost:8080/share. The Activiti App should be accessible at http://localhost:9080/activiti-app.
+
+## (OPTIONAL) Apply ACS Enterprise License
+If you selected to use *Enterprise Edition* of the ACS server, then you need to install a license.
+Navigate to the following address and apply your ACS Enterprise license:
+
+```bash
+http://localhost:8082/alfresco/service/enterprise/admin/admin-license
+```
+
+## Apply APS Enterprise License
+The APS server is running as an Enterprise Edition, so you must apply a license to use it.
+Navigate to `http://localhost:9080/activiti-app` and you will be asked to upload a license.
 
 ## Changing the Extensions and Rebuilding and Deploying the Docker Images
 The Alfresco system is now up and running and you would most likely want to keep working on 

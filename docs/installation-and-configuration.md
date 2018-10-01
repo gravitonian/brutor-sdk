@@ -1,5 +1,30 @@
 **You only need to do this once.**
 
+## Install Docker
+You probably already have Docker installed as everything these days is easily accessible and run as containers. 
+If you don't, then head over to the [Docker Store](https://store.docker.com/search?type=edition&offering=community) and download the latest stable community edition (CE). 
+
+Make sure the Docker daemon is running and you are set:
+
+```bash 
+mbergljung$ docker -v
+Docker version 18.06.1-ce, build e68fc7a
+```
+
+## (OPTIONAL) Set up Access to Alfresco Enterprise Docker Images
+If you intend to use Alfresco Repo and/or Share Enterprise versions, then you need to set up 
+access to Alfresco's Enterprise Docker Registry, which is [QUAY](https://quay.io/).
+
+You can request access/credentials via Alfresco Support.
+
+Then login to Quay.io with Docker using your credentials:
+
+```bash 
+$ docker login quay.io
+Username: myusername
+Password: mypassword
+```
+
 ## Clone this project
 You need to clone this project in order to use the Yeoman generator:
 
@@ -28,5 +53,5 @@ $ npm link
 ```
 
 ## Configuring Maven
-Before you can build any of the generated projects you need to have Java and Maven installed.
+Before you can build any of the generated projects you need to have Java SDK and Maven installed.
 Then you need to configure Maven according to this [doc](configuring-maven-with-alfresco-repositories.md). 

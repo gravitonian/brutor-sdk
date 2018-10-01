@@ -2,9 +2,19 @@
 version: "2"
 
 services:
-  <% if (includeRepoExtension == true || includeShareExtension == true) { %>
+  <% if (includeRepoExtension == true || includeShareExtension == true || includeActivitiCallAcsSample == true) { %>
   content:
+       <% if (repoExtensionGenerateDockerBuild == true) { %>
       image: alfresco-content-services-custom:1.0.0-SNAPSHOT
+      <% } %>
+      <% if (repoExtensionGenerateDockerBuild == false) { %>
+        <% if (communityOrEnterprise == 'Community') { %>
+      image: alfresco/alfresco-content-repository-community:6.0.7-ga
+        <% } %>
+        <% if (communityOrEnterprise == 'Enterprise') { %>
+      image: alfresco/alfresco-content-repository:6.0.0.2
+        <% } %>
+      <% } %>
       mem_limit: 1500m
       environment:
           CATALINA_OPTS: "
@@ -41,7 +51,12 @@ services:
         - postgres
 
   share:
+      <% if (shareExtensionGenerateDockerBuild == true) { %>
       image: alfresco-share-custom:1.0.0-SNAPSHOT
+      <% } %>
+      <% if (shareExtensionGenerateDockerBuild == false) { %>
+      image: alfresco/alfresco-share:6.0.c
+      <% } %>
       mem_limit: 1g
       environment:
         - REPO_HOST=content
@@ -76,7 +91,12 @@ services:
 
   <% if (includeActivitiExtension == true || includeRepoCallApsSample == true) { %>
   process:
+    <% if (activitiExtensionGenerateDockerBuild == true) { %>
     image: alfresco-process-services-custom:1.0.0-SNAPSHOT
+    <% } %>
+    <% if (activitiExtensionGenerateDockerBuild == false) { %>
+    image: alfresco/process-services:1.9.0.1
+    <% } %>
     environment:
       ACTIVITI_DATASOURCE_USERNAME: alfresco
       ACTIVITI_DATASOURCE_PASSWORD: alfresco

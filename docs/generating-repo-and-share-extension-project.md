@@ -359,6 +359,9 @@ alfresco-share-custom                                            1.0.0-SNAPSHOT 
 ## Running the Docker Images with Extensions applied
 To run and test the customizations use the `run.sh` command (first time you do this you will see a lot of downloads of Docker images from Docker Hub):
 
+*Important!  Make sure ports 5432, 8080, 8082, and 8083 are open. 
+These are defined in the docker-compose.yml file.*
+
 ```bash
 my-repo-share-project mbergljung$ ./run.sh 
 Creating network "docker-compose_default" with the default driver
@@ -418,6 +421,14 @@ Share, Solr, and PostgreSQL.
 
 The Repository should now be accessible on http://localhost:8082 and Share should be accessible on 
 http://localhost:8080/share.
+
+## (OPTIONAL) Apply ACS Enterprise License
+If you selected to use *Enterprise Edition* of the ACS server, then you need to install a license.
+Navigate to the following address and apply your ACS Enterprise license:
+
+```bash
+http://localhost:8082/alfresco/service/enterprise/admin/admin-license
+```
 
 ## Changing the Extensions and Rebuilding and Deploying the Docker Images
 The Alfresco system is now up and running and you would most likely want to keep working on 

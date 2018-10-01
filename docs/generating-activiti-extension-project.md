@@ -253,6 +253,9 @@ alfresco-process-services-custom                 1.0.0-SNAPSHOT      80684fec14a
 ## Running the Docker Image with Extension applied
 To run and test the customization use the `run.sh` command:
 
+*Important!  Make sure ports 5432 and 9080 are open. 
+These are defined in the docker-compose.yml file.*
+
 ```bash
 my-repo-project mbergljung$ ./run.sh 
 Creating network "docker-compose_default" with the default driver
@@ -270,6 +273,10 @@ process_1        | 01-Oct-2018 08:47:36.035 INFO [main] org.apache.catalina.star
 This uses the *runner/docker-compose/docker-compose.yml* file to start up the whole Alfresco environment with APS, ElasticSearch, and PostgreSQL.
 
 The Activiti App should now be accessible on the http://localhost:9080/activiti-app URL.
+
+## Apply APS Enterprise License
+The APS server is running as an Enterprise Edition, so you must apply a license to use it.
+Navigate to `http://localhost:9080/activiti-app` and you will be asked to upload a license.
 
 ## Changing the Extension and Rebuilding and Deploying the Docker Image
 The Activiti/APS system is now up and running and you would most likely want to keep working on 

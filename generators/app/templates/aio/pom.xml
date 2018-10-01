@@ -15,14 +15,20 @@
   <modules>
     <% if (includeActivitiExtension == true) { %>
     <module><%- activitiExtensionArtifactId %></module>
+    <% } %>
+    <% if (activitiExtensionGenerateDockerBuild == true) { %>
     <module>activiti-aggregator-docker</module>
     <% } %>
     <% if (includeRepoExtension == true) { %>
     <module><%- repoExtensionArtifactId %></module>
+    <% } %>
+    <% if (repoExtensionGenerateDockerBuild == true) { %>
     <module>repo-aggregator-docker</module>
     <% } %>
     <% if (includeShareExtension == true) { %>
     <module><%- shareExtensionArtifactId %></module>
+    <% } %>
+    <% if (shareExtensionGenerateDockerBuild == true) { %>
     <module>share-aggregator-docker</module>
     <% } %>
   </modules>

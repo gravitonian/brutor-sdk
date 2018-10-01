@@ -19,6 +19,7 @@ Alfresco extensions for Platform/Repository and Share.
 ## Getting Started
 
 - [Installation and Configuration](docs/installation-and-configuration.md) 
+- [Get up to speed on Docker](docs/introduction-to-docker.md)
 
 Here are some links to how you can generate, build, and run a project supporting:
 

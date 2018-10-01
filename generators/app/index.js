@@ -815,11 +815,11 @@ module.exports = class extends Generator {
       var dbRunnerConfigSrcDir = fileSrc + 'docker-postgresql-multiple-databases/';
 
       this._copyAsTemplate(fileSrc, fileDst, "docker-compose.yml", tplContext);
-      if (this.props.includeRepoExtension || this.props.includeShareExtension) {
+      if (this.props.includeRepoExtension || this.props.includeShareExtension || this.props.includeActivitiCallAcsSample) {
         this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "alfresco-global.properties", tplContext);
         this._copyAsTemplate(acsRunnerConfigSrcDir, fileDst + 'acs/', "log4j.properties", tplContext);
       }
-      if (this.props.includeActivitiExtension) {
+      if (this.props.includeActivitiExtension || this.props.includeRepoCallApsSample) {
         this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "activiti-app.properties", tplContext);
         this._copyAsTemplate(apsRunnerConfigSrcDir, fileDst + 'aps/', "log4j.properties", tplContext);
         this._copyAsTemplate(apsLicenseRunnerConfigSrcDir, fileDst + 'aps/enterprise-license/', "README.md", tplContext);
