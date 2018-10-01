@@ -14,10 +14,8 @@ an Alfresco Share extension will be applied to the *share.war* file.
 -   [Stopping the Docker Containers](#stopping-the-docker-containers)
 
 ## Prerequisites
-The Yeoman scaffolding tool has been installed and the Alfresco project generator 
-has been installed. See this [README](https://github.com/gravitonian/brutor-sdk/blob/master/README.md) if you need to install these. 
 
-You have configured Maven according to this [doc](docs/configuring-maven-with-alfresco-repositories.md). 
+You have installed and configured the development environment according to this [doc](installation-and-configuration.md). 
 
 ## Generating the extension project
 Standing in the directory where you want to generate the project (it will be created in a new subdirectory) 
@@ -168,11 +166,11 @@ The following table explains the properties related to this type of extension pr
 
 | Name | Type | Default value | Description |
 | ---- | ---- | ------------- | ----------- |
-| Parent Project name | `string` | Alfresco Extension Project | This is the name of the parent project that will contain the Repository extension, Repository Docker build, and Runner projects. You can call it whatever you like. Does not apply to the Repository Extension project name.|
-| Parent Project description | `string` | Alfresco project for working with multiple extensions in a containerized environment | This is the description of the parent project. Does not apply to the Repository Extension project description.|
-| Maven projects groupId | `string` | org.alfresco | The Maven project group ID. This applies to both the parent project and the Repository extension project|
-| Maven parent project artifactId | `string` | my_alf_proj | The Maven parent project artifact ID. Does not apply to the Repository Extension project|
-| Maven projects version | `string` | 1.0.0-SNAPSHOT | The Maven project version. This applies to both the parent project and the Repository extension project|
+| Parent Project name | `string` | Alfresco Extension Project | This is the name of the parent project that will contain the Repository and Share extensions, aggregator and Docker builds, and Runner projects. You can call it whatever you like. Does not apply to the individual extension project names.|
+| Parent Project description | `string` | Alfresco project for working with multiple extensions in a containerized environment | This is the description of the parent project. Does not apply to the individual extension project descriptions.|
+| Maven projects groupId | `string` | org.alfresco | The Maven project group ID. This applies to both the parent project and the Repository and Share extension projects|
+| Maven parent project artifactId | `string` | my_alf_proj | The Maven parent project artifact ID. Does not apply to the extension projects|
+| Maven projects version | `string` | 1.0.0-SNAPSHOT | The Maven project version. This applies to both the parent project and the extension projects|
 | Package for Java classes | `string` | org.alfresco | The base Java package for Java classes. Any generated sample code in any generated project will end up in this package|
 | Would you like to use Community or Enterprise Edition | `string` | Community | Controls whether the Alfresco Community Edition or Enterprise Edition should be used. It determines default versions for artifacts and Docker images.|
 | Include project for Alfresco Repository Extension | `boolean` | Yes | Controls whether a Repository Extension project should be generated or not.|

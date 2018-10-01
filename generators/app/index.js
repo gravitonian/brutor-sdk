@@ -424,7 +424,7 @@ module.exports = class extends Generator {
       default: this._getConfigValue(constants.PROP_ENABLE_INBOUND_EMAIL_SERVER),
       store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeDevRuntimeEnv;
+        return currentAnswers.includeDevRuntimeEnv && (currentAnswers.includeRepoExtension || currentAnswers.includeShareExtension);
       }
     }, {
       type: 'confirm',
@@ -433,7 +433,7 @@ module.exports = class extends Generator {
       default: this._getConfigValue(constants.PROP_ENABLE_OUTBOUND_EMAIL_SERVER),
       store: true,
       when: function (currentAnswers) {
-        return currentAnswers.includeDevRuntimeEnv;
+        return currentAnswers.includeDevRuntimeEnv && (currentAnswers.includeRepoExtension || currentAnswers.includeShareExtension);
       }
     }];
 

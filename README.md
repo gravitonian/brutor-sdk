@@ -16,14 +16,19 @@ The way you code extensions has not changed, have a look [here](https://docs.alf
 Alfresco extensions for Platform/Repository and Share.
  
  
-## Getting Started:
+## Getting Started
 
 - [Installation and Configuration](docs/installation-and-configuration.md) 
-- [Generating, building, and running a project supporting Repo, Share, and Activiti Extensions](docs/generating-repo-and-share-and-activiti-extension-project.md) 
-- [Generating, building, and running a project supporting Repo and Share Extensions](docs/generating-repo-and-share-extension-project.md) 
-- [Generating, building, and running a project supporting Repo Extensions](docs/generating-repository-extension-project.md) 
-- [Generating, building, and running a project supporting Share Extensions](docs/generating-share-extension-project.md)
-- [Generating, building, and running a project supporting Repo Extensions and APS Java Client](docs/generating-repository-extension-project-with-support-for-APS-calls.md)
+
+Here are some links to how you can generate, build, and run a project supporting:
+
+- [Repo, Share, and Activiti Extensions](docs/generating-repo-and-share-and-activiti-extension-project.md) 
+- [Repo and Share Extensions](docs/generating-repo-and-share-extension-project.md) 
+- [Repo Extensions](docs/generating-repository-extension-project.md) 
+- [Share Extensions](docs/generating-share-extension-project.md)
+- [Activiti Extensions](docs/generating-activiti-extension-project.md)
+- [Repo Extensions and APS Java Client](docs/generating-repository-extension-project-with-support-for-APS-calls.md)
+- [Activiti Extensions and ACS Java Client](docs/generating-activiti-extension-project-with-support-for-ACS-calls.md)
 
 If you are integrating ACS and APS you will need the following Java client libraries:
 

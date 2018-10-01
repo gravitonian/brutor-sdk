@@ -12,10 +12,8 @@ to the *alfresco.war* file.
 -   [Stopping the Docker Containers](#stopping-the-docker-containers)
 
 ## Prerequisites
-The Yeoman scaffolding tool has been installed and the Alfresco project generator 
-has been installed. See this [README](https://github.com/gravitonian/brutor-sdk/blob/master/README.md) if you need to install these. 
 
-You have configured Maven according to this [doc](docs/configuring-maven-with-alfresco-repositories.md). 
+You have installed and configured the development environment according to this [doc](installation-and-configuration.md). 
 
 ## Generating the extension project
 Standing in the directory where you want to generate the project (it will be created in a new subdirectory) 
@@ -287,7 +285,7 @@ content_1   | 25-Sep-2018 07:43:56.158 INFO [main] org.apache.catalina.startup.C
 This uses the *runner/docker-compose/docker-compose.yml* file to start up the whole Alfresco environment with Repository,
 Share, Solr, and PostgreSQL.
 
-The Repository should now be accessible on http://localhost:8082 and Share should be accessible on 
+The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
 http://localhost:8080/share.
 
 ## Changing the Extension and Rebuilding and Deploying the Docker Image

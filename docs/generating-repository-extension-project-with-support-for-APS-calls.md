@@ -137,8 +137,41 @@ Now when we got everything configured and running we can try out the `CallApsWeb
 via the `http://localhost:8082/alfresco/s/sample/callaps` URL. The response should look something
 like this:
 
-```json 
-class ProcessInstanceRepresentation { businessKey: null ended: null graphicalNotationDefined: true id: 8 name: My Process Instance processDefinitionCategory: http://www.activiti.org/processdef processDefinitionDeploymentId: 1 processDefinitionDescription: This process is used by ACS to demonstrate starting a process via APS ReST API processDefinitionId: SampleProcesswithUserTask:1:7 processDefinitionKey: SampleProcesswithUserTask processDefinitionName: Sample Process with User Task processDefinitionVersion: 1 startFormDefined: false started: 2018-10-01T07:47:50.692Z startedBy: class LightUserRepresentation { company: null email: admin@app.activiti.com externalId: null firstName: null id: 1 lastName: Administrator pictureId: null } suspended: false tenantId: tenant_1 variables: [class RestVariable { name: acscontent scope: null type: null value: null }, class RestVariable { name: atextvar scope: null type: string value: Some text }, class RestVariable { name: initiator scope: null type: string value: 1 }] }' 
+``` 
+class ProcessInstanceRepresentation {
+  businessKey: null
+  ended: null
+  graphicalNotationDefined: true
+  id: 8
+  name: My
+  Process
+  Instance
+  processDefinitionCategory: http://www.activiti.org/processdef 
+  processDefinitionDeploymentId: 1 
+  processDefinitionDescription: This process is used by ACS to demonstrate starting a process via APS ReST API 
+  processDefinitionId: SampleProcesswithUserTask:1:7 
+  processDefinitionKey: SampleProcesswithUserTask 
+  processDefinitionName: Sample Process with User Task 
+  processDefinitionVersion: 1 
+  startFormDefined: false 
+  started: 2018-10-01T07:47:50.692Z 
+  startedBy: class LightUserRepresentation { 
+    company: null 
+    email: admin@app.activiti.com 
+    externalId: null 
+    firstName: null 
+    id: 1 
+    lastName: Administrator 
+    pictureId: null 
+  } 
+  suspended: false 
+  tenantId: tenant_1 
+  variables: [
+    class RestVariable { name: acscontent scope: null type: null value: null }, 
+    class RestVariable { name: atextvar scope: null type: string value: Some text }, 
+    class RestVariable { name: initiator scope: null type: string value: 1 }
+  ] 
+}
 ```
 
 Logged into APS you should be able to click on the **Sample App** tile and then on **Processes**. You should then see
