@@ -786,11 +786,6 @@ module.exports = class extends Generator {
         this._copyAsTemplate(fileSrc, fileDst, "SimpleSpringJavaDelegate.java", tplContext);
         if (this.props.includeActivitiCallAcsSample) {
           this._copyAsTemplate(fileSrc, fileDst, "CallAcsSpringJavaDelegate.java", tplContext);
-
-          templateActivitiModuleId = 'activiti-process-samples/';
-          fileSrc = 'aio/' + templateActivitiModuleId;
-          fileDst = templateActivitiModuleId;
-          this._copyAsTemplate(fileSrc, fileDst, "process-app-service-task-call-asc.zip", tplContext);
         }
       }
 
@@ -799,6 +794,14 @@ module.exports = class extends Generator {
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "pom.xml", tplContext);
         this._copyAsTemplate("aio/" + templateActivitiDockerDir + "/", templateActivitiDockerDir + "/", "Dockerfile", tplContext);
       }
+    }
+
+    if (this.props.includeActivitiCallAcsSample || this.props.includeRepoCallApsSample) {
+      // Copy Process App Sample with some process definitions
+      templateActivitiModuleId = 'activiti-process-samples/';
+      fileSrc = 'aio/' + templateActivitiModuleId;
+      fileDst = templateActivitiModuleId;
+      this._copyAsTemplate(fileSrc, fileDst, "Sample App.zip", tplContext);
     }
 
     if (this.props.includeDevRuntimeEnv) {

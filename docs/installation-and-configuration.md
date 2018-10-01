@@ -1,13 +1,20 @@
 **You only need to do this once.**
 
-## Installing Yeoman 
+## Clone this project
+You need to clone this project in order to use the Yeoman generator:
+
+```bash
+$ git clone https://github.com/gravitonian/brutor-sdk
+```
+
+## Install Yeoman 
 First, install [Yeoman](http://yeoman.io):
 
 ```bash
 $ sudo npm install -g yo
 ```
 
-## Installing Alfresco Project Generator 
+## Install Alfresco Project Generator 
 Since we’re developing the generator locally, it’s not yet available as a global npm module. 
 A global module may be created and symlinked to a local one, using npm. 
 
