@@ -38,5 +38,7 @@ If you are integrating ACS and APS you will need the following Java client libra
 - [Sample code using ACS Java Client - Service Task implementation](https://github.com/gravitonian/brutor-sdk/blob/master/generators/app/templates/aio/activiti-extension/src/main/java/com/activiti/extension/bean/CallAcsSpringJavaDelegate.java)
 - [Sample code using APS Java Client - Web Script implementation](https://github.com/gravitonian/brutor-sdk/blob/master/generators/app/templates/aio/repo-extension/src/main/java/org/alfresco/tutorial/reposamples/CallApsWebScript.java)
 
+Debugging:
 
+- [Debugging Repo Extensions with IntelliJ IDEA](docs/debugging-repository-extensions.md)
 
