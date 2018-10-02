@@ -41,4 +41,5 @@ If you are integrating ACS and APS you will need the following Java client libra
 Debugging:
 
 - [Debugging Repo Extensions with IntelliJ IDEA](docs/debugging-repository-extensions.md)
+- [Debugging Activiti Extensions with IntelliJ IDEA](docs/debugging-activiti-extensions.md)
 

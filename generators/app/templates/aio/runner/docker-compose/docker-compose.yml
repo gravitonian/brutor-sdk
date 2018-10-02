@@ -98,6 +98,9 @@ services:
     image: alfresco/process-services:1.9.0.1
     <% } %>
     environment:
+      CATALINA_OPTS: "
+          		-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+          		"
       ACTIVITI_DATASOURCE_USERNAME: alfresco
       ACTIVITI_DATASOURCE_PASSWORD: alfresco
       ACTIVITI_DATASOURCE_DRIVER: org.postgresql.Driver
@@ -115,7 +118,8 @@ services:
       - ./aps/log4j.properties:/usr/share/tomcat/webapps/activiti-app/WEB-INF/classes/log4j.properties
       - ./data/aps:/usr/local/data/
     ports:
-      - 9080:8080
+      - 9080:8080 # Browser port
+      - 5006:5005 # Remote Debug
     links:
       - elasticsearch:elasticsearch
       - postgres:postgres
