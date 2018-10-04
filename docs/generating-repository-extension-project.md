@@ -225,7 +225,7 @@ my-repo-project mbergljung$ ./build-all.sh
 [INFO] 
 [INFO] --- maven-dependency-plugin:3.0.2:copy (copy-repo-extensions) @ repo-aggregator-docker ---
 [INFO] Configured Artifact: org.alfresco:repo-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/target/extensions/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ repo-aggregator-docker ---
 [INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-aggregator-docker/1.0.0-SNAPSHOT/repo-aggregator-docker-1.0.0-SNAPSHOT.pom
@@ -364,7 +364,7 @@ docker-compose_content_1
 [INFO] 
 [INFO] --- maven-dependency-plugin:3.0.2:copy (copy-repo-extensions) @ repo-aggregator-docker ---
 [INFO] Configured Artifact: org.alfresco:repo-extension:1.0.0-SNAPSHOT:jar
-[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/target/jars/repo-extension-1.0.0-SNAPSHOT.jar
+[INFO] Copying repo-extension-1.0.0-SNAPSHOT.jar to /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/target/extensions/repo-extension-1.0.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ repo-aggregator-docker ---
 [INFO] Installing /Users/mbergljung/IDEAProjects/brutor-samples/my-repo-project/repo-aggregator-docker/pom.xml to /Users/mbergljung/.m2/repository/org/alfresco/repo-aggregator-docker/1.0.0-SNAPSHOT/repo-aggregator-docker-1.0.0-SNAPSHOT.pom
@@ -388,7 +388,7 @@ This script will do the following:
 - Build the Extension so we are sure to get the latest changes
 - Stop the Container 
 - Remove the Container - so we can build a new image
-- Assemble/Aggregate all Repository extension JARs into the target/jars directory
+- Assemble/Aggregate all Repository extension JARs into the target/extensions directory
 - Build a new Docker Image with the Extension JAR(s) applied
 - Start the Container based on newly built Image
 

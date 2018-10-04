@@ -3,7 +3,7 @@
 
     <artifactId>repo-aggregator-docker</artifactId>
     <name>Alfresco Repository Aggregator and Repository Docker Image Build</name>
-    <description>Alfresco Repository Extensions Aggregator and Repository Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
+    <description>Alfresco Repository Extensions Aggregator and Repository Docker Image Build - JAR and AMP assembly under /target/extensions for use by Dockerfile</description>
     <packaging>pom</packaging>
 
     <parent>
@@ -14,15 +14,22 @@
 
     <!-- Define the dependencies that should be part of custom Alfresco Repo (ACS) image -->
     <dependencies>
-        <!-- Our custom repo JAR extension with custom content model -->
+        <% if (repoJarOrAmp == 'AMP') { %>
+        <!-- Our custom repo AMP extension -->
+        <% } %>
+        <% if (repoJarOrAmp == 'JAR') { %>
+        <!-- Our custom repo JAR extension -->
+        <% } %>
         <dependency>
             <groupId><%- groupId %></groupId>
             <artifactId><%- repoExtensionArtifactId %></artifactId>
             <version><%- version %></version>
+            <% if (repoJarOrAmp == 'AMP') { %>
+            <type>amp</type>
+            <% } %>
         </dependency>
 
-
-        <% if (includeRepoCallApsSample) { %>
+        <% if (includeRepoCallApsSample == true) { %>
         <!--  This requires you to first clone https://github.com/gravitonian/aps-rest-api-java-client
               and then run mvn install so you have this lib in your local maven repo. -->
         <!-- APS ReST API Java Client -->
@@ -62,7 +69,7 @@
         </dependency>
         <% } %>
 
-        <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+        <!-- Other extensions (JARs or AMPs) that need to be included, such as 3rd party libs
 
        ...
 
@@ -89,7 +96,10 @@
                                     <artifactId><%- repoExtensionArtifactId %></artifactId>
                                     <version><%- version %></version>
                                     <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                    <% if (repoJarOrAmp == 'AMP') { %>
+                                    <type>amp</type>
+                                    <% } %>
+                                    <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <% if (includeRepoCallApsSample) { %>
                                 <artifactItem>
@@ -97,45 +107,45 @@
                                   <artifactId>aps-rest-api-java-client</artifactId>
                                   <version>1.0.0-SNAPSHOT</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                   <groupId>com.squareup.okhttp</groupId>
                                   <artifactId>okhttp</artifactId>
                                   <version>2.7.5</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                   <groupId>com.squareup.okio</groupId>
                                   <artifactId>okio</artifactId>
                                   <version>1.6.0</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                   <groupId>com.google.code.gson</groupId>
                                   <artifactId>gson</artifactId>
                                   <version>2.8.1</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                   <groupId>io.gsonfire</groupId>
                                   <artifactId>gson-fire</artifactId>
                                   <version>1.8.0</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                   <groupId>org.threeten</groupId>
                                   <artifactId>threetenbp</artifactId>
                                   <version>1.3.5</version>
                                   <overWrite>false</overWrite>
-                                  <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                  <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
                                 <% } %>
-                              <!-- Other extensions (JARs or AMPs) that need to be included, such as libs to make HTTP calls to for example APS
+                              <!-- Other extensions (JARs or AMPs) that need to be included, such as 3rd party libs
 
                               ...
 

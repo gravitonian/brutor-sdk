@@ -2,7 +2,7 @@
   "name": "generator-alfresco-extension-project",
   "version": "0.1.0",
   "description": "Yeoman generator for Alfresco Extension Projects",
-  "homepage": "https://github.com/Alfresco/XXXXXXXXXXXXXXXXXXXXXXXX",
+  "homepage": "https://github.com/gravitonian/brutor-sdk",
   "author": {
     "name": "Martin Bergljung",
     "email": "martin.bergljung@alfresco.com"
@@ -25,7 +25,8 @@
     "lodash": "^4.6.1",
     "mkdirp": "^0.5.1",
     "chalk": "^1.0.0",
-    "yosay": "^1.0.0"
+    "yosay": "^1.0.0",
+    "semver": "5.5.0"
   },
   "devDependencies": {
     "yeoman-test": "^1.0.0",

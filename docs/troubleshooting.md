@@ -1,4 +1,13 @@
-## There are problems building - unused or dangling Docker images
+## The Repository Container does not start - Cannot connect to PostgreSQL
+This can happen sometimes after the first build and run.
+
+Stop the system with **Ctrl-C**.
+
+Then make sure all containers are stopped and removed with **./stop.sh**.
+
+Then start it back up again with **./run.sh.sh**
+
+## There are general problems building - unused or dangling Docker images
 It does not work properly to build or run the system.
 
 An unused image means that it has not been assigned or used in a container. 

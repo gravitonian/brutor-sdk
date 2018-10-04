@@ -3,7 +3,7 @@
 
     <artifactId>share-aggregator-docker</artifactId>
     <name>Alfresco Share Aggregator and Share Docker Image Build</name>
-    <description>Alfresco Share Extensions Aggregator and Share Docker Image Build - JAR and AMP assembly under /target for use by Dockerfile</description>
+    <description>Alfresco Share Extensions Aggregator and Share Docker Image Build - JAR and AMP assembly under /target/extensions for use by Dockerfile</description>
     <packaging>pom</packaging>
 
     <parent>
@@ -14,11 +14,19 @@
 
     <!-- Define the dependencies that should be part of custom Alfresco Share image -->
     <dependencies>
-        <!-- Our custom share JAR extension -->
+        <% if (shareJarOrAmp == 'AMP') { %>
+        <!-- Our custom Share AMP extension -->
+        <% } %>
+        <% if (shareJarOrAmp == 'JAR') { %>
+        <!-- Our custom Share JAR extension -->
+        <% } %>
         <dependency>
           <groupId><%- groupId %></groupId>
           <artifactId><%- shareExtensionArtifactId %></artifactId>
           <version><%- version %></version>
+          <% if (shareJarOrAmp == 'AMP') { %>
+          <type>amp</type>
+          <% } %>
         </dependency>
 
         <!-- Other UI extensions (JARs or AMPs) that need to be included
@@ -48,9 +56,13 @@
                                     <artifactId><%- shareExtensionArtifactId %></artifactId>
                                     <version><%- version %></version>
                                     <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                    <% if (shareJarOrAmp == 'AMP') { %>
+                                    <type>amp</type>
+                                    <% } %>
+                                    <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
-                                <!-- Other UI extensions (JARs or AMPs) that need to be included
+
+                                <!-- Other extensions (JARs or AMPs) that need to be included, such as 3rd party libs
 
                                  ...
 

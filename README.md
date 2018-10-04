@@ -43,3 +43,6 @@ Debugging:
 - [Debugging Repo Extensions with IntelliJ IDEA](docs/debugging-repository-extensions.md)
 - [Debugging Activiti Extensions with IntelliJ IDEA](docs/debugging-activiti-extensions.md)
 
+Troubleshooting:
+
+- [Troubleshooting tips](docs/troubleshooting.md)

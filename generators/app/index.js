@@ -1,9 +1,10 @@
 'use strict';
-var alflogo = require('alfresco-logo');
-var Generator = require('yeoman-generator');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var _ = require('lodash');
+const alflogo = require('alfresco-logo');
+const Generator = require('yeoman-generator');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const _ = require('lodash');
+const semver = require('semver');
 
 var constants = require('./../common/constants.js');
 
@@ -82,6 +83,25 @@ module.exports = class extends Generator {
       activitiProjectPackage: 'com.activiti.extension.bean', // Standard place where Activiti searches for Spring Beans
       includeActivitiCallAcsSample: false
     };
+
+    /* Now check if Java and Maven is installed
+    try {
+      if (semver.lt(process.versions.node, '5.0.0')) {
+        throw new Error('Node.JS 5.0.0 or above is required, you are using: ' + process.versions.node + '.');
+      }
+
+      this.javaVersion = versions.getJavaVersion();
+      if (!this.javaVersion) {
+        throw new Error('Cannot find a java executable. JDK version 8.0 is recommended.');
+      }
+
+      this.mavenVersion = versions.getMavenVersion();
+      if (!this.mavenVersion) {
+        throw new Error('Cannot find a maven executable. Maven is required to build the projects.');
+      }
+    } catch (e) {
+      this.out.error(e.message);
+    }*/
   }
 
   // Where you prompt users for options (where you’d call this.prompt())
