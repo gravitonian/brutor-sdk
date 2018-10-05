@@ -1,5 +1,5 @@
-## Running Problem - Cannot start service share: b driver failed
-If you see an error like this when you do run.sh:
+## Running Problem - Cannot start service share b driver failed
+If you see an error like follows when you do run.sh:
 
 ```bash
 ERROR: for docker-compose_share_1  Cannot start service share: b'driver failed programming external connectivity on endpoint docker-compose_share_1 (98f36a05bf1d4b282efb112fb9c9c0173f5beab35ebfb54446ffeea8dedf47a5): failed to update bridge endpoint 98f36a0 to store: failed to update bridge store for object type *bridge.bridgeEndpoint: input/output error'
