@@ -1,4 +1,4 @@
-## Running Problem - Cannot start service share: b driver failed...
+## Running Problem - Cannot start service share: b driver failed
 If you see an error like this when you do run.sh:
 
 ```bash
