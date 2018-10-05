@@ -14,13 +14,14 @@
 
     <!-- Define the dependencies that should be part of custom Activiti/APS Docker Image -->
     <dependencies>
+        <% if (includeActivitiExtension) { %>
         <!-- Our custom Activiti JAR extension -->
         <dependency>
             <groupId><%- groupId %></groupId>
             <artifactId><%- activitiExtensionArtifactId %></artifactId>
             <version><%- version %></version>
         </dependency>
-
+        <% } %>
         <% if (includeActivitiCallAcsSample) { %>
         <!--  This requires you to first clone https://github.com/gravitonian/acs-rest-api-java-client
               and then run mvn install so you have this lib in your local maven repo. -->
@@ -84,6 +85,7 @@
                         </goals>
                         <configuration>
                             <artifactItems>
+                                <% if (includeActivitiExtension) { %>
                                 <artifactItem>
                                     <groupId><%- groupId %></groupId>
                                     <artifactId><%- activitiExtensionArtifactId %></artifactId>
@@ -91,6 +93,7 @@
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/jars</outputDirectory>
                                 </artifactItem>
+                                <% } %>
                                 <% if (includeActivitiCallAcsSample) { %>
                                 <artifactItem>
                                   <groupId>org.alfresco</groupId>
@@ -137,7 +140,13 @@
                                 <% } %>
                                 <!-- Other libs that your extension is using
 
-                                 ...
+                                 <artifactItem>
+                                    <groupId> the group ID </groupId>
+                                    <artifactId> the artifact ID </artifactId>
+                                    <version> version </version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/jars</outputDirectory>
+                                </artifactItem>
 
                                 -->
                             </artifactItems>

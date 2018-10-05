@@ -355,6 +355,11 @@ REPOSITORY                                                       TAG            
 alfresco-content-services-custom                                 1.0.0-SNAPSHOT      2910039ecc35        About a minute ago   1.89GB
 alfresco-share-custom                                            1.0.0-SNAPSHOT      07bcb1ed692f        About a minute ago   709MB
 ```
+## (OPTIONAL) Apply ACS Enterprise License
+If you generated the project to use the Enterprise Edition of ACS, then you should apply an Enterprise license.
+Put the license file in the `my-repo-project/runner/docker-compose/acs/license` directory.
+
+**Note**. ACS comes with a 2 day trial license that is automatically installed. Request an extended 30-day trial at: https://www.alfresco.com/platform/content-services-ecm/trial/docker
 
 ## Running the Docker Images with Extensions applied
 To run and test the customizations use the `run.sh` command (first time you do this you will see a lot of downloads of Docker images from Docker Hub):

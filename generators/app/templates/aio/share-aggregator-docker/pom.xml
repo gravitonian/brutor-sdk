@@ -14,6 +14,7 @@
 
     <!-- Define the dependencies that should be part of custom Alfresco Share image -->
     <dependencies>
+        <% if (includeShareExtension == true) { %>
         <% if (shareJarOrAmp == 'AMP') { %>
         <!-- Our custom Share AMP extension -->
         <% } %>
@@ -28,7 +29,7 @@
           <type>amp</type>
           <% } %>
         </dependency>
-
+        <% } %>
         <!-- Other UI extensions (JARs or AMPs) that need to be included
 
        ...
@@ -51,6 +52,7 @@
                         </goals>
                         <configuration>
                             <artifactItems>
+                                <% if (includeShareExtension == true) { %>
                                 <artifactItem>
                                     <groupId><%- groupId %></groupId>
                                     <artifactId><%- shareExtensionArtifactId %></artifactId>
@@ -61,10 +63,16 @@
                                     <% } %>
                                     <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
-
+                                <% } %>
                                 <!-- Other extensions (JARs or AMPs) that need to be included, such as 3rd party libs
 
-                                 ...
+                                 <artifactItem>
+                                    <groupId> the group ID </groupId>
+                                    <artifactId> the artifact ID </artifactId>
+                                    <version> version </version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/extensions</outputDirectory>
+                                </artifactItem>
 
                                 -->
                             </artifactItems>

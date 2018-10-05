@@ -2,7 +2,7 @@
 version: "2"
 
 services:
-  <% if (includeRepoExtension == true || includeShareExtension == true || includeActivitiCallAcsSample == true) { %>
+  <% if (includeRepoAndShareContainersInRunner == true) { %>
   content:
        <% if (repoExtensionGenerateDockerBuild == true) { %>
       image: alfresco-content-services-custom:1.0.0-SNAPSHOT
@@ -37,6 +37,7 @@ services:
         - ./data/acs:/usr/local/tomcat/alf_data/
         - ./acs/alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
         - ./acs/log4j.properties:/usr/local/tomcat/webapps/alfresco/WEB-INF/classes/log4j.properties
+        - ./acs/license:/usr/local/tomcat/shared/classes/alfresco/extension/license
       ports:
         - 8082:8080 # Browser port
         <% if (enableInboundEmailServer == true) { %>
@@ -89,7 +90,7 @@ services:
         - 8083:8983 #Browser port
   <% } %>
 
-  <% if (includeActivitiExtension == true || includeRepoCallApsSample == true) { %>
+  <% if (includeActivitiContainerInRunner == true) { %>
   process:
     <% if (activitiExtensionGenerateDockerBuild == true) { %>
     image: alfresco-process-services-custom:1.0.0-SNAPSHOT

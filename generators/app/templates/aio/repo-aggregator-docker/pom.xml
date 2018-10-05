@@ -14,6 +14,7 @@
 
     <!-- Define the dependencies that should be part of custom Alfresco Repo (ACS) image -->
     <dependencies>
+        <% if (includeRepoExtension == true) { %>
         <% if (repoJarOrAmp == 'AMP') { %>
         <!-- Our custom repo AMP extension -->
         <% } %>
@@ -28,7 +29,7 @@
             <type>amp</type>
             <% } %>
         </dependency>
-
+        <% } %>
         <% if (includeRepoCallApsSample == true) { %>
         <!--  This requires you to first clone https://github.com/gravitonian/aps-rest-api-java-client
               and then run mvn install so you have this lib in your local maven repo. -->
@@ -91,6 +92,7 @@
                         </goals>
                         <configuration>
                             <artifactItems>
+                                <% if (includeRepoExtension == true) { %>
                                 <artifactItem>
                                     <groupId><%- groupId %></groupId>
                                     <artifactId><%- repoExtensionArtifactId %></artifactId>
@@ -101,6 +103,7 @@
                                     <% } %>
                                     <outputDirectory>${project.build.directory}/extensions</outputDirectory>
                                 </artifactItem>
+                                <% } %>
                                 <% if (includeRepoCallApsSample) { %>
                                 <artifactItem>
                                   <groupId>org.activiti</groupId>
@@ -147,7 +150,13 @@
                                 <% } %>
                               <!-- Other extensions (JARs or AMPs) that need to be included, such as 3rd party libs
 
-                              ...
+                               <artifactItem>
+                                    <groupId> the group ID </groupId>
+                                    <artifactId> the artifact ID </artifactId>
+                                    <version> version </version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/extensions</outputDirectory>
+                                </artifactItem>
 
                               -->
                             </artifactItems>

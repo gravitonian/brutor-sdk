@@ -7,7 +7,7 @@ RUN mkdir -p $TOMCAT_DIR/amps_share
 COPY target/extensions/*.amp $TOMCAT_DIR/amps_share/
 <% } %>
 
-<% if (shareJarOrAmp == 'JAR') { %>
+<% if (shareJarOrAmp == 'JAR' || (shareJarOrAmp != 'AMP' && shareExtensionGenerateDockerBuild)) { %>
 COPY target/extensions/*.jar $TOMCAT_DIR/webapps/share/WEB-INF/lib/
 <% } %>
 

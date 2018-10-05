@@ -12,7 +12,7 @@ RUN mkdir -p $TOMCAT_DIR/amps
 COPY target/extensions/*.amp $TOMCAT_DIR/amps/
 <% } %>
 
-<% if (repoJarOrAmp == 'JAR' || includeRepoCallApsSample == true) { %>
+<% if (repoJarOrAmp == 'JAR' || includeRepoCallApsSample == true || (repoJarOrAmp != 'AMP' && repoExtensionGenerateDockerBuild)) { %>
 COPY target/extensions/*.jar $TOMCAT_DIR/webapps/alfresco/WEB-INF/lib/
 <% } %>
 
