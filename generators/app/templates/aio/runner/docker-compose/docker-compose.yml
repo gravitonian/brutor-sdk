@@ -19,6 +19,9 @@ services:
       environment:
           CATALINA_OPTS: "
       		-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      		<% if (repoEnableHotSwap == true) { %>
+      		-javaagent:/usr/local/tomcat/lib/hotswap-agent-1.3.0.jar=propertiesFilePath=/usr/local/tomcat/hotswap-agent/hotswap-agent-repo.properties
+      		<% } %>
       		"
           JAVA_OPTS: "
               -Ddb.driver=org.postgresql.Driver
@@ -38,6 +41,10 @@ services:
         - ./acs/alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
         - ./acs/log4j.properties:/usr/local/tomcat/webapps/alfresco/WEB-INF/classes/log4j.properties
         - ./acs/license:/usr/local/tomcat/shared/classes/alfresco/extension/license
+        <% if (repoEnableHotSwap == true) { %>
+        - ../../<%- repoExtensionArtifactId %>/src/main/resources:/usr/local/tomcat/hotswap-agent/<%- repoExtensionArtifactId %>/src/main/resources
+        - ../../<%- repoExtensionArtifactId %>/src/main/resources/hotswap-agent.properties:/usr/local/tomcat/hotswap-agent/hotswap-agent-repo.properties
+        <% } %>
       ports:
         - 8082:8080 # Browser port
         <% if (enableInboundEmailServer == true) { %>

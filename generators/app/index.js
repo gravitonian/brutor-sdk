@@ -59,6 +59,7 @@ module.exports = class extends Generator {
       repoDockerImageEnterpriseVersion: '6.0.0.2',
       repoJarOrAmp: 'JAR',
       includeRepoCallApsSample: false,
+      repoEnableHotSwap: false,
 
       // Default config for Share extension properties
       includeShareExtension: true,
@@ -251,6 +252,15 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return (currentAnswers.includeRepoExtension || currentAnswers.repoExtensionGenerateDockerBuild) &&
                currentAnswers.communityOrEnterprise == 'Enterprise';
+      }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_REPOSITORY_ENABLE_HOTSWAP,
+      message: 'Enable HotSwap Agent and DCEVM for Repository Extension?',
+      default: this._getConfigValue(constants.PROP_REPOSITORY_ENABLE_HOTSWAP),
+      store: true,
+      when: function (currentAnswers) {
+            return (currentAnswers.includeRepoExtension || currentAnswers.repoExtensionGenerateDockerBuild);
       }
     },
 
@@ -515,6 +525,7 @@ module.exports = class extends Generator {
       constants.PROP_REPOSITORY_ENTERPRISE_VERSION,
       constants.PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION,
       constants.PROP_REPOSITORY_JAR_OR_AMP,
+      constants.PROP_REPOSITORY_ENABLE_HOTSWAP,
 
       // Share extension props
       constants.PROP_INCLUDE_SHARE_EXTENSION,
@@ -617,6 +628,7 @@ module.exports = class extends Generator {
       repoJarOrAmp: this.props.repoJarOrAmp,
       includeRepoCallApsSample: this.props.includeRepoCallApsSample,
       includeRepoAndShareContainersInRunner: includeRepoAndShareContainersInRunner,
+      repoEnableHotSwap: this.props.repoEnableHotSwap,
 
       // Share Extension properties
       includeShareExtension: this.props.includeShareExtension,
@@ -704,9 +716,11 @@ module.exports = class extends Generator {
           this._copyAsTemplate(fileSrc, fileDst, "CallApsWebScript.java", tplContext);
         }
 
+        var repoExtensionTemplateResourcesDir = repoExtensionTemplateSrcMainDir + 'resources/';
+        var repoExtensionResourcesDir = this.props.repoExtensionArtifactId + '/src/main/resources/';
         var webScriptDirPath = 'alfresco/extension/templates/webscripts/alfresco/tutorials/';
-        fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + webScriptDirPath;
-        fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + webScriptDirPath;
+        fileSrc = repoExtensionTemplateResourcesDir + webScriptDirPath;
+        fileDst = repoExtensionResourcesDir + webScriptDirPath;
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.desc.xml", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.html.ftl", tplContext);
         this._copyAsTemplate(fileSrc, fileDst, "helloworld.get.js", tplContext);
@@ -736,9 +750,12 @@ module.exports = class extends Generator {
       this._copyAsTemplate(fileSrc, fileDst, "module.properties", tplContext);
       this._copyAsTemplate(fileSrc, fileDst, "module-context.xml", tplContext);
 
-      fileSrc = repoExtensionTemplateSrcMainDir + 'resources/' + metaInfResourcesDirPath;
-      fileDst = this.props.repoExtensionArtifactId + '/src/main/resources/' + metaInfResourcesDirPath;
+      fileSrc = repoExtensionTemplateResourcesDir + metaInfResourcesDirPath;
+      fileDst = repoExtensionResourcesDir + metaInfResourcesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
+      if (this.props.repoEnableHotSwap) {
+        this._copyAsTemplate(repoExtensionTemplateResourcesDir, repoExtensionResourcesDir, "hotswap-agent.properties", tplContext);
+      }
     }
     if (this.props.repoExtensionGenerateDockerBuild) {
       var templateRepoDockerDir = 'repo-aggregator-docker';

@@ -27,6 +27,7 @@ module.exports = {
   PROP_REPOSITORY_DOCKER_IMAGE_ENTERPRISE_VERSION: 'repoDockerImageEnterpriseVersion',
   PROP_REPOSITORY_JAR_OR_AMP: 'repoJarOrAmp',
   PROP_INCLUDE_REPOSITORY_CALL_APS_SAMPLE: 'includeRepoCallApsSample',
+  PROP_REPOSITORY_ENABLE_HOTSWAP: 'repoEnableHotSwap',
 
   // Share extension props
   PROP_INCLUDE_SHARE_EXTENSION: 'includeShareExtension',

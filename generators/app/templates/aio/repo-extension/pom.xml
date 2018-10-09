@@ -73,6 +73,18 @@
           </dependencies>
         </plugin>
         <% } %>
+        <% if (repoEnableHotSwap == true) { %>
+        <!-- Include the Alfresco Maven Plugin so we can use the alfresco:refresh-repo goal, this will be used
+             to refresh Web Scripts after they have been updated, and in combination with HotSwap Agent we can get RAD -->
+        <plugin>
+          <groupId>org.alfresco.maven.plugin</groupId>
+          <artifactId>alfresco-maven-plugin</artifactId>
+          <version>3.0.1</version>
+          <configuration>
+            <refreshPort>8082</refreshPort> <!-- Port matches port for service 'content' in Docker Compose file -->
+          </configuration>
+        </plugin>
+        <% } %>
       </plugins>
 
       <!-- Make sure resources are filtered (e.g. module.id=${project.artifactId} -> module.id=repo-extension) -->
