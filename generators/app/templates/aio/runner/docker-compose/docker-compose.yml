@@ -18,24 +18,24 @@ services:
       mem_limit: 1500m
       environment:
           CATALINA_OPTS: "
-      		-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
-      		<% if (repoEnableHotSwap == true) { %>
-      		-javaagent:/usr/local/tomcat/lib/hotswap-agent-1.3.0.jar=propertiesFilePath=/usr/local/tomcat/hotswap-agent/hotswap-agent-repo.properties
-      		<% } %>
-      		"
+            -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+            <% if (repoEnableHotSwap == true) { %>
+            -javaagent:/usr/local/tomcat/lib/hotswap-agent-1.3.0.jar=propertiesFilePath=/usr/local/tomcat/hotswap-agent/hotswap-agent-repo.properties
+            <% } %>
+            "
           JAVA_OPTS: "
-              -Ddb.driver=org.postgresql.Driver
-              -Ddb.username=alfresco
-              -Ddb.password=alfresco
-              -Ddb.url=jdbc:postgresql://postgres:5432/alfresco
-              -Dsolr.host=solr6
-              -Dsolr.port=8983
-              -Dsolr.secureComms=none
-              -Dsolr.base.url=/solr
-              -Dindex.subsystem.name=solr6
-              -Ddeployment.method=DOCKER_COMPOSE
-              -Xms1g -Xmx1g
-              "
+            -Ddb.driver=org.postgresql.Driver
+            -Ddb.username=alfresco
+            -Ddb.password=alfresco
+            -Ddb.url=jdbc:postgresql://postgres:5432/alfresco
+            -Dsolr.host=solr6
+            -Dsolr.port=8983
+            -Dsolr.secureComms=none
+            -Dsolr.base.url=/solr
+            -Dindex.subsystem.name=solr6
+            -Ddeployment.method=DOCKER_COMPOSE
+            -Xms1g -Xmx1g
+            "
       volumes:
         - ./data/acs:/usr/local/tomcat/alf_data/
         - ./acs/alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
@@ -67,9 +67,20 @@ services:
       <% } %>
       mem_limit: 1g
       environment:
-        - REPO_HOST=content
-        - REPO_PORT=8080
-        - "CATALINA_OPTS= -Xms500m -Xmx500m"
+          CATALINA_OPTS: "
+          -Xms500m -Xmx500m
+          -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+          <% if (shareEnableHotSwap == true) { %>
+          -javaagent:/usr/local/tomcat/lib/hotswap-agent-1.3.0.jar=propertiesFilePath=/usr/local/tomcat/hotswap-agent/hotswap-agent-share.properties
+          <% } %>
+          "
+          REPO_HOST: "content"
+          REPO_PORT: "8080"
+      <% if (shareEnableHotSwap == true) { %>
+      volumes:
+        - ../../<%- shareExtensionArtifactId %>/src/main/resources:/usr/local/tomcat/hotswap-agent/<%- shareExtensionArtifactId %>/src/main/resources
+        - ../../<%- shareExtensionArtifactId %>/src/main/resources/hotswap-agent.properties:/usr/local/tomcat/hotswap-agent/hotswap-agent-share.properties
+      <% } %>
       ports:
         - 8080:8080
       links:

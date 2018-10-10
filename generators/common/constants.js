@@ -40,6 +40,7 @@ module.exports = {
   PROP_SHARE_ENTERPRISE_VERSION: 'shareEnterpriseVersion',
   PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION: 'shareDockerImageEnterpriseVersion',
   PROP_SHARE_JAR_OR_AMP: 'shareJarOrAmp',
+  PROP_SHARE_ENABLE_HOTSWAP: 'shareEnableHotSwap',
 
   // Activiti extension props
   PROP_INCLUDE_ACTIVITI_EXTENSION: 'includeActivitiExtension',

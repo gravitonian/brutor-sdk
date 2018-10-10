@@ -75,7 +75,7 @@
         <% } %>
         <% if (repoEnableHotSwap == true) { %>
         <!-- Include the Alfresco Maven Plugin so we can use the alfresco:refresh-repo goal, this will be used
-             to refresh Web Scripts after they have been updated, and in combination with HotSwap Agent we can get RAD -->
+             to refresh Repo Web Scripts after they have been updated, and in combination with HotSwap Agent we can get RAD -->
         <plugin>
           <groupId>org.alfresco.maven.plugin</groupId>
           <artifactId>alfresco-maven-plugin</artifactId>

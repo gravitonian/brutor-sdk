@@ -58,8 +58,8 @@ module.exports = class extends Generator {
       repoEnterpriseVersion: '6.0.0.2',
       repoDockerImageEnterpriseVersion: '6.0.0.2',
       repoJarOrAmp: 'JAR',
-      includeRepoCallApsSample: false,
       repoEnableHotSwap: false,
+      includeRepoCallApsSample: false,
 
       // Default config for Share extension properties
       includeShareExtension: true,
@@ -72,6 +72,7 @@ module.exports = class extends Generator {
       shareEnterpriseVersion: '6.0',
       shareDockerImageEnterpriseVersion: '6.0',
       shareJarOrAmp: 'JAR',
+      shareEnableHotSwap: false,
 
       // Default config for Activiti extension properties
       includeActivitiExtension: true,
@@ -258,7 +259,7 @@ module.exports = class extends Generator {
       name: constants.PROP_REPOSITORY_ENABLE_HOTSWAP,
       message: 'Enable HotSwap Agent and DCEVM for Repository Extension?',
       default: this._getConfigValue(constants.PROP_REPOSITORY_ENABLE_HOTSWAP),
-      store: true,
+      store: false,
       when: function (currentAnswers) {
             return (currentAnswers.includeRepoExtension || currentAnswers.repoExtensionGenerateDockerBuild);
       }
@@ -353,6 +354,15 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return (currentAnswers.includeShareExtension || currentAnswers.shareExtensionGenerateDockerBuild) &&
                currentAnswers.communityOrEnterprise == 'Enterprise';
+      }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_SHARE_ENABLE_HOTSWAP,
+      message: 'Enable HotSwap Agent and DCEVM for Share Extension?',
+      default: this._getConfigValue(constants.PROP_SHARE_ENABLE_HOTSWAP),
+      store: false,
+      when: function (currentAnswers) {
+            return (currentAnswers.includeShareExtension || currentAnswers.shareExtensionGenerateDockerBuild);
       }
     },
 
@@ -538,6 +548,7 @@ module.exports = class extends Generator {
       constants.PROP_SHARE_ENTERPRISE_VERSION,
       constants.PROP_SHARE_DOCKER_IMAGE_ENTERPRISE_VERSION,
       constants.PROP_SHARE_JAR_OR_AMP,
+      constants.PROP_SHARE_ENABLE_HOTSWAP,
 
       // Activiti extension props
       constants.PROP_INCLUDE_ACTIVITI_EXTENSION,
@@ -639,6 +650,7 @@ module.exports = class extends Generator {
       shareVersion: tempShareVersion,
       shareDockerImageVersion: tempShareDockerImageVersion,
       shareJarOrAmp: this.props.shareJarOrAmp,
+      shareEnableHotSwap: this.props.shareEnableHotSwap,
 
       // Activiti Extension properties
       includeActivitiExtension: this.props.includeActivitiExtension,
@@ -753,6 +765,7 @@ module.exports = class extends Generator {
       fileSrc = repoExtensionTemplateResourcesDir + metaInfResourcesDirPath;
       fileDst = repoExtensionResourcesDir + metaInfResourcesDirPath;
       this._copyAsTemplate(fileSrc, fileDst, "test.html", tplContext);
+
       if (this.props.repoEnableHotSwap) {
         this._copyAsTemplate(repoExtensionTemplateResourcesDir, repoExtensionResourcesDir, "hotswap-agent.properties", tplContext);
       }
@@ -828,9 +841,15 @@ module.exports = class extends Generator {
         this._copyAsTemplate(fileSrc, fileDst, "TemplateWidget.js", tplContext);
       }
 
-      fileSrc = shareExtensionTemplateSrcMainDir + 'resources/META-INF/';
-      fileDst = this.props.shareExtensionArtifactId + '/src/main/resources/META-INF/';
+      var shareExtensionTemplateResourcesDir = shareExtensionTemplateSrcMainDir + 'resources/';
+      var shareExtensionResourcesDir = this.props.shareExtensionArtifactId + '/src/main/resources/';
+      fileSrc = shareExtensionTemplateResourcesDir + 'META-INF/';
+      fileDst = shareExtensionResourcesDir + 'META-INF/';
       this._copyAsTemplate(fileSrc, fileDst, "share-config-custom.xml", tplContext);
+
+      if (this.props.shareEnableHotSwap) {
+        this._copyAsTemplate(shareExtensionTemplateResourcesDir, shareExtensionResourcesDir, "hotswap-agent.properties", tplContext);
+      }
     }
     if (this.props.shareExtensionGenerateDockerBuild) {
       var templateShareDockerDir = 'share-aggregator-docker';

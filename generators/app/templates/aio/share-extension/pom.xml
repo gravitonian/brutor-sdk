@@ -43,6 +43,18 @@
           </dependencies>
         </plugin>
         <% } %>
+        <% if (shareEnableHotSwap == true) { %>
+        <!-- Include the Alfresco Maven Plugin so we can use the alfresco:refresh-share goal, this will be used
+             to refresh Share Web Scripts after they have been updated, and in combination with HotSwap Agent we can get RAD -->
+        <plugin>
+          <groupId>org.alfresco.maven.plugin</groupId>
+          <artifactId>alfresco-maven-plugin</artifactId>
+          <version>3.0.1</version>
+          <configuration>
+            <refreshPort>8080</refreshPort> <!-- Port matches port for service 'share' in Docker Compose file -->
+          </configuration>
+        </plugin>
+        <% } %>
       </plugins>
 
       <!-- Make sure resources are filtered (e.g. module.id=${project.artifactId} -> module.id=custom-share-extension) -->

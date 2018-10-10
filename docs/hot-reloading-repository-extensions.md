@@ -55,7 +55,7 @@ hot reloading.
 ## HotSwap Agent Activation and Configuration
 *This configuration is set up for you when the project is generated.*
 
-The Docker Compose file (my-repo-project/runner/docker-compose/docker-compose.yml) 
+The Docker Compose file (my-repo-proj-hotswap/runner/docker-compose/docker-compose.yml) 
 in a Repository Extension project has the following configuration:
 
 ```yaml
