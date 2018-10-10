@@ -44,6 +44,7 @@ Debugging and Hot Reloading:
 - [Debugging Activiti Extensions with IntelliJ IDEA](docs/debugging-activiti-extensions.md)
 - [Hot Reloading of Repo Extension Code](docs/hot-reloading-repository-extensions.md)
 - [Hot Reloading of Share Extension Code](docs/hot-reloading-share-extensions.md)
+- [Hot Reloading of Activiti Extension Code](docs/hot-reloading-activiti-extensions.md)
 
 Troubleshooting:
 
