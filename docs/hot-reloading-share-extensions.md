@@ -19,7 +19,7 @@ the Spring XML context files.
 Walk through the following tutorial to generate a Share extension project
 and while doing it make sure to answer `Yes` to the question **Enable HotSwap Agent and DCEVM for Share Extension**:
 
-[Gerate a Share Extension Project](generating-share-extension-project.md):
+[Generate a Share Extension Project](generating-share-extension-project.md):
 
 ```bash
 ? Parent Project name? My Share Project with Hotswap
@@ -50,6 +50,8 @@ and while doing it make sure to answer `Yes` to the question **Enable HotSwap Ag
 
 This will generate the standard Share extension project but with some extra configuration to enable 
 hot reloading.
+
+**Important! Make sure you build and run the project before continuing.**
 
 ## HotSwap Agent Activation and Configuration
 *This configuration is set up for you when the project is generated.*
@@ -120,7 +122,7 @@ The page can be accessed with the `http://localhost:8080/share/page/hdp/ws/simpl
 
 The pages uses only text based files, so no Java code is involved. See the [hot reloading tutorial 
 for Repository Extensions](hot-reloading-repository-extensions.md) for information about how to do Java Class reloading,
-it should work the same for Java code in Share.
+it should work the same for Java code in Share, except that the port is 5007 instead of 5005.
  
 Let’s start by changing the page title and layout. This is done in the 
 **share-extension/src/main/resources/alfresco/web-extension/site-webscripts/com/example/pages/simple-page.get.js** file:

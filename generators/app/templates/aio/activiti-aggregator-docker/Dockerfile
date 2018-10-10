@@ -17,3 +17,13 @@ ARG TOMCAT_DIR=/usr/share/tomcat
 <% } %>
 
 COPY target/jars $TOMCAT_DIR/webapps/activiti-app/WEB-INF/lib
+<% if (activitiEnableHotSwap == true) { %>
+# Hotswap Stuff ########################################################################################################
+# Download and Install the more capable DCEVM, which will allow more changes to classes, such as new methods
+RUN mkdir -p dcevm \
+    && curl -L -o dcevm/DCEVM-8u181-installer.jar "https://github.com/dcevm/dcevm/releases/download/light-jdk8u181%2B2/DCEVM-8u181-installer-build2.jar" \
+    && cd dcevm \
+    && jar -xvf DCEVM-8u181-installer.jar \
+    && cp linux_amd64_compiler2/product/libjvm.so /usr/java/default/jre/lib/amd64/server
+########################################################################################################################
+<% } %>

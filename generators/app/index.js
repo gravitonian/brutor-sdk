@@ -83,7 +83,8 @@ module.exports = class extends Generator {
       activitiVersion: '1.9.0.3', // Alfresco Process Services (APS) version (Enterprise)
       activitiDockerImageVersion: '1.9.0.1', // Docker image does not exist for latest build 1.9.0.3
       activitiProjectPackage: 'com.activiti.extension.bean', // Standard place where Activiti searches for Spring Beans
-      includeActivitiCallAcsSample: false
+      includeActivitiCallAcsSample: false,
+      activitiEnableHotSwap: false
     };
 
     /* Now check if Java and Maven is installed
@@ -433,8 +434,18 @@ module.exports = class extends Generator {
       when: function (currentAnswers) {
         return currentAnswers.includeActivitiExtension || currentAnswers.activitiExtensionGenerateDockerBuild;
       }
+    }, {
+      type: 'confirm',
+      name: constants.PROP_ACTIVITI_ENABLE_HOTSWAP,
+      message: 'Enable DCEVM for Activiti Extension?',
+      default: this._getConfigValue(constants.PROP_ACTIVITI_ENABLE_HOTSWAP),
+      store: false,
+      when: function (currentAnswers) {
+            return (currentAnswers.includeActivitiExtension || currentAnswers.activitiExtensionGenerateDockerBuild);
+      }
     },
 
+    // General question about source code and runtime environment
     {
       type: 'confirm',
       name: constants.PROP_GENERATE_SAMPLE_SRC,
@@ -663,7 +674,8 @@ module.exports = class extends Generator {
       activitiDockerImageMinorVersion: activitiDockerImageMinorVersion,
       activitiPackage: this.props.activitiProjectPackage,
       includeActivitiCallAcsSample: this.props.includeActivitiCallAcsSample,
-      includeActivitiContainerInRunner: includeActivitiContainerInRunner
+      includeActivitiContainerInRunner: includeActivitiContainerInRunner,
+      activitiEnableHotSwap: this.props.activitiEnableHotSwap
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

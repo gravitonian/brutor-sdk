@@ -19,7 +19,7 @@ the Spring XML context files.
 Walk through the following tutorial to generate a Repository extension project
 and while doing it make sure to answer `Yes` to the question **Enable HotSwap Agent and DCEVM for Repository Extension**:
 
-[Gerate a Repository Extension Project](generating-repository-extension-project.md):
+[Generate a Repository Extension Project](generating-repository-extension-project.md):
 
 ```bash
 ? Parent Project name? My Repo Project with Hotswap
@@ -51,6 +51,8 @@ and while doing it make sure to answer `Yes` to the question **Enable HotSwap Ag
 
 This will generate the standard Repository extension project but with some extra configuration to enable 
 hot reloading.
+
+**Important! Make sure you build and run the project before continuing.**
 
 ## HotSwap Agent Activation and Configuration
 *This configuration is set up for you when the project is generated.*

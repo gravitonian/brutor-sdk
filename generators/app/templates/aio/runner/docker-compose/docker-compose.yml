@@ -82,7 +82,8 @@ services:
         - ../../<%- shareExtensionArtifactId %>/src/main/resources/hotswap-agent.properties:/usr/local/tomcat/hotswap-agent/hotswap-agent-share.properties
       <% } %>
       ports:
-        - 8080:8080
+        - 8080:8080 # Browser port
+        - 5007:5005 # Remote Debug
       links:
         - content:content
       depends_on:

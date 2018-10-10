@@ -52,7 +52,7 @@ module.exports = {
   PROP_ACTIVITI_DOCKER_IMAGE_VERSION: 'activitiDockerImageVersion',
   PROP_ACTIVITI_PROJECT_PACKAGE: 'activitiProjectPackage',
   PROP_INCLUDE_ACTIVITI_CALL_ACS_SAMPLE: 'includeActivitiCallAcsSample',
-
+  PROP_ACTIVITI_ENABLE_HOTSWAP: 'activitiEnableHotSwap',
 
   // Repository Action props
   PROP_REPOSITORY_ACTION_TITLE: 'repoActionTitle',
