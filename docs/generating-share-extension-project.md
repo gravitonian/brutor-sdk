@@ -12,7 +12,6 @@ to the *share.war* file.
 -   [Stopping the Docker Containers](#stopping-the-docker-containers)
 
 ## Prerequisites
-
 You have installed and configured the development environment according to this [doc](installation-and-configuration.md). 
 
 ## Generating the extension project
@@ -156,6 +155,28 @@ The following table explains the properties related to Share extension projects:
 | Enable Inbound Email Server | `boolean` | No | Controls whether the alfresco-global.properties should be configured to enable Inbound Email.|
 | Enable Outbound Email Server | `boolean` | Yes | Controls whether the alfresco-global.properties should be configured to enable Outbound Email. This also adds an SMTP service to the Docker Compose file so outbound email can be tested.|
 
+## (OPTIONAL) Set up Quay.io access for Enterprise Docker Image access
+If you generated the project to use the Enterprise Edition of ACS, then you need to contact
+Alfresco Support/Customer Service to get access to the Quay.io Docker Image Repositories.
+
+When you have the credentials for Quay.io login as follows:
+
+```bash
+$ docker login quay.io
+```
+
+## (OPTIONAL) Apply ACS Enterprise License
+If you generated the project to use the Enterprise Edition of ACS, then you should apply an Enterprise license.
+Put the license file in the `my-share-project/runner/docker-compose/acs/license` directory.
+
+**Note**. ACS comes with a 2 day trial license that is automatically installed. Request an extended 30-day trial at: https://www.alfresco.com/platform/content-services-ecm/trial/docker
+
+You can also navigate to the following address and apply your ACS Enterprise license after the system is running, see next:
+
+```bash
+http://localhost:8082/alfresco/service/enterprise/admin/admin-license
+```
+
 ## Building the extension project
 To build the project step into the project directory and run the `build-all.sh` script:
 
@@ -285,14 +306,6 @@ Share, Solr, and PostgreSQL.
 
 The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
 http://localhost:8080/share.
-
-## (OPTIONAL) Apply ACS Enterprise License
-If you selected to use *Enterprise Edition* of the ACS server, then you need to install a license.
-Navigate to the following address and apply your ACS Enterprise license:
-
-```bash
-http://localhost:8082/alfresco/service/enterprise/admin/admin-license
-```
 
 ## Changing the Extension and Rebuilding and Deploying the Docker Image
 The Alfresco system is now up and running and you would most likely want to keep working on 

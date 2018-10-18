@@ -11,7 +11,6 @@ An Activiti project builds an extension that will be applied to the *activiti-ap
 -   [Stopping the Docker Containers](#stopping-the-docker-containers)
 
 ## Prerequisites
-
 You have installed and configured the development environment according to this [doc](installation-and-configuration.md). 
 
 ## Generating the extension project
@@ -277,6 +276,8 @@ The Activiti App should now be accessible on the http://localhost:9080/activiti-
 ## Apply APS Enterprise License
 The APS server is running as an Enterprise Edition, so you must apply a license to use it.
 Navigate to `http://localhost:9080/activiti-app` and you will be asked to upload a license.
+
+You can request a trail license from https://www.alfresco.com/platform/process-services-bpm/trial/download
 
 ## Changing the Extension and Rebuilding and Deploying the Docker Image
 The Activiti/APS system is now up and running and you would most likely want to keep working on 

@@ -226,6 +226,28 @@ The following table explains the properties related to this type of extension pr
 | Enable Inbound Email Server | `boolean` | No | Controls whether the alfresco-global.properties should be configured to enable Inbound Email.|
 | Enable Outbound Email Server | `boolean` | Yes | Controls whether the alfresco-global.properties should be configured to enable Outbound Email. This also adds an SMTP service to the Docker Compose file so outbound email can be tested.|
 
+## (OPTIONAL) Set up Quay.io access for Enterprise Docker Image access
+If you generated the project to use the Enterprise Edition of ACS, then you need to contact
+Alfresco Support/Customer Service to get access to the Quay.io Docker Image Repositories.
+
+When you have the credentials for Quay.io login as follows:
+
+```bash
+$ docker login quay.io
+```
+
+## (OPTIONAL) Apply ACS Enterprise License
+If you generated the project to use the Enterprise Edition of ACS, then you should apply an Enterprise license.
+Put the license file in the `my-repo-share-activiti-project/runner/docker-compose/acs/license` directory.
+
+**Note**. ACS comes with a 2 day trial license that is automatically installed. Request an extended 30-day trial at: https://www.alfresco.com/platform/content-services-ecm/trial/docker
+
+You can also navigate to the following address and apply your ACS Enterprise license after the system is running, see next:
+
+```bash
+http://localhost:8082/alfresco/service/enterprise/admin/admin-license
+```
+
 ## Building the extension project
 To build the project step into the project directory and run the `build-all.sh` script:
 
@@ -443,11 +465,6 @@ alfresco-share-custom                            1.0.0-SNAPSHOT      019de7b1dd7
 alfresco-content-services-custom                 1.0.0-SNAPSHOT      1cb52bb3a635        2 minutes ago       1.89GB
 alfresco-process-services-custom                 1.0.0-SNAPSHOT      8846dce1a3af        2 minutes ago       1.1GB
 ```
-## (OPTIONAL) Apply ACS Enterprise License
-If you generated the project to use the Enterprise Edition of ACS, then you should apply an Enterprise license.
-Put the license file in the `my-repo-project/runner/docker-compose/acs/license` directory.
-
-**Note**. ACS comes with a 2 day trial license that is automatically installed. Request an extended 30-day trial at: https://www.alfresco.com/platform/content-services-ecm/trial/docker
 
 ## Running the Docker Images with Extensions applied
 To run and test the customizations use the `run.sh` command (first time you do this you will see a lot of downloads of Docker images from Docker Hub):
@@ -505,17 +522,11 @@ Share, Solr, Activiti, and PostgreSQL.
 The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
 http://localhost:8080/share. The Activiti App should be accessible at http://localhost:9080/activiti-app.
 
-## (OPTIONAL) Apply ACS Enterprise License
-If you selected to use *Enterprise Edition* of the ACS server, then you need to install a license.
-Navigate to the following address and apply your ACS Enterprise license:
-
-```bash
-http://localhost:8082/alfresco/service/enterprise/admin/admin-license
-```
-
 ## Apply APS Enterprise License
 The APS server is running as an Enterprise Edition, so you must apply a license to use it.
 Navigate to `http://localhost:9080/activiti-app` and you will be asked to upload a license.
+
+You can request a trail license from https://www.alfresco.com/platform/process-services-bpm/trial/download
 
 ## Changing the Extensions and Rebuilding and Deploying the Docker Images
 The Alfresco system is now up and running and you would most likely want to keep working on 
