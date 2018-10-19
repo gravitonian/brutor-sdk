@@ -3,7 +3,11 @@
 This is an Alfresco extension project that can be used to build customizations for
 <% } %> 
 <% if (includeActivitiExtension == true) { %>
-- **Activiti** (APS version 1.8.x and version 1.9.x) 
+<% if (activitiDockerImageMinorVersion >= 1.9) { %>
+- **Activiti** (APS version 1.9.x)
+<% } else { %> 
+- **Activiti** (APS version 1.8.x)
+<% } %>
 <% } %>
 <% if (includeRepoExtension == true) { %>
 - **Repository** (ACS version 6.x)  
