@@ -17,7 +17,10 @@ The Activiti workflow extension will be applied to the *activiti-app.war* file.
 
 ## Prerequisites
 
-You have installed and configured the development environment according to this [doc](installation-and-configuration.md). 
+You have installed and configured the development environment according to this [doc](installation-and-configuration.md).
+
+**IMPORTANT** - this project uses Enterprise Activiti artifacts, so you need to set up 
+location and credentials for the Activiti Private Nexus Repository. Even if you are using ACS Community. 
 
 ## Generating the extension project
 Standing in the directory where you want to generate the project (it will be created in a new subdirectory) 

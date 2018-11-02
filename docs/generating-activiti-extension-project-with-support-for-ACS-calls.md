@@ -34,7 +34,7 @@ total 5504
 Walk through the following tutorial to generate an Activiti extension project
 and while doing it make sure to answer `Yes` to the question **Generate Service Task sample with ACS Rest Call in the Activiti Extension project**:
 
-[Gerate an Activiti Extension Project](generating-activiti-extension-project.md):
+[Generate an Activiti Extension Project](generating-activiti-extension-project.md):
 
 ```bash
 ? Parent Project name? My Activiti Project with ACS Call Support
