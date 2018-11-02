@@ -12,7 +12,7 @@ $ git clone https://github.com/gravitonian/acs-rest-api-java-client
 
 ```bash
 $ cd acs-rest-api-java-client/
-acs-rest-api-java-client mbergljung$ mvn clean package
+acs-rest-api-java-client mbergljung$ mvn clean install
 ``` 
 
 Make sure you got the project available in your local Maven Repository:
