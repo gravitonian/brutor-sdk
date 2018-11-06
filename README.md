@@ -16,6 +16,10 @@ The way you code extensions has not changed, have a look [here](https://docs.alf
 Alfresco extensions for Platform/Repository and Share.
  
  
+## Useful Blog Posts
+
+This [blog post](https://community.alfresco.com/people/gravitonian/blog/2018/11/06/building-content-and-process-solutions-with-acs-60-aps-19-and-adf-26) shows the use of the Alfresco extension project generator and the ReST API Java clients.  
+ 
 ## Getting Started
 
 - [Installation and Configuration](docs/installation-and-configuration.md) 
