@@ -440,8 +440,10 @@ content_1   | 25-Sep-2018 07:43:56.158 INFO [main] org.apache.catalina.startup.C
 This uses the *runner/docker-compose/docker-compose.yml* file to start up the whole Alfresco environment with Repository,
 Share, Solr, and PostgreSQL.
 
-The Repository should now be accessible on http://localhost:8082 and Share should be accessible on 
-http://localhost:8080/share.
+The different applications should now be accessible:
+
+- **ACS Repository**: http://localhost:8082/alfresco 
+- **ACS Share**: http://localhost:8080/share/ - login with admin/admin
 
 ## Changing the Extensions and Rebuilding and Deploying the Docker Images
 The Alfresco system is now up and running and you would most likely want to keep working on 

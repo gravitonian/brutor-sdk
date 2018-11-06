@@ -305,7 +305,7 @@ This uses the *runner/docker-compose/docker-compose.yml* file to start up the wh
 Share, Solr, and PostgreSQL.
 
 The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
-http://localhost:8080/share.
+http://localhost:8080/share - login with admin/admin.
 
 ## Changing the Extension and Rebuilding and Deploying the Docker Image
 The Alfresco system is now up and running and you would most likely want to keep working on 

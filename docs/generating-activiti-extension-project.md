@@ -275,6 +275,7 @@ process_1        | 01-Oct-2018 08:47:36.035 INFO [main] org.apache.catalina.star
 This uses the *runner/docker-compose/docker-compose.yml* file to start up the whole Alfresco environment with APS, ElasticSearch, and PostgreSQL.
 
 The Activiti App should now be accessible on the http://localhost:9080/activiti-app URL.
+Login with admin@app.activiti.com/admin (Note. You need to install a license to use APS, see below)
 
 ## Apply APS Enterprise License
 The APS server is running as an Enterprise Edition, so you must apply a license to use it.

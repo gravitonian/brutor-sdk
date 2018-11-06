@@ -522,8 +522,11 @@ content_1        | 29-Sep-2018 15:05:02.536 INFO [main] org.apache.catalina.star
 This uses the *runner/docker-compose/docker-compose.yml* file to start up the whole Alfresco environment with Repository,
 Share, Solr, Activiti, and PostgreSQL.
 
-The Repository should now be accessible on http://localhost:8082/alfresco and Share should be accessible on 
-http://localhost:8080/share. The Activiti App should be accessible at http://localhost:9080/activiti-app.
+The different applications should now be accessible:
+
+- **APS**: http://localhost:9080/activiti-app - login with admin@app.activiti.com/admin (Note. You need to install a license to use APS, see below)
+- **ACS Repository**: http://localhost:8082/alfresco 
+- **ACS Share**: http://localhost:8080/share/ - login with admin/admin
 
 ## Apply APS Enterprise License
 The APS server is running as an Enterprise Edition, so you must apply a license to use it.
